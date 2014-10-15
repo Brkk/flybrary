@@ -14,10 +14,11 @@ public class Textbook {
     private String edition;//edition or edition?
     private String type;
     private String matched;
+    private String email;
     
     //need to add an ID field, maybe randomly generate it?
     public Textbook(String title, String author, Date addDate, User user,
-			String isbn, String condition, String edition, String type, String matched) {
+			String isbn, String condition, String edition, String type, String matched, String email) {
 		super();
 		this.title = title;
 		this.author = author;
@@ -28,6 +29,7 @@ public class Textbook {
 		this.edition = edition;
 		this.type = type;
 		this.matched = matched;
+		this.email = email;
 	}
 
 	public String getTitle() {
@@ -100,6 +102,14 @@ public class Textbook {
 
 	public void setMatched(String matched) {
 		this.matched = matched;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+	
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 }

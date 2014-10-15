@@ -4,7 +4,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -12,7 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +20,6 @@ import com.google.appengine.api.users.*;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
@@ -36,63 +33,58 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
-/* maybe have different classes for each operation? */
+
 @Path("/textshare")
 public class TextbookResource {
  
-	//Send all textbook associated with given user
 	 @POST
 	 @Path("/retrieve") 
 	 @Consumes(MediaType.APPLICATION_JSON)
 	 @Produces(MediaType.APPLICATION_JSON)
 	 public String getTextbook(String input) {
-		 //Retreive the user name from the frontend
+		 
 		 //Create a filter for retrieving all the books associated with that user
 		 JSONObject obj = new JSONObject(input);
 		 String user = obj.getString("user");
-		 Filter userFilter =
-				  new FilterPredicate("user",
-				                      FilterOperator.EQUAL,
-				                      user);
-		System.out.println(user);
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		// Use class Query to assemble a query
-		Query q = new Query("Textbook").setFilter(userFilter);
+		 Filter userFilter = new FilterPredicate("user", FilterOperator.EQUAL, user);
 
-		// Use PreparedQuery interface to retrieve results and save it into a list
-		PreparedQuery pq = datastore.prepare(q);
-		List<Entity> textbooks = pq.asList(FetchOptions.Builder.withDefaults());
+		 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		 // Use class Query to assemble a query
+		 Query q = new Query("Textbook").setFilter(userFilter);
+
+		 // Use PreparedQuery interface to retrieve results and save it into a list
+		 PreparedQuery pq = datastore.prepare(q);
+		 List<Entity> textbooks = pq.asList(FetchOptions.Builder.withDefaults());
 		
-	    String json = new Gson().toJson(textbooks);
-	    return json;
-	   }
+		 String json = new Gson().toJson(textbooks);
+		 return json;
+	 }
 	 
 	 @POST
 	 @Path("/add")
 	 @Consumes(MediaType.APPLICATION_JSON)
 	 public void addTextbook(String input)	throws ParseException {
-		 //Parse the input parameters form the JSON object sent from Frontend
-		 String matched = "no";
+		
+		 //Parse the input parameters form the JSON object sent from client side
 		 JSONObject text = new JSONObject(input);
-/*		 UserService userService = UserServiceFactory.getUserService();
-		 User user = userService.getCurrentUser();
-
-		 //check if the entered book matches anything in the DB
-		 //matched = MatchingFunction.checkForMatch(title, author, edition, condition, type, user, email);
 		 
-		 //call matched with object.
-		 //Boolean matched1 = MatchingFunction.checkForMatchObj(textbook1);
-*/
-		 matched = MatchingFunction.checkForMatch(text.getString("title"), text.getString("author"), 
+		 /*
+		  * Are these going to be used or are we depending on the information from the client side
+		  */
+		// UserService userService = UserServiceFactory.getUserService();
+		// User user = userService.getCurrentUser();
+		 Date date = new Date();
+		 
+		 String matched = MatchingFunction.checkForMatch(
+				 text.getString("title"), 
+				 text.getString("author"), 
 				 text.getString("edition"), 
 				 text.getString("condition"), 
 				 text.getString("type"), 
 				 text.getString("user"), 
 				 text.getString("email"));
 		 
-		 Date date = new Date();
 		 // Create an textbook entity using the user input 
 		 Entity textbook = new Entity("Textbook");
 		    textbook.setProperty("user", text.getString("user"));
@@ -103,18 +95,22 @@ public class TextbookResource {
 		    textbook.setProperty("edition", text.getString("edition"));
 		    textbook.setProperty("condition", text.getString("condition"));
 		    textbook.setProperty("date", date);	 
-		    textbook.setProperty("matched", matched); //If we know a book is matched, we can omit it when searching for a match.
+		    textbook.setProperty("matched", matched);
 		    textbook.setProperty("email",text.getString("email"));
+		    
 		    //Add the created entity on the Datastore.
 		    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		    datastore.put(textbook); 	
 	 }
 	 
-	 //Doesnt try to match the book
+	 /*
+	  * Doesnt try to match the book -- user this method on DEVSERVER to create indexes.
+	  */
 	 @POST
 	 @Path("/onlyAdd")
 	 @Consumes(MediaType.APPLICATION_JSON)
 	 public void addTextbookTest(String input) {
+		 
 		 String matched = "no";
 		 JSONObject obj = new JSONObject(input);
 		 UserService userService = UserServiceFactory.getUserService();
@@ -128,7 +124,8 @@ public class TextbookResource {
 				 obj.getString("condition"),
 				 obj.getString("edition"),
 				 obj.getString("type"),
-				 matched);
+				 matched,
+				 obj.getString("email"));
 		 		 
 		 // Create an textbook entity using the user input 
 		 Entity textbook = new Entity("Textbook");
@@ -139,7 +136,7 @@ public class TextbookResource {
 		    textbook.setProperty("isbn", textbook1.getIsbn());
 		    textbook.setProperty("edition", textbook1.getEdition());
 		    textbook.setProperty("condition", textbook1.getCondition());
-		    textbook.setProperty("date", textbook1.getAddDate());	 
+		    textbook.setProperty("date", textbook1.getAddDate());
 		    textbook.setProperty("matched", "no"); //If we know a book is matched, we can omit it when searching for a match.
 		    
 		    //Add the created entity on the Datastore.
@@ -206,8 +203,6 @@ public class TextbookResource {
 		 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
 		 JSONObject obj = new JSONObject(input);
 		 
-		 //Parse the input parameters form the JSON object sent from Frontend
-		 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		 Long id = Long.valueOf(obj.getString("id")).longValue();
 		 String title = obj.getString("title");
 		 String author = obj.getString("author");
@@ -217,13 +212,12 @@ public class TextbookResource {
 		 String condition = obj.getString("condition");
 		 String type = obj.getString("type");
 		 String matched = "no";
-		 String email = "user@email.com"; //learn how to read this
+		 String email = obj.getString("email");
 	
-		Key textbookKey = KeyFactory.createKey("Textbook", id);
-		Query q = new Query(textbookKey);
-		Entity textbook = datastore.prepare(q).asSingleEntity();//datastore.get(textbookKey);
-		System.out.println(textbook);
-		    textbook.setProperty("user", user);
+		 Key textbookKey = KeyFactory.createKey("Textbook", id);
+		 Query q = new Query(textbookKey);
+		 Entity textbook = datastore.prepare(q).asSingleEntity();
+		 	textbook.setProperty("user", user);
 		    textbook.setProperty("type", type);
 		    textbook.setProperty("title", title);
 		    textbook.setProperty("author", author);
@@ -231,13 +225,14 @@ public class TextbookResource {
 		    textbook.setProperty("edition", edition);
 		    textbook.setProperty("condition", condition); 
 		    textbook.setProperty("matched", matched);
-		datastore.put(textbook);
-		 
+		    textbook.setProperty("email", email);
+		    
+		 datastore.put(textbook);
 	 }
  
 	 @GET
-	    @Path("/test")
-	    public String testMethod() {
-	        return "this is a test";
-	    } 
+	 @Path("/test")
+	 public String testMethod() {
+		 return "this is a test";
+	 } 
 }
