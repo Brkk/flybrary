@@ -1,0 +1,167 @@
+<!doctype html>
+<!-- <html class="no-js" class="ng-scope"> -->
+<html lang="en" ng-app="textShareApp" class="ng-scope">
+  <head>
+    <meta charset="utf-8">
+    <title>TextShare</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../bower_components/angular-material/angular-material.css">
+    <link   rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/angular-aria/angular-aria.js"></script>
+    <script src="../bower_components/angular-animate/angular-animate.js"></script>
+    <script src="../bower_components/hammerjs/hammer.js"></script>
+    <script src="../bower_components/angular-material/angular-material.js"></script>
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  </head>
+  <body layout="horizontal">
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+    <div ng-controller="SidebarController" layout="horizontal" style="width:100%">
+
+        <material-sidenav component-id="left"  layout="vertical" class="material-sidenav-left">
+            <material-toolbar class="material-theme-light material-medium-tall">
+              <h1 class="material-toolbar-tools" style="padding-top:25px;">
+              </h1>
+            </material-toolbar>
+        </material-sidenav>
+
+        <div layout="vertical" layout-fill="" tabindex="-1" role="main">
+            <material-content layout="vertical">
+                <material-toolbar class="material-theme-dark material-medium-tall app-toolbar">
+                    <div class="material-toolbar-tools" ng-click="openLeftMenu()" tabindex="0">
+                        TextShare
+                    </div>
+                    <div ng-controller="tabCtrl">
+                        <material-tabs selected="tabs.selectedIndex" center>
+                            <material-tab label="OFFERS"></material-tab>
+                            <material-tab label="REQUEST"></material-tab>
+                        </material-tabs>
+                    </div>
+                </material-toolbar>
+                <div layout="horizontal" layout-align="end start" ng-controller="addBookCtrl">
+                            <material-button class="material-button-fab material-theme-green" ng-click="dialog($event)">
+                            <material-icon icon="images/plus.svg" style="width: 24px; height: 24px;"></material-icon>
+                            </material-button>
+                        </div>
+                <div ng-controller="BookListCtrl">
+                <div class="animate-switch-container" ng-controller="tabCtrl" ng-switch on="tabs.selectedIndex">
+                    <div class="animate-switch" 
+                        ng-switch-when="0" 
+                        material-swipe-left="next()" 
+                        material-swipe-right="previous()"
+                    >
+                        <!--<div>
+                            <tf-float label="Search My Books" value="query"></tf-float>
+                            Sort by:
+                            <select ng-model="orderProp">
+                                <option value="title">Alphabetical</option>
+                                <option value="date">Newest</option>
+                                <option value="-age">Oldest</option>
+                            </select>
+                        </div> -->   
+                            <material-list>
+                                <material-item ng-repeat="book in books | orderBy:orderProp | filter:{type: 'offer'}">
+                                    <material-item-content>
+                                        <div class="material-tile-left">
+                                            <img ng-src="{{book.image}}" class="img" alt="{{book.title}}">
+                                        </div>
+                                        <div class="material-tile-content">
+                                            <h3>{{book.title}}</h3>
+                                            <h4>{{book.author}}</h4>
+                                        </div>
+                                    </material-item-content>
+                                    <material-divider ng-if="!$last"></material-divider>
+                                </material-item>
+                            </material-list>
+                        
+
+                    </div>
+                    <div class="animate-switch" 
+                        ng-switch-when="1" 
+                        material-swipe-left="next()" 
+                        material-swipe-right="previous()"
+                    >
+                        <!--<div>
+                            <tf-float label="Search My Books" value="query"></tf-float>
+                            Sort by:
+                            <select ng-model="orderProp">
+                                <option value="title">Alphabetical</option>
+                                <option value="date">Newest</option>
+                                <option value="-age">Oldest</option>
+                            </select>
+                        </div> -->
+                        
+                            <material-list>
+                                <material-item ng-repeat="book in books | orderBy:orderProp | filter:{type: 'request'}">
+                                    <material-item-content>
+                                        <div class="material-tile-left">
+                                            <img ng-src="{{book.image}}" class="img" alt="{{book.title}}">
+                                        </div>
+                                        <div class="material-tile-content">
+                                            <h3>{{book.title}}</h3>
+                                            <h4>{{book.author}}</h4>
+                                        </div>
+                                    </material-item-content>
+                                    <material-divider ng-if="!$last"></material-divider>
+                                </material-item>
+                            </material-list>
+                        
+                    <!--</div>-->
+                </div>
+
+            </material-content>        
+        </div>
+
+
+
+</material-content>
+</div>
+    </div>
+
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+     <script>
+       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+       ga('create', 'UA-XXXXX-X');
+       ga('send', 'pageview');
+    </script>
+
+    <!-- build:js(.) scripts/oldieshim.js -->
+    <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.js"></script>
+    <![endif]-->
+    <!-- endbuild -->
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="scripts/app.js"></script>
+        <script src="scripts/controllers/main.js"></script>
+        <!-- endbuild -->
+</body>
+</html>
