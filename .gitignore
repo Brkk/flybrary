@@ -10,3 +10,8 @@ release.properties
 .classpath
 *.class
 *.properties
+node_modules
+.tmp
+.sass-cache
+bower_components
+dist
