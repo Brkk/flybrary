@@ -1,1 +1,39 @@
-<head><material-dialog aria-label="Add a new book"> <material-content class="dialog-content"> <div ng-controller="addBookCtrl" layout="vertical"> <h2>Add Book</h2> <material-content> <form style="padding: 20px"> <div class="row"> <tf-float label="Title" value="book.title"> </tf-float> <tf-float label="Author" value="book.author"> </tf-float> </div> <div class="row"> <tf-float label="Condition" value="book.condition" class="long"> </tf-float> <tf-float label="Edition" value="book.version"> </tf-float> </div> <div class="row"> <tf-float label="ISBN" value="book.isbn"> </tf-float> </div> </form> </material-content> </div> </material-content> <div class="dialog-actions"> <span flex></span> <material-button ng-click="addBook()" class="material-theme-grey" center> Add Book </material-button> </div> </material-dialog>
+<head/><material-dialog aria-label="Add a new book">
+
+  <material-content class="dialog-content">
+
+
+    <div ng-controller="addBookCtrl" layout="vertical">
+
+      <h2>Add Book</h2>
+
+      <material-content>
+        <form style="padding: 20px;">
+          <div class="row">
+            <tf-float label="Title" value="book.title"> </tf-float>
+            <tf-float label="Author" value="book.author"> </tf-float>
+          </div>
+          <div class="row">
+            <tf-float label="Condition" value="book.condition" class="long"> </tf-float>
+            <tf-float label="Edition" value="book.version"> </tf-float>
+          </div>
+          <div class="row">
+            <tf-float label="ISBN" value="book.isbn"> </tf-float>
+          </div>
+        </form>
+      </material-content>
+
+    </div>
+
+
+
+  </material-content>
+
+  <div class="dialog-actions">
+    <span flex></span>
+    <material-button ng-click="addBook()" class="material-theme-grey" center>
+      Add Book
+    </material-button>
+  </div>
+
+</material-dialog>
