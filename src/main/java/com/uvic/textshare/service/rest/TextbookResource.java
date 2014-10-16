@@ -35,9 +35,10 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 
 
-@Path("/textshare")
+@SuppressWarnings("unused")
+@Path("/")
 public class TextbookResource {
- 
+	 
 	 @POST
 	 @Path("/retrieve") 
 	 @Consumes(MediaType.APPLICATION_JSON)
@@ -66,7 +67,7 @@ public class TextbookResource {
 	 @Consumes(MediaType.APPLICATION_JSON)
 	 public void addTextbook(String input)	throws ParseException {
 		
-		 //Parse the input parameters form the JSON object sent from client side
+		 //Parse the input parameters from the JSON object sent from client side
 		 JSONObject text = new JSONObject(input);
 		 
 		 /*
@@ -192,10 +193,12 @@ public class TextbookResource {
 		 
 	 }
 	 
-	 //To update a book, you have to send back the unique id of the textbook as well.
-	 //When you call the retrieve method it returns the unique id for each book that user has
-	 //Store that with the rest of the textbook so it can be sent back
-	 // !!!! Only works if the unique ID (created by datastore when the textbook is created) provided !!!!
+	 /* 
+	 * To update a book, you have to send back the unique id of the textbook as well.
+	 * When you call the retrieve method it returns the unique id for each book that user has
+	 * Store that with the rest of the textbook so it can be sent back
+	 * Only works if the unique ID (created by datastore when the textbook is created) provided 
+	 */
 	 @POST
 	 @Path("/update")
 	 @Consumes(MediaType.APPLICATION_JSON)
@@ -235,4 +238,11 @@ public class TextbookResource {
 	 public String testMethod() {
 		 return "this is a test";
 	 } 
+	 
+	 @GET
+	 @Produces(MediaType.TEXT_HTML)
+	 public String sayHtmlHello() {
+	    return "<html> " + "<title>" + "Hello Jersey" + "</title>"
+	        + "<body><h1>" + "Test" + "</body></h1>" + "</html> ";
+	  }
 }
