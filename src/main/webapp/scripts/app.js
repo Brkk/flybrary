@@ -40,9 +40,9 @@ function DialogController($scope, $rootScope, $materialDialog) {
 //angular
   //.module('textShareApp', []);
 angular
-  .module( 'textShareApp', [ 'ngAnimate', 'ngMaterial' ])
+  .module( 'textShareApp', [ 'ngAnimate', 'ngMaterial','directive.g+signin' ])
   .controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jsonFilter) {
-      
+
       var logResult = function (str, data, status, headers)
       {
         console.log(data);
@@ -56,16 +56,16 @@ angular
 
       $http.post("resources/retrieve", {'uid':'2'}, null)
           .success(function (data, status, headers, config)
-          {   
+          {
             $timeout(function() {
               $scope.books = data;
-            });   
+            });
           })
           .error(function (data, status, headers, config)
           {
-            
+
           });
-      
+
       $scope.orderProp = 'title';
   })
   .filter('isOffer', function () {
@@ -104,7 +104,7 @@ angular
         targetEvent: ev,
         controller: DialogController
       }).then(function(addBook) {
-        
+
         if($scope.tabs.selectedIndex == 0)
         {
           $scope.book.type = 'offer';
@@ -118,23 +118,23 @@ angular
 
         $http.post("resources/add", addBook, null)
           .success(function (data, status, headers, config)
-          {  
+          {
             $http.post("resources/retrieve", {'uid':'2'}, null)
               .success(function (data, status, headers, config)
-              {   
+              {
                   $scope.books = data;
               })
               .error(function (data, status, headers, config)
               {
-                
-              }); 
+
+              });
             })
           .error(function (data, status, headers, config)
           {
           }
         );
 
-        
+
       });
     };
   })
@@ -146,7 +146,7 @@ angular
     };
 
     $rootScope.next = function() {
-      $scope.tabs.selectedIndex = Math.min( $scope.tabs.maxIndex, $scope.tabs.selectedIndex + 1) ;  
+      $scope.tabs.selectedIndex = Math.min( $scope.tabs.maxIndex, $scope.tabs.selectedIndex + 1) ;
     };
 
     $rootScope.previous = function() {
@@ -156,6 +156,12 @@ angular
   })
   .controller('pageCtrl', function($scope, $rootScope) {
     $rootScope.loggedIn = 1;
+    $rootScope.$on('event:google-plus-signin-success', function (event,authResult) {
+      $rootScope.loggedIn = 1;
+    });
+    $rootScope.$on('event:google-plus-signin-failure', function (event,authResult) {
+      // Auth failure or signout detected
+    });
   })
 
 
@@ -197,6 +203,3 @@ angular
         '</material-input-group>'
     };
 });
-
-
-

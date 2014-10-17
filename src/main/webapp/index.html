@@ -14,6 +14,7 @@
     <script src="../bower_components/angular-animate/angular-animate.js"></script>
     <script src="../bower_components/hammerjs/hammer.js"></script>
     <script src="../bower_components/angular-material/angular-material.js"></script>
+    <script src="scripts/google-plus-signin.js"</script>
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
@@ -23,6 +24,7 @@
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
+
 </head>
 <body layout="horizontal">
     <!--[if lt IE 7]>
@@ -32,10 +34,9 @@
     <!-- Add your site or application content here -->
 
     <div class="animate-switch-container" ng-controller="pageCtrl" ng-switch on="loggedIn" style="width:100%">
-        <div class="animate-switch" ng-switch-when="0" >
-
-        </div>
-
+          <div class="animate-switch" ng-switch-when="0" >
+              <google-plus-signin clientid="642821490386-5e5tfhghkcvsmjauaeu0mbnlrnjnl30n.apps.googleusercontent.com"></google-plus-signin>
+          </div>
         <div class="animate-switch" ng-switch-when="1" >
 
             <div ng-controller="SidebarController" layout="horizontal">
@@ -67,9 +68,9 @@
                         </div>
                         <div ng-controller="BookListCtrl">
                             <div class="animate-switch-container" ng-controller="tabCtrl" ng-switch on="tabs.selectedIndex">
-                                <div class="animate-switch" 
-                                    ng-switch-when="0" 
-                                    material-swipe-left="next()" 
+                                <div class="animate-switch"
+                                    ng-switch-when="0"
+                                    material-swipe-left="next()"
                                     material-swipe-right="previous()"
                                 >
                                     <material-list>
@@ -86,11 +87,11 @@
                                             <material-divider ng-if="!$last"></material-divider>
                                         </material-item>
                                     </material-list>
-                        
+
                                 </div>
-                                <div class="animate-switch" 
-                                    ng-switch-when="1" 
-                                    material-swipe-left="next()" 
+                                <div class="animate-switch"
+                                    ng-switch-when="1"
+                                    material-swipe-left="next()"
                                     material-swipe-right="previous()"
                                 >
                                     <!--<div>
@@ -102,7 +103,7 @@
                                             <option value="-age">Oldest</option>
                                         </select>
                                     </div> -->
-                                
+
                                     <material-list>
                                         <material-item ng-repeat="book in books | orderBy:orderProp | isRequest">
                                             <material-item-content>
@@ -117,10 +118,10 @@
                                             <material-divider ng-if="!$last"></material-divider>
                                         </material-item>
                                     </material-list>
-                                                            
+
                                 </div>
                             </div>
-                            
+
                         </div>
 
                     </material-content>
