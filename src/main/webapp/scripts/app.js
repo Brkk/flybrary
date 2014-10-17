@@ -22,13 +22,14 @@ function DialogController($scope, $rootScope, $materialDialog) {
        title: '',
        topic: '',
        author: '',
-       version: '',
+       edition: '',
        condition: '',
-       user: 1,
-       date: 1412810947,
-       lat: 48.462927,
-       lon: -123.311534,
-       image: 'images/finite_elements.jpg'
+       user: '2',
+       date: '1412810947',
+       lat: '48.462927',
+       lon: '-123.311534',
+       image: 'images/finite_elements.jpg',
+       email: 'jhedin10@gmail.com'
     };
 }
 
@@ -38,73 +39,63 @@ function DialogController($scope, $rootScope, $materialDialog) {
   //.module('textShareApp', []);
 angular
   .module( 'textShareApp', [ 'ngAnimate', 'ngMaterial' ])
-  .controller('BookListCtrl', function($scope, $rootScope) {
-      $rootScope.books = [
+  .controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jsonFilter) {
+      
+      var logResult = function (str, data, status, headers)
+      {
+        console.log(data);
+        return str + "\n\n" +
+          "data: " + data + "\n\n" +
+          "status: " + status + "\n\n" +
+          "headers: " + jsonFilter(headers()) + "\n\n";
+      };
+
+      $rootScope.books = [];
+
+      $http.post("resources/retrieve", {'user':'2'}, null)
+          .success(function (data, status, headers, config)
+          {   
+            $timeout(function() {
+              $scope.books = data;
+            });   
+          })
+          .error(function (data, status, headers, config)
           {
-              'type': 'request',
-              'isbn': '978-0-595-66825-1',
-              'title': 'A - A First Course in the Finite Element Method',
-              'topic': 'mechanical engineering',
-              'author': 'Sergway',
-              'version': '5',
-              'condition': 'good',
-              'user': 1,
-              'date': 14128109451,
-              'lat': 48.462927,
-              'lon': -123.311534,
-              'image': 'images/finite_elements.jpg'
-          },
-          {
-              'type': 'offer',
-              'isbn': '978-0-595-66825-1',
-              'title': 'B - Physics for Scientists and Engineers',
-              'topic': 'mechanical engineering',
-              'author': 'Logan',
-              'version': '5',
-              'condition': 'good',
-              'user': 1,
-              'date': 1412810950,
-              'lat': 48.462927,
-              'lon': -123.311534,
-              'image': 'images/finite_elements.jpg'
-          },
-          {
-              'type': 'request',
-              'isbn': '978-0-595-66825-1',
-              'title': 'C - A First Course in the Finite Element Method',
-              'topic': 'mechanical engineering',
-              'author': 'Logan',
-              'version': '5',
-              'condition': 'good',
-              'user': 1,
-              'date': 1412810949,
-              'lat': 48.462927,
-              'lon': -123.311534,
-              'image': 'images/finite_elements.jpg'
-          },
-          {
-              'type': 'offer',
-              'isbn': '978-0-595-66825-1',
-              'title': 'D - First Course in the Finite Element Method',
-              'topic': 'mechanical engineering',
-              'author': 'Sergway',
-              'version': '5',
-              'condition': 'good',
-              'user': 1,
-              'date': 1412810948,
-              'lat': 48.462927,
-              'lon': -123.311534,
-              'image': 'images/finite_elements.jpg'
-          }
-      ];
+            
+          });
+      
       $scope.orderProp = 'title';
+  })
+  .filter('isOffer', function () {
+    return function (items) {
+      var filtered = [];
+      for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        if (item.propertyMap.type == 'offer') {
+          filtered.push(item);
+        }
+      }
+      return filtered;
+    };
+  })
+  .filter('isRequest', function () {
+    return function (items) {
+      var filtered = [];
+      for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        if (item.propertyMap.type == 'request') {
+          filtered.push(item);
+        }
+      }
+      return filtered;
+    };
   })
   .controller('SidebarController', function($scope, $rootScope, $materialSidenav) {
       $scope.openLeftMenu = function() {
         $materialSidenav('left').toggle();
       };
   })
-  .controller('addBookCtrl', function($scope, $rootScope, $materialDialog, $timeout) {
+  .controller('addBookCtrl', function($scope, $rootScope, $materialDialog, $http, $timeout) {
     $scope.dialog = function(ev) {
       $materialDialog.show({
         templateUrl: 'views/addBook.html',
@@ -122,7 +113,28 @@ angular
         }
 
         console.log(addBook);
-        $timeout(function() {$scope.books.push(addBook)});
+
+        $http.post("resources/add", addBook, null)
+          .success(function (data, status, headers, config)
+          {  
+            $http.post("resources/retrieve", {'user':'2'}, null)
+              .success(function (data, status, headers, config)
+              {   
+                $timeout(function() {
+                  $scope.books = data;
+                });   
+              })
+              .error(function (data, status, headers, config)
+              {
+                
+              }); 
+            })
+          .error(function (data, status, headers, config)
+          {
+          }
+        );
+
+        
       });
     };
   })
