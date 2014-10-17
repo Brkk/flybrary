@@ -31,10 +31,10 @@ public class MatchingFunction {
 		String searchType;
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		
-		if(type.equals("offered")) {
-			 searchType = "requested";
+		if(type.equals("offer")) {
+			 searchType = "request";
 		} else {
-			searchType = "offered";
+			searchType = "offer";
 		}
 
 		//Set up filters for matching
@@ -52,7 +52,7 @@ public class MatchingFunction {
 		if(!textbooks.isEmpty())
 		{
 			Entity matchedBook = textbooks.get(0);
-			String user2 = (String) matchedBook.getProperty("user");
+			String user2 = (String) matchedBook.getProperty("name");
 			String email2 = (String) matchedBook.getProperty("email");
 
 			sendEmailToUser(user1, email1, user2, email2, title);
@@ -66,8 +66,6 @@ public class MatchingFunction {
 		
 	}
 	
-	
-	
 	//Take a look at this method here, I created it using a hashmap to switch filters and broaden the results
 	//Ps. not ready yet but working
 	public static boolean checkForMatchObj(Textbook textbook) {
@@ -75,10 +73,10 @@ public class MatchingFunction {
 			String searchType;
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 			
-			if(textbook.getType().equals("offered")) {
-				 searchType = "requested";
+			if(textbook.getType().equals("offer")) {
+				 searchType = "request";
 			} else {
-				searchType = "offered";
+				searchType = "offer";
 			}
 			
 			//Set up filters for matching

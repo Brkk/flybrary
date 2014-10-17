@@ -23,8 +23,8 @@
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
-  </head>
-  <body layout="horizontal">
+</head>
+<body layout="horizontal">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -53,83 +53,86 @@
                     </div>
                 </material-toolbar>
                 <div layout="horizontal" layout-align="end start" ng-controller="addBookCtrl">
-                            <material-button class="material-button-fab material-theme-green" ng-click="dialog($event)">
-                            <material-icon icon="images/plus.svg" style="width: 24px; height: 24px;"></material-icon>
-                            </material-button>
-                        </div>
+                    <material-button class="material-button-fab material-theme-green" ng-click="dialog($event)">
+                        <material-icon icon="images/plus.svg" style="width: 24px; height: 24px;"></material-icon>
+                    </material-button>
+                </div>
                 <div ng-controller="BookListCtrl">
-                <div class="animate-switch-container" ng-controller="tabCtrl" ng-switch on="tabs.selectedIndex">
-                    <div class="animate-switch" 
-                        ng-switch-when="0" 
-                        material-swipe-left="next()" 
-                        material-swipe-right="previous()"
-                    >
-                        <!--<div>
-                            <tf-float label="Search My Books" value="query"></tf-float>
-                            Sort by:
-                            <select ng-model="orderProp">
-                                <option value="title">Alphabetical</option>
-                                <option value="date">Newest</option>
-                                <option value="-age">Oldest</option>
-                            </select>
-                        </div> -->   
+                    <div class="animate-switch-container" ng-controller="tabCtrl" ng-switch on="tabs.selectedIndex">
+                        <div class="animate-switch" 
+                            ng-switch-when="0" 
+                            material-swipe-left="next()" 
+                            material-swipe-right="previous()"
+                        >
                             <material-list>
-                                <material-item ng-repeat="book in books | orderBy:orderProp | filter:{type: 'offer'}">
+                                <material-item ng-repeat="book in books | orderBy:orderProp | isOffer">
                                     <material-item-content>
                                         <div class="material-tile-left">
-                                            <img ng-src="{{book.image}}" class="img" alt="{{book.title}}">
+                                            <img ng-src="{{book.propertyMap.image}}" class="img" alt="{{book.propertyMap.title}}">
                                         </div>
                                         <div class="material-tile-content">
-                                            <h3>{{book.title}}</h3>
-                                            <h4>{{book.author}}</h4>
+                                            <h3>{{book.propertyMap.title}}</h3>
+                                            <h4>{{book.propertyMap.author}}</h4>
                                         </div>
                                     </material-item-content>
                                     <material-divider ng-if="!$last"></material-divider>
                                 </material-item>
                             </material-list>
+                
+                        </div>
+                        <div class="animate-switch" 
+                            ng-switch-when="1" 
+                            material-swipe-left="next()" 
+                            material-swipe-right="previous()"
+                        >
+                            <!--<div>
+                                <tf-float label="Search My Books" value="query"></tf-float>
+                                Sort by:
+                                <select ng-model="orderProp">
+                                    <option value="title">Alphabetical</option>
+                                    <option value="date">Newest</option>
+                                    <option value="-age">Oldest</option>
+                                </select>
+                            </div> -->
                         
-
+                            <material-list>
+                                <material-item ng-repeat="book in books | orderBy:orderProp | isRequest">
+                                    <material-item-content>
+                                        <div class="material-tile-left">
+                                            <img ng-src="{{book.propertyMap.image}}" class="img" alt="{{book.propertyMap.title}}">
+                                        </div>
+                                        <div class="material-tile-content">
+                                            <h3>{{book.propertyMap.title}}</h3>
+                                            <h4>{{book.propertyMap.author}}</h4>
+                                        </div>
+                                    </material-item-content>
+                                    <material-divider ng-if="!$last"></material-divider>
+                                </material-item>
+                            </material-list>
+                                                    
+                        </div>
                     </div>
-                    <div class="animate-switch" 
-                        ng-switch-when="1" 
-                        material-swipe-left="next()" 
-                        material-swipe-right="previous()"
-                    >
-                        <!--<div>
-                            <tf-float label="Search My Books" value="query"></tf-float>
-                            Sort by:
-                            <select ng-model="orderProp">
-                                <option value="title">Alphabetical</option>
-                                <option value="date">Newest</option>
-                                <option value="-age">Oldest</option>
-                            </select>
-                        </div> -->
-                        
-                            <material-list>
-                                <material-item ng-repeat="book in books | orderBy:orderProp | filter:{type: 'request'}">
-                                    <material-item-content>
-                                        <div class="material-tile-left">
-                                            <img ng-src="{{book.image}}" class="img" alt="{{book.title}}">
-                                        </div>
-                                        <div class="material-tile-content">
-                                            <h3>{{book.title}}</h3>
-                                            <h4>{{book.author}}</h4>
-                                        </div>
-                                    </material-item-content>
-                                    <material-divider ng-if="!$last"></material-divider>
-                                </material-item>
-                            </material-list>
-                        
-                    <!--</div>-->
+                    
                 </div>
 
-            </material-content>        
+                <material-list>
+                    <material-item ng-repeat="book in books | orderBy:orderProp">
+                        <material-item-content>
+                            <div class="material-tile-left">
+                                <img ng-src="{{book.propertyMap.image}}" class="img" alt="{{book.propertyMap.title}}">
+                            </div>
+                            <div class="material-tile-content">
+                                <h3>{{book.propertyMap.title}}</h3>
+                                <h4>{{book.propertyMap.author}}</h4>
+                                <h3>{{book.propertyMap.type}}</h3>
+                            </div>
+                        </material-item-content>
+                        <material-divider ng-if="!$last"></material-divider>
+                    </material-item>
+                </material-list>
+
+            </material-content>
         </div>
-
-
-
-</material-content>
-</div>
     </div>
 
 
