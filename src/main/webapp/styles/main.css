@@ -11,6 +11,10 @@ material-dialog {
     margin: 16px;
 }
 
+.background {
+  background-image:url('../images/bg.png');
+}
+
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
 .marketing,

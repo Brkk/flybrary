@@ -33,9 +33,8 @@
     <!-- Add your site or application content here -->
 
     <div class="animate-switch-container" ng-controller="pageCtrl" ng-switch on="loggedIn" style="width:100%">
-          <div class="animate-switch" ng-switch-when="0" style="background: url('images/bg.png')" style="height=100%">
-            <div layout="vertical" layout-fill>
-
+          <div layout="vertical" layout-fill>
+            <div class="animate-switch background" ng-switch-when="0" flex>
               <md-whiteframe class="md-whiteframe-z1" layout layout-align="center center">
                 <google-plus-signin clientid="642821490386-5e5tfhghkcvsmjauaeu0mbnlrnjnl30n.apps.googleusercontent.com"></google-plus-signin>
               </md-whiteframe>
