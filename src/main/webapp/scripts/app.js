@@ -120,9 +120,8 @@ angular
             $http.post("resources/retrieve", {'user':'2'}, null)
               .success(function (data, status, headers, config)
               {   
-                $timeout(function() {
                   $scope.books = data;
-                });   
+                  $scope.$apply();
               })
               .error(function (data, status, headers, config)
               {
