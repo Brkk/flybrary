@@ -14,7 +14,6 @@
     <script src="../bower_components/angular-animate/angular-animate.js"></script>
     <script src="../bower_components/hammerjs/hammer.js"></script>
     <script src="../bower_components/angular-material/angular-material.js"></script>
-    <script src="scripts/google-plus-signin.js"</script>
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
@@ -35,7 +34,7 @@
 
     <div class="animate-switch-container" ng-controller="pageCtrl" ng-switch on="loggedIn" style="width:100%">
           <div class="animate-switch" ng-switch-when="0" >
-              <google-plus-signin clientid="642821490386-5e5tfhghkcvsmjauaeu0mbnlrnjnl30n.apps.googleusercontent.com"></google-plus-signin>
+                <google-plus-signin clientid="642821490386"></google-plus-signin>
           </div>
         <div class="animate-switch" ng-switch-when="1" >
 
@@ -129,6 +128,8 @@
             </div>
         </div>
     </div>
+
+    <script src="scripts/google-plus-signin.js"</script>
 
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
