@@ -6,7 +6,7 @@ material-dialog {
 
 .img {
     border-radius: 30px;
-    border: 1px solid #ddd;
+    border: 1\2px solid #ddd;
     width: 48px;
     height:48px;
     margin: 16px;
@@ -117,20 +117,6 @@ material-dialog {
   }
 }
 
-.loginBox{
-/*border: 1px solid #ddd;*/
-  background-size: 100% 100%;
-  background-color:grey;
-vertical-align: middle;
-display: inline-block;
-}
-
-h1 {
-  font-family: 'Roboto', sans-serif;
-  font-style: 30 px;
-
-}
-
 
 .animate-switch-container {
   position:relative;
@@ -150,3 +136,50 @@ h1 {
   background-image:url('../images/bg.png');
 
 }
+
+
+.clr { clear: both;}
+#wrapper {
+  margin: 50px auto;
+  width: 540px;
+  height:300px;
+  background: #fff;
+
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
+  border-radius: 5px;
+  padding: 40px;
+}
+
+.join {
+  color: #222;
+  font-size: 44px;
+  font-weight:700;
+  float: left;
+  text-shadow: 1px 0 1px #777;
+}
+/*.lock {
+  float: right;
+  background:url("http://i.imgur.com/Jsq8WUM.png") no-repeat;
+  width:14px;
+  height:18px;
+  margin-top: 12px;
+}*/
+.login-options {
+  margin-top: 15px;
+  color: #9c9c9c;
+  margin-bottom: 25px;
+}
+
+
+
+
+
+
+
+
+
+
+

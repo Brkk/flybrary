@@ -34,22 +34,19 @@
 
      <div class="animate-switch-container" ng-controller="pageCtrl" ng-switch on="loggedIn"  >
             <div class="animate-switch first" ng-switch-when="0" flex>
-             
-                <div layout="horizontal">
-                    <div style="width: 30%;"> </div>
-                    <div layout="vertical"  flex>
-                        
-                        <div class="loginBox">
-                            <center>
-                            <h1><div flex>Welcome to TextChanger</div></h1>
-                            <div flex><google-plus-signin clientid="642821490386-5e5tfhghkcvsmjauaeu0mbnlrnjnl30n.apps.googleusercontent.com"></google-plus-signin></div>
-                            </center>
-                        </div>
-                        
-                    </div>
-                    <div style="width: 30%;"> </div>
+                          
+
+                <div id="wrapper">
+                    <div class="join">Welcome to TextChange</div>
+                    <div class="clr"></div>
+                <div class="login-options">Choose on of the following sign up methods.</div>
+                    <div> <google-plus-signin clientid="642821490386-5e5tfhghkcvsmjauaeu0mbnlrnjnl30n.apps.googleusercontent.com"></google-plus-signin></div>
+                    <div class="clr"><hr /></div>   
                 </div>
-            </div>
+
+
+
+             </div>
 
 
         <div class="animate-switch" ng-switch-when="1" style="width: 100%;">
