@@ -70,10 +70,7 @@ public class TextbookResource {
 		
 		 //Parse the input parameters from the JSON object sent from client side
 		 JSONObject text = new JSONObject(input);
-		 
-		 /*
-		  * Are these going to be used or are we depending on the information from the client side
-		  */
+
 		// UserService userService = UserServiceFactory.getUserService();
 		// User user = userService.getCurrentUser();
 		 Date date = new Date();
@@ -146,7 +143,7 @@ public class TextbookResource {
 		    datastore.put(textbook);
 	 }  
 	 
-	 @POST
+/*	 @POST
 	 @Path("/delete")
 	 @Consumes(MediaType.APPLICATION_JSON)
 	 public void deleteTextbook(String input) throws JSONException {
@@ -192,6 +189,22 @@ public class TextbookResource {
 		 Query q = new Query("Textbook").setFilter(matchFilter);
 		 Entity textbook = datastore.prepare(q).asSingleEntity();
 		 datastore.delete(textbook.getKey());
+		 
+	 } */
+	 @POST
+	 @Path("/delete")
+	 @Consumes(MediaType.APPLICATION_JSON)
+	 public void deleteTextbook(String input) throws JSONException {
+		 
+		 JSONObject in = new JSONObject(input);
+		 JSONObject obj = in.getJSONObject("key");
+		 System.out.println(obj);
+		 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		 Long id = obj.getLong("id");
+		 System.out.println(id);
+		 Key textbookKey = KeyFactory.createKey("Textbook", id);
+		 datastore.delete(textbookKey);
 		 
 	 }
 	 
@@ -240,12 +253,5 @@ public class TextbookResource {
 	 @Path("/test")
 	 public String testMethod() {
 		 return "this is a test";
-	 } 
-	 
-	 @GET
-	 @Produces(MediaType.TEXT_HTML)
-	 public String sayHtmlHello() {
-	    return "<html> " + "<title>" + "Hello Jersey" + "</title>"
-	        + "<body><h1>" + "Test" + "</body></h1>" + "</html> ";
-	  }
+	 }
 }

@@ -56,6 +56,7 @@ public class MatchingFunction {
 			String email2 = (String) matchedBook.getProperty("email");
 
 			sendEmailToUser(user1, email1, user2, email2, title);
+			sendEmailToUser(user2, email2, user1, email1, title);
 			matchedBook.setProperty("matched", "yes");
 			datastore.put(matchedBook);
 			return "yes";
