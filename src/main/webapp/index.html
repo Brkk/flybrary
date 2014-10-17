@@ -31,15 +31,14 @@
 
     <!-- Add your site or application content here -->
 
-    <div class="animate-switch-container" ng-controller="pageCtrl" ng-switch on="loggedIn">
+    <div class="animate-switch-container" ng-controller="pageCtrl" ng-switch on="loggedIn" style="width:100%">
         <div class="animate-switch" ng-switch-when="0" >
 
         </div>
 
-        <div class="animate-switch" ng-switch-when="0" >
+        <div class="animate-switch" ng-switch-when="1" >
 
-
-            <div ng-controller="SidebarController" layout="horizontal" style="width:100%">
+            <div ng-controller="SidebarController" layout="horizontal">
 
                 <material-sidenav component-id="left"  layout="vertical" class="material-sidenav-left">
                     <material-toolbar class="material-theme-light material-medium-tall">
