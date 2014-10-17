@@ -34,10 +34,8 @@
 
     <div class="animate-switch-container" ng-controller="pageCtrl" ng-switch on="loggedIn" style="width:100%">
           <div layout="vertical" layout-fill>
-            <div class="animate-switch background" ng-switch-when="0" flex>
-              <md-whiteframe class="md-whiteframe-z1" layout layout-align="center center">
+            <div class="animate-switch background" ng-switch-when="0" flex layout layout-align="center center">
                 <google-plus-signin clientid="642821490386-5e5tfhghkcvsmjauaeu0mbnlrnjnl30n.apps.googleusercontent.com"></google-plus-signin>
-              </md-whiteframe>
             </div>
           </div>
         <div class="animate-switch" ng-switch-when="1" >
@@ -54,8 +52,13 @@
                 <div layout="vertical" layout-fill="" tabindex="-1" role="main">
                     <material-content layout="vertical">
                         <material-toolbar class="material-theme-dark material-medium-tall app-toolbar">
-                            <div class="material-toolbar-tools" ng-click="openLeftMenu()" tabindex="0">
+                            <div class="material-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between">
+                              <div ng-click="openLeftMenu()">
                                 TextShare
+                              </div>
+                              <div ng-click="logout()">
+                                  <button style="color:#900000">Logout</button>
+                              </div>
                             </div>
                             <div ng-controller="tabCtrl">
                                 <material-tabs selected="tabs.selectedIndex" center>

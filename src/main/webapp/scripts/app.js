@@ -30,7 +30,7 @@ function DialogController($scope, $rootScope, $materialDialog) {
        date: '1412810947',
        lat: '48.462927',
        lon: '-123.311534',
-       image: 'images/finite_elements.jpg',
+       image: '../images/finite_elements.jpg',
        email: 'jhedin10@gmail.com'
     };
 }
@@ -95,6 +95,11 @@ angular
   .controller('SidebarController', function($scope, $rootScope, $materialSidenav) {
       $scope.openLeftMenu = function() {
         $materialSidenav('left').toggle();
+      };
+      $scope.logout = function() {
+        gapi.auth.signOut();
+        $rootScope.loggedIn = 0;
+        $scope.$apply();
       };
   })
   .controller('addBookCtrl', function($scope, $rootScope, $materialDialog, $http, $timeout) {

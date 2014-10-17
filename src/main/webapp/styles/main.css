@@ -70,6 +70,31 @@ material-dialog {
   margin-top: 28px;
 }
 
+.buttondemoBasicUsage {
+  /** From vulcanized demo **/ }
+  .buttondemoBasicUsage section {
+    background: #f7f7f7;
+    border-radius: 3px;
+    text-align: center;
+    margin: 1em;
+    position: relative !important;
+    padding-bottom: 10px; }
+  .buttondemoBasicUsage md-content {
+    margin-right: 7px; }
+  .buttondemoBasicUsage section md-button:not(.md-button-fab) {
+    width: 10em; }
+  .buttondemoBasicUsage section md-button {
+    display: block;
+    margin: 1em;
+    line-height: 25px; }
+  .buttondemoBasicUsage .label {
+    position: absolute;
+    bottom: 5px;
+    left: 7px;
+    color: #ccc;
+    font-size: 14px;
+}
+
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
   /* Remove the padding we set earlier */
