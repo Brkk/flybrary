@@ -6,15 +6,6 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
       <welcome-file>index.html</welcome-file>
   </welcome-file-list>
   <servlet>
-      <servlet-name>HelloWorldServlet</servlet-name>
-      <servlet-class>com.uvic.textshare.HelloWorldServlet</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-      <servlet-name>HelloWorldServlet</servlet-name>
-      <url-pattern>/hi</url-pattern>
-  </servlet-mapping> 
-  <servlet>
   	<servlet-name>Jersey Web Application</servlet-name>
     <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
     <init-param>

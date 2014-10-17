@@ -47,7 +47,8 @@ public class TextbookResource {
 		 
 		 //Create a filter for retrieving all the books associated with that user
 		 JSONObject obj = new JSONObject(input);
-		 String user = obj.getString("user");
+		 JSONObject propertyMap = obj.getJSONObject("propertyMap");
+		 String user = propertyMap.getString("user");
 		 Filter userFilter = new FilterPredicate("user", FilterOperator.EQUAL, user);
 
 		 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -150,7 +151,8 @@ public class TextbookResource {
 	 @Consumes(MediaType.APPLICATION_JSON)
 	 public void deleteTextbook(String input) throws JSONException {
 		 
-		 JSONObject obj = new JSONObject(input);
+		 JSONObject in = new JSONObject(input);
+		 JSONObject obj = in.getJSONObject("propertyMap");
 		 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		 String title = obj.getString("title");
 		 String author = obj.getString("author");
@@ -205,8 +207,9 @@ public class TextbookResource {
 	 public void updateTextbook(String input) {
 		 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
 		 JSONObject obj = new JSONObject(input);
-		 
-		 Long id = Long.valueOf(obj.getString("id")).longValue();
+		 JSONObject keyValues = obj.getJSONObject("key");
+
+		 Long id = Long.valueOf(keyValues.getString("id")).longValue();
 		 String title = obj.getString("title");
 		 String author = obj.getString("author");
 		 String isbn = obj.getString("isbn");
