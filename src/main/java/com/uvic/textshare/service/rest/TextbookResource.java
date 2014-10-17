@@ -47,7 +47,8 @@ public class TextbookResource {
 		 
 		 //Create a filter for retrieving all the books associated with that user
 		 JSONObject obj = new JSONObject(input);
-		 String user = obj.getString("user");
+		 JSONObject propertyMap = obj.getJSONObject("propertyMap");
+		 String user = propertyMap.getString("user");
 		 Filter userFilter = new FilterPredicate("user", FilterOperator.EQUAL, user);
 
 		 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -69,10 +70,7 @@ public class TextbookResource {
 		
 		 //Parse the input parameters from the JSON object sent from client side
 		 JSONObject text = new JSONObject(input);
-		 
-		 /*
-		  * Are these going to be used or are we depending on the information from the client side
-		  */
+
 		// UserService userService = UserServiceFactory.getUserService();
 		// User user = userService.getCurrentUser();
 		 Date date = new Date();
@@ -145,12 +143,13 @@ public class TextbookResource {
 		    datastore.put(textbook);
 	 }  
 	 
-	 @POST
+/*	 @POST
 	 @Path("/delete")
 	 @Consumes(MediaType.APPLICATION_JSON)
 	 public void deleteTextbook(String input) throws JSONException {
 		 
-		 JSONObject obj = new JSONObject(input);
+		 JSONObject in = new JSONObject(input);
+		 JSONObject obj = in.getJSONObject("propertyMap");
 		 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		 String title = obj.getString("title");
 		 String author = obj.getString("author");
@@ -191,6 +190,22 @@ public class TextbookResource {
 		 Entity textbook = datastore.prepare(q).asSingleEntity();
 		 datastore.delete(textbook.getKey());
 		 
+	 } */
+	 @POST
+	 @Path("/delete")
+	 @Consumes(MediaType.APPLICATION_JSON)
+	 public void deleteTextbook(String input) throws JSONException {
+		 
+		 JSONObject in = new JSONObject(input);
+		 JSONObject obj = in.getJSONObject("key");
+		 System.out.println(obj);
+		 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		 Long id = obj.getLong("id");
+		 System.out.println(id);
+		 Key textbookKey = KeyFactory.createKey("Textbook", id);
+		 datastore.delete(textbookKey);
+		 
 	 }
 	 
 	 /* 
@@ -205,8 +220,9 @@ public class TextbookResource {
 	 public void updateTextbook(String input) {
 		 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
 		 JSONObject obj = new JSONObject(input);
-		 
-		 Long id = Long.valueOf(obj.getString("id")).longValue();
+		 JSONObject keyValues = obj.getJSONObject("key");
+
+		 Long id = Long.valueOf(keyValues.getString("id")).longValue();
 		 String title = obj.getString("title");
 		 String author = obj.getString("author");
 		 String isbn = obj.getString("isbn");
@@ -237,12 +253,5 @@ public class TextbookResource {
 	 @Path("/test")
 	 public String testMethod() {
 		 return "this is a test";
-	 } 
-	 
-	 @GET
-	 @Produces(MediaType.TEXT_HTML)
-	 public String sayHtmlHello() {
-	    return "<html> " + "<title>" + "Hello Jersey" + "</title>"
-	        + "<body><h1>" + "Test" + "</body></h1>" + "</html> ";
-	  }
+	 }
 }
