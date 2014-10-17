@@ -128,7 +128,7 @@ public class TextbookResource {
 		    textbook.setProperty("edition", obj.getString("edition"));
 		    textbook.setProperty("condition", obj.getString("codnition"));
 		    textbook.setProperty("email", obj.getString("email"));
-		    textbook.setProperty("date", date;
+		    textbook.setProperty("date", date);
 		    textbook.setProperty("matched", "no"); //If we know a book is matched, we can omit it when searching for a match.
 		    
 		    //Add the created entity on the Datastore.
