@@ -47,8 +47,7 @@ public class TextbookResource {
 		 
 		 //Create a filter for retrieving all the books associated with that user
 		 JSONObject obj = new JSONObject(input);
-		 JSONObject propertyMap = obj.getJSONObject("propertyMap");
-		 String user_id = propertyMap.getString("uid");
+		 String user_id = obj.getString("uid");
 		 Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, user_id);
 
 		 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
