@@ -1,3 +1,4 @@
+
 /* Space out content a bit */
 material-dialog {
   min-width: 50%;
@@ -63,6 +64,8 @@ material-dialog {
 }
 
 /* Supporting marketing content */
+
+
 .marketing {
   margin: 40px 0;
 }
@@ -112,4 +115,38 @@ material-dialog {
   .jumbotron {
     border-bottom: 0;
   }
+}
+
+.loginBox{
+/*border: 1px solid #ddd;*/
+  background-size: 100% 100%;
+  background-color:grey;
+vertical-align: middle;
+display: inline-block;
+}
+
+h1 {
+  font-family: 'Roboto', sans-serif;
+  font-style: 30 px;
+
+}
+
+
+.animate-switch-container {
+  position:relative;
+
+  width: 100%;
+  height:100%;
+  overflow:hidden;
+}
+
+
+.first {
+
+  height: 100%;
+  width: 100%;
+
+  background-size: 100% 100%;
+  background-image:url('../images/bg.png');
+
 }

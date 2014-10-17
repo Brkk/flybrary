@@ -32,15 +32,29 @@
 
     <!-- Add your site or application content here -->
 
-    <div class="animate-switch-container" ng-controller="pageCtrl" ng-switch on="loggedIn" style="width:100%">
-          <div layout="vertical" layout-fill>
-            <div class="animate-switch background" ng-switch-when="0" flex layout layout-align="center center">
-                <google-plus-signin clientid="642821490386-5e5tfhghkcvsmjauaeu0mbnlrnjnl30n.apps.googleusercontent.com"></google-plus-signin>
+     <div class="animate-switch-container" ng-controller="pageCtrl" ng-switch on="loggedIn"  >
+            <div class="animate-switch first" ng-switch-when="0" flex>
+             
+                <div layout="horizontal">
+                    <div style="width: 30%;"> </div>
+                    <div layout="vertical"  flex>
+                        
+                        <div class="loginBox">
+                            <center>
+                            <h1><div flex>Welcome to TextChanger</div></h1>
+                            <div flex><google-plus-signin clientid="642821490386-5e5tfhghkcvsmjauaeu0mbnlrnjnl30n.apps.googleusercontent.com"></google-plus-signin></div>
+                            </center>
+                        </div>
+                        
+                    </div>
+                    <div style="width: 30%;"> </div>
+                </div>
             </div>
-          </div>
-        <div class="animate-switch" ng-switch-when="1" >
 
-            <div ng-controller="SidebarController" layout="horizontal">
+
+        <div class="animate-switch" ng-switch-when="1" style="width: 100%;">
+
+            <div ng-controller="SidebarController" layout="horizontal" style="width: 100%;">
 
                 <material-sidenav component-id="left"  layout="vertical" class="material-sidenav-left">
                     <material-toolbar class="material-theme-light material-medium-tall">
@@ -49,7 +63,7 @@
                     </material-toolbar>
                 </material-sidenav>
 
-                <div layout="vertical" layout-fill="" tabindex="-1" role="main">
+                <div layout="vertical" layout-fill="" tabindex="-1" role="main" style="width: 100%;">
                     <material-content layout="vertical">
                         <material-toolbar class="material-theme-dark material-medium-tall app-toolbar">
                             <div class="material-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between">
