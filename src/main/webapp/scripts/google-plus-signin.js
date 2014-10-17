@@ -24,7 +24,7 @@ angular.module('directive.g+signin', []).
         callback: 'signinCallback',
         cookiepolicy: 'single_host_origin',
         requestvisibleactions: 'http://schemas.google.com/AddActivity',
-        scope: 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email',
+        scope: 'https://www.googleapis.com/auth/profile https://www.googleapis.com/auth/userinfo.email',
         width: 'wide'
       };
 
