@@ -155,9 +155,10 @@ angular
 
   })
   .controller('pageCtrl', function($scope, $rootScope) {
-    $rootScope.loggedIn = 1;
+    $rootScope.loggedIn = 0;
     $rootScope.$on('event:google-plus-signin-success', function (event,authResult) {
       $rootScope.loggedIn = 1;
+      $scope.$apply();
     });
     $rootScope.$on('event:google-plus-signin-failure', function (event,authResult) {
       // Auth failure or signout detected
