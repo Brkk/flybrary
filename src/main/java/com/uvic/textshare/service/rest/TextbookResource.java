@@ -47,9 +47,8 @@ public class TextbookResource {
 		 
 		 //Create a filter for retrieving all the books associated with that user
 		 JSONObject obj = new JSONObject(input);
-		 JSONObject propertyMap = obj.getJSONObject("propertyMap");
-		 String user = propertyMap.getString("user");
-		 Filter userFilter = new FilterPredicate("user", FilterOperator.EQUAL, user);
+		 String user_id = obj.getString("uid");
+		 Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, user_id);
 
 		 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		 // Use class Query to assemble a query
@@ -81,12 +80,13 @@ public class TextbookResource {
 				 text.getString("edition"), 
 				 text.getString("condition"), 
 				 text.getString("type"), 
-				 text.getString("user"), 
+				 text.getString("name"), 
 				 text.getString("email"));
 		 
 		 // Create an textbook entity using the user input 
 		 Entity textbook = new Entity("Textbook");
-		    textbook.setProperty("user", text.getString("user"));
+		    textbook.setProperty("name", text.getString("name"));
+		    textbook.setProperty("uid", text.getString("uid"));
 		    textbook.setProperty("type", text.getString("type"));
 		    textbook.setProperty("title", text.getString("title"));
 		    textbook.setProperty("author", text.getString("author"));
@@ -111,31 +111,23 @@ public class TextbookResource {
 	 public void addTextbookTest(String input) {
 		 
 		 String matched = "no";
-		 JSONObject obj = new JSONObject(input);
-		 UserService userService = UserServiceFactory.getUserService();
-		 User user = userService.getCurrentUser();
-		 
-		 Textbook textbook1 = new Textbook(obj.getString("title"),
-				 obj.getString("author"),
-				 new Date(),
-				 user,
-				 obj.getString("isbn"),
-				 obj.getString("condition"),
-				 obj.getString("edition"),
-				 obj.getString("type"),
-				 matched,
-				 obj.getString("email"));
+		 JSONObject propertyMap = new JSONObject(input);
+		 JSONObject obj = propertyMap.getJSONObject("propertyMap");
+		 Date date = new Date();
+
 		 		 
 		 // Create an textbook entity using the user input 
 		 Entity textbook = new Entity("Textbook");
-		    textbook.setProperty("user", textbook1.getUser());
-		    textbook.setProperty("type", textbook1.getType());
-		    textbook.setProperty("title", textbook1.getTitle());
-		    textbook.setProperty("author", textbook1.getAuthor());
-		    textbook.setProperty("isbn", textbook1.getIsbn());
-		    textbook.setProperty("edition", textbook1.getEdition());
-		    textbook.setProperty("condition", textbook1.getCondition());
-		    textbook.setProperty("date", textbook1.getAddDate());
+		    textbook.setProperty("name", obj.getString("name"));
+		    textbook.setProperty("uid", obj.getString("uid"));
+		    textbook.setProperty("type", obj.getString("type"));
+		    textbook.setProperty("title", obj.getString("title"));
+		    textbook.setProperty("author", obj.getString("author"));
+		    textbook.setProperty("isbn", obj.getString("isbn"));
+		    textbook.setProperty("edition", obj.getString("edition"));
+		    textbook.setProperty("condition", obj.getString("codnition"));
+		    textbook.setProperty("email", obj.getString("email"));
+		    textbook.setProperty("date", date);
 		    textbook.setProperty("matched", "no"); //If we know a book is matched, we can omit it when searching for a match.
 		    
 		    //Add the created entity on the Datastore.
@@ -227,16 +219,18 @@ public class TextbookResource {
 		 String author = obj.getString("author");
 		 String isbn = obj.getString("isbn");
 		 String edition = obj.getString("edition");
-		 String user = obj.getString("user");
+		 String name = obj.getString("name");
 		 String condition = obj.getString("condition");
 		 String type = obj.getString("type");
 		 String matched = "no";
 		 String email = obj.getString("email");
+		 String uid = obj.getString("uid");
 	
 		 Key textbookKey = KeyFactory.createKey("Textbook", id);
 		 Query q = new Query(textbookKey);
 		 Entity textbook = datastore.prepare(q).asSingleEntity();
-		 	textbook.setProperty("user", user);
+		 	textbook.setProperty("name", name);
+		 	textbook.setProperty("uid", uid);
 		    textbook.setProperty("type", type);
 		    textbook.setProperty("title", title);
 		    textbook.setProperty("author", author);

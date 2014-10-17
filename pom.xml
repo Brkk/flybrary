@@ -55,11 +55,6 @@
   <build>
       <plugins>
           <plugin>
-              <groupId>org.eclipse.jetty</groupId>
-              <artifactId>jetty-maven-plugin</artifactId>
-              <version>9.1.3.v20140225</version>
-          </plugin>
-          <plugin>
               <groupId>com.google.appengine</groupId>
               <artifactId>appengine-maven-plugin</artifactId>
               <version>${appengine.sdk.version}</version>

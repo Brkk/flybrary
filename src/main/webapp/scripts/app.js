@@ -24,7 +24,8 @@ function DialogController($scope, $rootScope, $materialDialog) {
        author: '',
        edition: '',
        condition: '',
-       user: '2',
+       uid: '2',
+       name: '2',
        date: '1412810947',
        lat: '48.462927',
        lon: '-123.311534',
@@ -52,7 +53,7 @@ angular
 
       $rootScope.books = [];
 
-      $http.post("resources/retrieve", {'user':'2'}, null)
+      $http.post("resources/retrieve", {'uid':'2'}, null)
           .success(function (data, status, headers, config)
           {   
             $timeout(function() {
@@ -117,12 +118,10 @@ angular
         $http.post("resources/add", addBook, null)
           .success(function (data, status, headers, config)
           {  
-            $http.post("resources/retrieve", {'user':'2'}, null)
+            $http.post("resources/retrieve", {'uid':'2'}, null)
               .success(function (data, status, headers, config)
               {   
-                $timeout(function() {
                   $scope.books = data;
-                });   
               })
               .error(function (data, status, headers, config)
               {
@@ -138,7 +137,6 @@ angular
       });
     };
   })
-
   .controller('tabCtrl', function($scope, $rootScope) {
     $rootScope.tabs = {
       maxIndex : 1,
@@ -155,6 +153,11 @@ angular
     };
 
   })
+  .controller('PageCtrl', function($scope, $rootScope) {
+    $rootScope.loggedIn;
+  })
+
+
   /**
    *  Simple directive used to quickly construct `Floating Label` text fields
    *  NOTE: the label field is considered a constant specified as an attribute
