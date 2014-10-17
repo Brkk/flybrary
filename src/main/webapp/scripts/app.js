@@ -118,7 +118,7 @@ angular
         $http.post("resources/add", addBook, null)
           .success(function (data, status, headers, config)
           {  
-            $http.post("resources/retrieve", {'user':'2'}, null)
+            $http.post("resources/retrieve", {'uid':'2'}, null)
               .success(function (data, status, headers, config)
               {   
                   $scope.books = data;
