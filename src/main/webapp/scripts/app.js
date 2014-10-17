@@ -16,22 +16,25 @@ function DialogController($scope, $rootScope, $materialDialog) {
     $scope.addBook = function(addBook) {
       $materialDialog.hide($scope.book);
     };
-    $rootScope.book = {
-       type: 'offer',
-       isbn: '978-0-595-66825-1',
-       title: '',
-       topic: '',
-       author: '',
-       edition: '',
-       condition: '',
-       uid: '2',
-       user: '2',
-       name: '',
-       date: '1412810947',
-       lat: '48.462927',
-       lon: '-123.311534',
-       image: '../images/finite_elements.jpg',
-       email: 'jhedin10@gmail.com'
+    if(!$scope.book)
+    {
+      $rootScope.book = {
+         type: 'offer',
+         isbn: '978-0-595-66825-1',
+         title: '',
+         topic: '',
+         author: '',
+         edition: '',
+         condition: '',
+         uid: '2',
+         user: '2',
+         name: '',
+         date: '1412810947',
+         lat: '48.462927',
+         lon: '-123.311534',
+         image: '../images/finite_elements.jpg',
+         email: 'jhedin10@gmail.com'
+      }
     };
 }
 
@@ -53,8 +56,8 @@ angular
       };
 
       $rootScope.books = [];
-
-      $http.post("resources/retrieve", {'uid':'2'}, null)
+      var req = {'uid':$scope.book.uid};
+      $http.post("resources/retrieve", req, null)
           .success(function (data, status, headers, config)
           {
             $timeout(function() {
@@ -124,7 +127,7 @@ angular
         $http.post("resources/add", addBook, null)
           .success(function (data, status, headers, config)
           {
-            $http.post("resources/retrieve", {'uid':'2'}, null)
+            $http.post("resources/retrieve", {'uid':$scope.book.uid}, null)
               .success(function (data, status, headers, config)
               {
                   $scope.books = data;
@@ -161,9 +164,40 @@ angular
   })
   .controller('pageCtrl', function($scope, $rootScope) {
     $rootScope.loggedIn = 0;
-    $rootScope.$on('event:google-plus-signin-success', function (event,authResult) {
-      $rootScope.loggedIn = 1;
+    $rootScope.userInfoCallback = function(userInfo) {
+        console.log(userInfo);
+
+        $rootScope.book = {
+         type: 'offer',
+         isbn: '978-0-595-66825-1',
+         title: '',
+         topic: '',
+         author: '',
+         edition: '',
+         condition: '',
+         uid: userInfo.id,
+         name: userInfo.displayName,
+         date: '1412810947',
+         lat: '48.462927',
+         lon: '-123.311534',
+         image: '../images/finite_elements.jpg',
+         email: userInfo.emails[0].value
+      }
+      $scope.loggedIn = 1;
       $scope.$apply();
+    };
+
+    $scope.$on('event:google-plus-signin-success', function (event,authResult) {
+
+      gapi.client.request(
+        {
+            'path':'/plus/v1/people/me',
+            'method':'GET',
+            'callback': $scope.userInfoCallback
+        }
+      );
+
+      
     });
     $rootScope.$on('event:google-plus-signin-failure', function (event,authResult) {
       // Auth failure or signout detected
