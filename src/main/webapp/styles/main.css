@@ -1,17 +1,4 @@
 
-/* Space out content a bit */
-material-dialog {
-  min-width: 50%;
-}
-
-.img {
-    border-radius: 30px;
-    border: 1\2px solid #ddd;
-    width: 48px;
-    height:48px;
-    margin: 16px;
-}
-
 .background {
   background-image:url('../images/bg.png');
 }
@@ -177,9 +164,36 @@ material-dialog {
 
 
 
+/* from james */
 
+material-dialog {
+  min-width: 50%;
+}
 
+.img {
+    border-radius: 30px;
+    border: 0.5px solid #ddd;
+    width: 48px;
+    height:48px;
+    margin: 16px;
+}
 
+md-button:not(.md-button-fab) {
+  width: 10em;
+}
+section md-button {
+  display: block;
+  margin: 1em;
+  line-height: 25px; 
+}
+md-tab:focus {
+  border:none;
+}
+section.tabs-header {
+  min-width: 372px;
+  max-width: 372px;
+}
+md-button:not([disabled]):hover, md-button:not([disabled]).focus {
+  background-color: rgba(228, 228, 228, 0.3);
 
-
-
+}

@@ -1,9 +1,9 @@
 <!doctype html>
 <!-- <html class="no-js" class="ng-scope"> -->
-<html lang="en" ng-app="textShareApp" class="ng-scope">
+<html lang="en" ng-app="textChangrApp" class="ng-scope">
   <head>
     <meta charset="utf-8">
-    <title>TextShare</title>
+    <title>TextChangr</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
@@ -32,10 +32,9 @@
 
     <!-- Add your site or application content here -->
 
-     <div class="animate-switch-container" ng-controller="pageCtrl" ng-switch on="loggedIn"  >
-            <div class="animate-switch first" ng-switch-when="0" flex>
+     <div class="animate-switch-container" layout-fill ng-controller="pageCtrl" ng-switch on="loggedIn"  >
+            <div class="animate-switch first" layout-fill ng-switch-when="0">
                           
-
                 <div id="wrapper">
                     <div class="join">Welcome to TextChange</div>
                     <div class="clr"></div>
@@ -43,73 +42,78 @@
                     <div> <google-plus-signin clientid="642821490386-5e5tfhghkcvsmjauaeu0mbnlrnjnl30n.apps.googleusercontent.com"></google-plus-signin></div>
                     <div class="clr"><hr /></div>   
                 </div>
-
-
-
              </div>
 
+        <div class="animate-switch" layout-fill ng-switch-when="1" style="width: 100%;">
+            <section layout="horizontal" layout-fill ng-controller="SidebarController" flex>
+                <md-sidenav class="md-sidenav-left md-whiteframe-z1" style="z-index:8" component-id="left"  layout="vertical" class="md-sidenav-left">
+                    <md-toolbar class="md-theme-dark md-medium-tall">
+                      <div class="md-toolbar-tools">Priorities</div>
+                    </md-toolbar>
+                    <md-content layout="vertical" flex layout-align="space-between">
+                         <md-content>
+                         </md-content>
+                        <footer>
+                            <md-divider></md-divider>
+                            <section layout="vertical" flex layout-align="center center">
+                                <md-button ng-click="logout()">
+                                    Logout
+                                </md-button>
+                            </section>
+                        </footer>
+                    </md-content>
+                </md-sidenav>
 
-        <div class="animate-switch" ng-switch-when="1" style="width: 100%;">
-
-            <div ng-controller="SidebarController" layout="horizontal" style="width: 100%;">
-
-                <material-sidenav component-id="left"  layout="vertical" class="material-sidenav-left">
-                    <material-toolbar class="material-theme-light material-medium-tall">
-                      <h1 class="material-toolbar-tools" style="padding-top:25px;">
-                      </h1>
-                    </material-toolbar>
-                </material-sidenav>
-
-                <div layout="vertical" layout-fill="" tabindex="-1" role="main" style="width: 100%;">
-                    <material-content layout="vertical">
-                        <material-toolbar class="material-theme-dark material-medium-tall app-toolbar">
-                            <div class="material-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between">
-                              <div ng-click="openLeftMenu()">
-                                TextShare
-                              </div>
-                              <div ng-click="logout()">
-                                  <button style="color:#900000">Logout</button>
-                              </div>
+                <div layout="vertical" layout-fill="" tabindex="-1" role="main" style="background:#eee">
+                    <md-toolbar class="md-theme-light app-toolbar" style="z-index:3">
+                        <div class="md-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between">
+                            <div ng-click="toggleLeft()">
+                                <md-button>Textchangr</md-button>
                             </div>
-                            <div ng-controller="tabCtrl">
-                                <material-tabs selected="tabs.selectedIndex" center>
-                                    <material-tab label="OFFERS"></material-tab>
-                                    <material-tab label="REQUEST"></material-tab>
-                                </material-tabs>
-                            </div>
-                        </material-toolbar>
-                        <div layout="horizontal" layout-align="end start" ng-controller="addBookCtrl">
-                            <material-button class="material-button-fab material-theme-green" ng-click="dialog($event)">
-                                <material-icon icon="images/plus.svg" style="width: 24px; height: 24px;"></material-icon>
-                            </material-button>
+                        </div> 
+                    </md-toolbar>
+                    <md-toolbar class="md-theme-light md-whiteframe-z1">
+                        <div class="md-toolbar-tools" ng-controller="tabCtrl" style="margin-bottom: 10px" style="z-index:3">
+                            <md-tabs selected="tabs.selectedIndex" layout="horizontal" layout-align="start start">
+                                <md-tab label="Offers"></md-tab>
+                                <md-tab label="Requests"></md-tab>
+                                <md-tab label="Textchanges"></md-tab>
+                            </md-tabs>
                         </div>
-                        <div ng-controller="BookListCtrl">
-                            <div class="animate-switch-container" ng-controller="tabCtrl" ng-switch on="tabs.selectedIndex">
+                    </md-toolbar>
+                    <div layout="horizontal" layout-align="end start" ng-controller="addBookCtrl" style="position:relative">
+                        <md-button class="md-button-fab md-theme-green" ng-click="dialog($event)" style="position: absolute; right:5%; top: -44px">
+                            <md-icon icon="images/plus.svg" style="width: 24px; height: 24px;"></md-icon>
+                        </md-button>
+                    </div>
+                    <md-content ng-controller="BookListCtrl">
+                        <md-whiteframe class="md-whiteframe-z1" layout layout-fill style="background: #f9f9f9; z-index:2;">
+                            <div class="animate-switch-container" ng-controller="tabCtrl" ng-switch on="tabs.selectedIndex" >
                                 <div class="animate-switch"
                                     ng-switch-when="0"
-                                    material-swipe-left="next()"
-                                    material-swipe-right="previous()"
+                                    md-swipe-left="next()"
+                                    md-swipe-right="previous()"
                                 >
-                                    <material-list>
-                                        <material-item ng-repeat="book in books | orderBy:orderProp | isOffer">
-                                            <material-item-content>
-                                                <div class="material-tile-left">
-                                                    <img ng-src="{{book.propertyMap.image}}" class="img" alt="{{book.propertyMap.title}}">
+                                    <md-list>
+                                        <md-item ng-repeat="book in books | orderBy:orderProp | isOffer">
+                                            <md-item-content>
+                                                <div class="md-tile-left">
+                                                    <img ng-src="images/{{book.propertyMap.image}}" class="img">
                                                 </div>
-                                                <div class="material-tile-content">
+                                                <div class="md-tile-content">
                                                     <h3>{{book.propertyMap.title}}</h3>
                                                     <h4>{{book.propertyMap.author}}</h4>
                                                 </div>
-                                            </material-item-content>
-                                            <material-divider ng-if="!$last"></material-divider>
-                                        </material-item>
-                                    </material-list>
+                                            </md-item-content>
+                                            <md-divider ng-if="!$last"></md-divider>
+                                        </md-item>
+                                    </md-list>
 
                                 </div>
                                 <div class="animate-switch"
                                     ng-switch-when="1"
-                                    material-swipe-left="next()"
-                                    material-swipe-right="previous()"
+                                    md-swipe-left="next()"
+                                    md-swipe-right="previous()"
                                 >
                                     <!--<div>
                                         <tf-float label="Search My Books" value="query"></tf-float>
@@ -121,29 +125,50 @@
                                         </select>
                                     </div> -->
 
-                                    <material-list>
-                                        <material-item ng-repeat="book in books | orderBy:orderProp | isRequest">
-                                            <material-item-content>
-                                                <div class="material-tile-left">
-                                                    <img ng-src="{{book.propertyMap.image}}" class="img" alt="{{book.propertyMap.title}}">
+                                    <md-list>
+                                        <md-item ng-repeat="book in books | orderBy:orderProp | isRequest">
+                                            <md-item-content>
+                                                <div class="md-tile-left">
+                                                    <img ng-src="images/{{book.propertyMap.image}}" class="img">
                                                 </div>
-                                                <div class="material-tile-content">
+                                                <div class="md-tile-content">
                                                     <h3>{{book.propertyMap.title}}</h3>
                                                     <h4>{{book.propertyMap.author}}</h4>
                                                 </div>
-                                            </material-item-content>
-                                            <material-divider ng-if="!$last"></material-divider>
-                                        </material-item>
-                                    </material-list>
+                                            </md-item-content>
+                                            <md-divider ng-if="!$last"></md-divider>
+                                        </md-item>
+                                    </md-list>
+                                </div>
+                                <div class="animate-switch"
+                                    ng-switch-when="3"
+                                    md-swipe-left="next()"
+                                    md-swipe-right="previous()"
+                                >
+                                    <md-list>
+                                        <md-item ng-repeat="book in books | orderBy:orderProp | isMatch">
+                                            <md-item-content>
+                                                <div class="md-tile-left">
+                                                    <img ng-src="images/{{book.propertyMap.image}}" class="img">
+                                                </div>
+                                                <div class="md-tile-content">
+                                                    <h3>{{book.propertyMap.title}}</h3>
+                                                    <h4>{{book.propertyMap.author}}</h4>
+                                                </div>
+                                            </md-item-content>
+                                            <md-divider ng-if="!$last"></md-divider>
+                                        </md-item>
+                                    </md-list>
 
                                 </div>
                             </div>
-
+                        </md-whiteframe>
+                        <div layout-padding>
                         </div>
+                    </md-content>
 
-                    </material-content>
                 </div>
-            </div>
+            </section>
         </div>
     </div>
 

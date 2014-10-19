@@ -96,6 +96,7 @@ public class TextbookResource {
 		    textbook.setProperty("date", date);	 
 		    textbook.setProperty("matched", matched);
 		    textbook.setProperty("email",text.getString("email"));
+		    textbook.setProperty("image",text.getString("image"));
 		    
 		    //Add the created entity on the Datastore.
 		    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -127,6 +128,7 @@ public class TextbookResource {
 		    textbook.setProperty("edition", obj.getString("edition"));
 		    textbook.setProperty("condition", obj.getString("codnition"));
 		    textbook.setProperty("email", obj.getString("email"));
+		    textbook.setProperty("image", obj.getString("image"));
 		    textbook.setProperty("date", date);
 		    textbook.setProperty("matched", "no"); //If we know a book is matched, we can omit it when searching for a match.
 		    
@@ -224,6 +226,7 @@ public class TextbookResource {
 		 String type = obj.getString("type");
 		 String matched = "no";
 		 String email = obj.getString("email");
+		 String image = obj.getString("image");
 		 String uid = obj.getString("uid");
 	
 		 Key textbookKey = KeyFactory.createKey("Textbook", id);
@@ -239,6 +242,7 @@ public class TextbookResource {
 		    textbook.setProperty("condition", condition); 
 		    textbook.setProperty("matched", matched);
 		    textbook.setProperty("email", email);
+		    textbook.setProperty("image", image);
 		    
 		 datastore.put(textbook);
 	 }

@@ -1,13 +1,13 @@
-<head/><material-dialog aria-label="Add a new book">
+<head/><md-dialog aria-label="Add a new book">
 
-  <material-content class="dialog-content">
+  <md-content class="dialog-content">
 
 
     <div ng-controller="addBookCtrl" layout="vertical">
 
       <h2>Add Book</h2>
 
-      <material-content>
+      <md-content>
         <form style="padding: 20px;">
           <div class="row">
             <tf-float label="Title" value="book.title"> </tf-float>
@@ -21,19 +21,19 @@
             <tf-float label="ISBN" value="book.isbn"> </tf-float>
           </div>
         </form>
-      </material-content>
+      </md-content>
 
     </div>
 
 
 
-  </material-content>
+  </md-content>
 
   <div class="dialog-actions">
     <span flex></span>
-    <material-button ng-click="addBook()" class="material-theme-grey" center>
+    <md-button ng-click="addBook()" class="md-theme-grey" center>
       Add Book
-    </material-button>
+    </md-button>
   </div>
 
-</material-dialog>
+</md-dialog>

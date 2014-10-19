@@ -15,10 +15,11 @@ public class Textbook {
     private String type;
     private String matched;
     private String email;
+    private String image;
     
     //need to add an ID field, maybe randomly generate it?
     public Textbook(String title, String author, Date addDate, User user,
-			String isbn, String condition, String edition, String type, String matched, String email) {
+			String isbn, String condition, String edition, String type, String matched, String email, String image) {
 		super();
 		this.title = title;
 		this.author = author;
@@ -30,6 +31,7 @@ public class Textbook {
 		this.type = type;
 		this.matched = matched;
 		this.email = email;
+		this.image = image;
 	}
 
 	public String getTitle() {
@@ -110,6 +112,9 @@ public class Textbook {
 	
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 }

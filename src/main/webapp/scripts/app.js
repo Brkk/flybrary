@@ -9,12 +9,12 @@
  * Main module of the application.
  */
 
-function DialogController($scope, $rootScope, $materialDialog) {
+function DialogController($scope, $rootScope, $mdDialog) {
     $scope.hide = function() {
-      $materialDialog.hide();
+      $mdDialog.hide();
     };
     $scope.addBook = function(addBook) {
-      $materialDialog.hide($scope.book);
+      $mdDialog.hide($scope.book);
     };
     if(!$scope.book)
     {
@@ -32,7 +32,7 @@ function DialogController($scope, $rootScope, $materialDialog) {
          date: '1412810947',
          lat: '48.462927',
          lon: '-123.311534',
-         image: '../images/finite_elements.jpg',
+         image: 'finite_elements.jpg',
          email: 'jhedin10@gmail.com'
       }
     };
@@ -43,7 +43,7 @@ function DialogController($scope, $rootScope, $materialDialog) {
 //angular
   //.module('textShareApp', []);
 angular
-  .module( 'textShareApp', [ 'ngAnimate', 'ngMaterial','directive.g+signin' ])
+  .module( 'textChangrApp', [ 'ngAnimate', 'ngMaterial','directive.g+signin' ])
   .controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jsonFilter) {
 
       var logResult = function (str, data, status, headers)
@@ -95,19 +95,28 @@ angular
       return filtered;
     };
   })
-  .controller('SidebarController', function($scope, $rootScope, $materialSidenav) {
-      $scope.openLeftMenu = function() {
-        $materialSidenav('left').toggle();
-      };
-      $scope.logout = function() {
-        gapi.auth.signOut();
-        $rootScope.loggedIn = 0;
-        $scope.$apply();
-      };
+  .filter('isMatch', function () {
+    return function (items) {
+      var filtered = [];
+      for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        if (item.propertyMap.matched == 'yes') {
+          filtered.push(item);
+        }
+      }
+      return filtered;
+    };
   })
-  .controller('addBookCtrl', function($scope, $rootScope, $materialDialog, $http, $timeout) {
+  .controller('SidebarController', function($scope, $rootScope, $mdSidenav) {
+    
+    $scope.toggleLeft = function() {
+      $mdSidenav('left').toggle();
+    };
+
+  })
+  .controller('addBookCtrl', function($scope, $rootScope, $mdDialog, $http, $timeout) {
     $scope.dialog = function(ev) {
-      $materialDialog.show({
+      $mdDialog.show({
         templateUrl: 'views/addBook.html',
         targetEvent: ev,
         controller: DialogController
@@ -130,7 +139,9 @@ angular
             $http.post("resources/retrieve", {'uid':$scope.book.uid}, null)
               .success(function (data, status, headers, config)
               {
-                  $scope.books = data;
+                  $timeout(function() {
+                    $scope.books = data;
+                  });
               })
               .error(function (data, status, headers, config)
               {
@@ -162,8 +173,17 @@ angular
     };
 
   })
-  .controller('pageCtrl', function($scope, $rootScope) {
+  .controller('pageCtrl', function($scope, $rootScope, $timeout) {
     $rootScope.loggedIn = 0;
+    
+    $rootScope.logout = function() {
+        gapi.auth.signOut();
+        $rootScope.loggedIn = 0;
+        $timeout(function() {
+          $scope.$apply();
+        });
+      };
+
     $rootScope.userInfoCallback = function(userInfo) {
         console.log(userInfo);
 
@@ -237,9 +257,9 @@ angular
         };
       },
       template:
-        '<material-input-group ng-disabled="isDisabled">' +
+        '<md-input-group ng-disabled="isDisabled">' +
           '<label for="{{fid}}">{{label}}</label>' +
-          '<material-input id="{{fid}}" ng-model="value">' +
-        '</material-input-group>'
+          '<md-input id="{{fid}}" ng-model="value">' +
+        '</md-input-group>'
     };
 });
