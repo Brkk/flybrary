@@ -8,7 +8,7 @@
   <packaging>war</packaging>
 
   <properties>
-      <appengine.sdk.version>1.9.12</appengine.sdk.version>
+      <appengine.sdk.version>1.9.13</appengine.sdk.version>
       <jersey.version>2.5.1</jersey.version>
       <servlet.api.version>2.5</servlet.api.version>
   </properties>
