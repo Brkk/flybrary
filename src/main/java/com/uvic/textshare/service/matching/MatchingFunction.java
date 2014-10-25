@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.Date;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -26,7 +27,7 @@ import com.uvic.textshare.service.model.Textbook;
 
 public class MatchingFunction {
 	
-	public static String checkForMatch(String title, String author, String edition, String condition, String type, String user1, String email1) {
+	public static String checkForMatch(String title, String author, String edition, String condition, String type, String uid, String location) {
 		
 		String searchType;
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -43,7 +44,8 @@ public class MatchingFunction {
 		Filter titleFilter = new FilterPredicate("title", FilterOperator.EQUAL, title);
 		Filter editionFilter = new FilterPredicate("edition", FilterOperator.EQUAL, edition);
 		Filter matchFilter = new FilterPredicate("matched", FilterOperator.EQUAL, "no");
-		Filter searchFilter = CompositeFilterOperator.and(titleFilter, authorFilter, editionFilter, typeFilter, matchFilter);
+		Filter locationFilter = new FilterPredicate("location", FilterOperator.EQUAL, location);
+		Filter searchFilter = CompositeFilterOperator.and(titleFilter, authorFilter, editionFilter, typeFilter, matchFilter, locationFilter);
 
 		Query q = new Query("Textbook").setFilter(searchFilter).addSort("date", Query.SortDirection.ASCENDING);
 		List<Entity> textbooks = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
@@ -52,12 +54,22 @@ public class MatchingFunction {
 		if(!textbooks.isEmpty())
 		{
 			Entity matchedBook = textbooks.get(0);
-			String user2 = (String) matchedBook.getProperty("name");
-			String email2 = (String) matchedBook.getProperty("email");
+			String uid2 = (String) matchedBook.getProperty("uid");
+			Date matchDate = new Date();
+			
+			//retreive first user
+			Filter uidFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uid);
+			Query query = new Query("Users").setFilter(uidFilter);
+			Entity user1 = datastore.prepare(query).asSingleEntity();
+			//retrieve second user
+			Filter uidFilter2 = new FilterPredicate("uid", FilterOperator.EQUAL, uid2);
+			Query query2 = new Query("Users").setFilter(uidFilter2);
+			Entity user2 = datastore.prepare(query2).asSingleEntity();
 
-			sendEmailToUser(user1, email1, user2, email2, title);
-			sendEmailToUser(user2, email2, user1, email1, title);
+			//sendEmailToUser(user1.getProperty("name"), user1.getProperty("email"),user2.getProperty("name"), user2.getProperty("email"), title);
+			//sendEmailToUser(user2.getProperty("name"), user2.getProperty("email"),user1.getProperty("name"), user1.getProperty("email"), title);
 			matchedBook.setProperty("matched", "yes");
+			matchedBook.setProperty("matchDate", matchDate);
 			datastore.put(matchedBook);
 			return "yes";
 		} 

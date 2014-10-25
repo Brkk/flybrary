@@ -50,16 +50,26 @@ public class TextbookResource {
 		 String user_id = obj.getString("uid");
 		 Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, user_id);
 
+
 		 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		 // Use class Query to assemble a query
-		 Query q = new Query("Textbook").setFilter(userFilter);
-
+		 Query q = new Query("Users").setFilter(userFilter);
 		 // Use PreparedQuery interface to retrieve results and save it into a list
 		 PreparedQuery pq = datastore.prepare(q);
-		 List<Entity> textbooks = pq.asList(FetchOptions.Builder.withDefaults());
-		
-		 String json = new Gson().toJson(textbooks);
-		 return json;
+		 Entity user = datastore.prepare(q).asSingleEntity();
+		 
+		 if(user == null) {
+		 	createUser(obj);
+		 	return "[]";
+		 } 
+		 else 
+		 {	
+		 	Query q2 = new Query("Textbook") .setFilter(userFilter);
+		 	PreparedQuery pd2 = datastore.prepare(q2);
+		 	List<Entity> textbooks = pd2.asList(FetchOptions.Builder.withDefaults());
+		 	String json = new Gson().toJson(textbooks);
+		 	return json;
+		 }
 	 }
 	 
 	 @POST
@@ -70,19 +80,22 @@ public class TextbookResource {
 		 //Parse the input parameters from the JSON object sent from client side
 		 JSONObject text = new JSONObject(input);
 
-		// UserService userService = UserServiceFactory.getUserService();
+		// UserService userService = UserServiceFactory.getUerService();
 		// User user = userService.getCurrentUser();
-		 Date date = new Date();
-		 
+		 Date addDate = new Date();
+		 Date matchDate = null; 
 		 String matched = MatchingFunction.checkForMatch(
 				 text.getString("title"), 
 				 text.getString("author"), 
 				 text.getString("edition"), 
 				 text.getString("condition"), 
-				 text.getString("type"), 
-				 text.getString("name"), 
-				 text.getString("email"));
+				 text.getString("type"),
+				 text.getString("uid"),
+		 		 text.getString("location"));
 		 
+		 if(matched.equals("yes"))
+		 	matchDate = new Date();
+
 		 // Create an textbook entity using the user input 
 		 Entity textbook = new Entity("Textbook");
 		    textbook.setProperty("name", text.getString("name"));
@@ -93,7 +106,8 @@ public class TextbookResource {
 		    textbook.setProperty("isbn", text.getString("isbn"));
 		    textbook.setProperty("edition", text.getString("edition"));
 		    textbook.setProperty("condition", text.getString("condition"));
-		    textbook.setProperty("date", date);	 
+		    textbook.setProperty("date", addDate);	 
+		    textbook.setProperty("matchDate", matchDate);
 		    textbook.setProperty("matched", matched);
 		    textbook.setProperty("email",text.getString("email"));
 		    textbook.setProperty("image",text.getString("image"));
@@ -137,54 +151,6 @@ public class TextbookResource {
 		    datastore.put(textbook);
 	 }  
 	 
-/*	 @POST
-	 @Path("/delete")
-	 @Consumes(MediaType.APPLICATION_JSON)
-	 public void deleteTextbook(String input) throws JSONException {
-		 
-		 JSONObject in = new JSONObject(input);
-		 JSONObject obj = in.getJSONObject("propertyMap");
-		 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		 String title = obj.getString("title");
-		 String author = obj.getString("author");
-		 String user = obj.getString("user");
-		 String type = obj.getString("type");
-		 String edition = obj.getString("edition");
-		//Create a filters for retrieving the textbook to be deleted
-		 Filter userFilter =
-				  new FilterPredicate("user",
-				                      FilterOperator.EQUAL,
-				                      user);
-		 Filter typeFilter =
-				  new FilterPredicate("type",
-	                      FilterOperator.EQUAL,
-	                      type);
-		 
-		 Filter authorFilter =
-				  new FilterPredicate("author",
-	                      FilterOperator.EQUAL,
-	                      author);
-		 
-		 Filter titleFilter = 
-				  new FilterPredicate("title",
-	                      FilterOperator.EQUAL,
-	                      title);
-		 Filter editionFilter =
-				  new FilterPredicate("edition",
-	                      FilterOperator.EQUAL,
-	                      edition);
-		 Filter matchFilter = CompositeFilterOperator.and(titleFilter,
-					authorFilter,
-					editionFilter,
-					userFilter,
-					typeFilter);
-		 
-		 //Query the text book and delete it.
-		 Query q = new Query("Textbook").setFilter(matchFilter);
-		 Entity textbook = datastore.prepare(q).asSingleEntity();
-		 datastore.delete(textbook.getKey());
-		 
-	 } */
 	 @POST
 	 @Path("/delete")
 	 @Consumes(MediaType.APPLICATION_JSON)
@@ -251,5 +217,17 @@ public class TextbookResource {
 	 @Path("/test")
 	 public String testMethod() {
 		 return "this is a test";
+	 }
+
+	 private void createUser(JSONObject obj) {
+	 	Entity user = new Entity("User");
+	 		user.setProperty("name", obj.getString("name"));
+	 		user.setProperty("email", obj.getString("email"));
+			user.setProperty("location", obj.getString("location"));
+			user.setProperty("lat", obj.getString("lat"));
+			user.setProperty("lon", obj.getString("lon"));
+		
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
+		datastore.put(user);
 	 }
 }
