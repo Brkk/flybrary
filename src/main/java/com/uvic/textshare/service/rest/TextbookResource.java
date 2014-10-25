@@ -91,14 +91,13 @@ public class TextbookResource {
 				 text.getString("condition"), 
 				 text.getString("type"),
 				 text.getString("uid"),
-		 		 text.getString("location"));
+		 		 "Victoria");
 		 
 		 if(matched.equals("yes"))
 		 	matchDate = new Date();
 
 		 // Create an textbook entity using the user input 
 		 Entity textbook = new Entity("Textbook");
-		    textbook.setProperty("name", text.getString("name"));
 		    textbook.setProperty("uid", text.getString("uid"));
 		    textbook.setProperty("type", text.getString("type"));
 		    textbook.setProperty("title", text.getString("title"));
@@ -109,8 +108,7 @@ public class TextbookResource {
 		    textbook.setProperty("date", addDate);	 
 		    textbook.setProperty("matchDate", matchDate);
 		    textbook.setProperty("matched", matched);
-		    textbook.setProperty("email",text.getString("email"));
-		    textbook.setProperty("image",text.getString("image"));
+		    textbook.setProperty("location", "Victoria");
 		    
 		    //Add the created entity on the Datastore.
 		    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
