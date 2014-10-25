@@ -45,7 +45,6 @@ function DialogController($scope, $rootScope, $mdDialog) {
 angular
   .module( 'textChangrApp', [ 'ngAnimate', 'ngMaterial','directive.g+signin' ])
   .controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jsonFilter) {
-
       var logResult = function (str, data, status, headers)
       {
         console.log(data);
@@ -53,6 +52,10 @@ angular
           "data: " + data + "\n\n" +
           "status: " + status + "\n\n" +
           "headers: " + jsonFilter(headers()) + "\n\n";
+      };
+
+      $scope.getBooksLength = function () {
+        return $rootScope.books.length;
       };
 
       $rootScope.books = [];
@@ -108,7 +111,7 @@ angular
     };
   })
   .controller('SidebarController', function($scope, $rootScope, $mdSidenav) {
-    
+
     $scope.toggleLeft = function() {
       $mdSidenav('left').toggle();
     };
@@ -175,7 +178,7 @@ angular
   })
   .controller('pageCtrl', function($scope, $rootScope, $timeout) {
     $rootScope.loggedIn = 0;
-    
+
     $rootScope.logout = function() {
         gapi.auth.signOut();
         $rootScope.loggedIn = 0;
@@ -217,7 +220,7 @@ angular
         }
       );
 
-      
+
     });
     $rootScope.$on('event:google-plus-signin-failure', function (event,authResult) {
       // Auth failure or signout detected
