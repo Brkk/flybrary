@@ -45,59 +45,61 @@ public class TextbookResource {
 	 @Produces(MediaType.APPLICATION_JSON)
 	 public String getTextbook(String input) {
 		 
-		 //Create a filter for retrieving all the books associated with that user
-		 JSONObject obj = new JSONObject(input);
-		 String user_id = obj.getString("uid");
-		 Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, user_id);
-
-
-		 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		 // Use class Query to assemble a query
-		 Query q = new Query("Users").setFilter(userFilter);
-		 // Use PreparedQuery interface to retrieve results and save it into a list
-		 PreparedQuery pq = datastore.prepare(q);
-		 Entity user = datastore.prepare(q).asSingleEntity();
+		//Create a filter for retrieving all the books associated with that user
+		JSONObject obj = new JSONObject(input);
+		String user_id = obj.getString("uid");
+		Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, user_id);
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		 
-		 if(user == null) {
-		 	createUser(obj);
+		/*
+		*	If the user exists, retreieve its entries
+		*	Else create a new user and return an emtpy entries list
+		*/
+		Query q = new Query("User").setFilter(userFilter);
+		PreparedQuery pq = datastore.prepare(q);
+		Entity user = datastore.prepare(q).asSingleEntity();
+		 
+		if(user == null) {
+			createUser(obj);
 		 	return "[]";
-		 } 
-		 else 
-		 {	
-		 	Query q2 = new Query("Textbook") .setFilter(userFilter);
+		} 
+		else 
+		{	
+			Query q2 = new Query("Textbook").setFilter(userFilter);
 		 	PreparedQuery pd2 = datastore.prepare(q2);
 		 	List<Entity> textbooks = pd2.asList(FetchOptions.Builder.withDefaults());
+		 	
 		 	String json = new Gson().toJson(textbooks);
 		 	return json;
-		 }
-	 }
+		}
+	}
 	 
-	 @POST
-	 @Path("/add")
-	 @Consumes(MediaType.APPLICATION_JSON)
-	 public void addTextbook(String input)	throws ParseException {
+	@POST
+	@Path("/add")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void addTextbook(String input)	throws ParseException {
 		
-		 //Parse the input parameters from the JSON object sent from client side
-		 JSONObject text = new JSONObject(input);
+		//Parse the input parameters from the JSON object sent from client side
+		JSONObject text = new JSONObject(input);
 
 		// UserService userService = UserServiceFactory.getUerService();
 		// User user = userService.getCurrentUser();
-		 Date addDate = new Date();
-		 Date matchDate = null; 
-		 String matched = MatchingFunction.checkForMatch(
-				 text.getString("title"), 
-				 text.getString("author"), 
-				 text.getString("edition"), 
-				 text.getString("condition"), 
-				 text.getString("type"),
-				 text.getString("uid"),
-		 		 "Victoria");
+		Date addDate = new Date();
+		Date matchDate = null; 
+		String matched = MatchingFunction.checkForMatch(
+				text.getString("title"), 
+				text.getString("author"), 
+				text.getString("edition"), 
+				text.getString("condition"), 
+				text.getString("type"),
+				text.getString("uid"),
+		 		"Victoria");
 		 
-		 if(matched.equals("yes"))
-		 	matchDate = new Date();
+		if(matched.equals("yes"))
+			matchDate = new Date();
 
-		 // Create an textbook entity using the user input 
-		 Entity textbook = new Entity("Textbook");
+		// Create an textbook entity using the user input 
+		Entity textbook = new Entity("Textbook");
 		    textbook.setProperty("uid", text.getString("uid"));
 		    textbook.setProperty("type", text.getString("type"));
 		    textbook.setProperty("title", text.getString("title"));
@@ -110,122 +112,150 @@ public class TextbookResource {
 		    textbook.setProperty("matched", matched);
 		    textbook.setProperty("location", "Victoria");
 		    
-		    //Add the created entity on the Datastore.
-		    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		    datastore.put(textbook); 	
-	 }
+		//Add the created entity on the Datastore.
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		datastore.put(textbook);
+
+		String bookOwner = text.getString("uid");
+		String typeOfEntry = text.getString("type");
+		updateUserKarma(bookOwner, typeOfEntry);
+	}
 	 
-	 /*
-	  * Doesnt try to match the book -- user this method on DEVSERVER to create indexes.
-	  */
-	 @POST
-	 @Path("/onlyAdd")
-	 @Consumes(MediaType.APPLICATION_JSON)
-	 public void addTextbookTest(String input) {
-		 
-		 String matched = "no";
-		 JSONObject propertyMap = new JSONObject(input);
-		 JSONObject obj = propertyMap.getJSONObject("propertyMap");
-		 Date date = new Date();
+	/*
+	*	Doesnt try to match the book -- user this method on DEVSERVER to create indexes.
+	*/
+	@POST
+	@Path("/onlyAdd")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void addTextbookTest(String input) {
+		
+		JSONObject propertyMap = new JSONObject(input);
+		JSONObject obj = propertyMap.getJSONObject("propertyMap");
+		Date date = new Date();
 
 		 		 
-		 // Create an textbook entity using the user input 
-		 Entity textbook = new Entity("Textbook");
-		    textbook.setProperty("name", obj.getString("name"));
+		// Create an textbook entity using the user input 
+		Entity textbook = new Entity("Textbook");
 		    textbook.setProperty("uid", obj.getString("uid"));
 		    textbook.setProperty("type", obj.getString("type"));
 		    textbook.setProperty("title", obj.getString("title"));
 		    textbook.setProperty("author", obj.getString("author"));
 		    textbook.setProperty("isbn", obj.getString("isbn"));
 		    textbook.setProperty("edition", obj.getString("edition"));
-		    textbook.setProperty("condition", obj.getString("codnition"));
-		    textbook.setProperty("email", obj.getString("email"));
-		    textbook.setProperty("image", obj.getString("image"));
-		    textbook.setProperty("date", date);
-		    textbook.setProperty("matched", "no"); //If we know a book is matched, we can omit it when searching for a match.
+		    textbook.setProperty("condition", obj.getString("condition"));
+		    textbook.setProperty("date", date);	 
+		    textbook.setProperty("matchDate", date);
+		    textbook.setProperty("matched", "no");
+		    textbook.setProperty("location", "Victoria");
 		    
-		    //Add the created entity on the Datastore.
-		    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		    datastore.put(textbook);
+		//Add the created entity on the Datastore.
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		datastore.put(textbook);
 	 }  
 	 
-	 @POST
-	 @Path("/delete")
-	 @Consumes(MediaType.APPLICATION_JSON)
-	 public void deleteTextbook(String input) throws JSONException {
+	@POST
+	@Path("/delete")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void deleteTextbook(String input) throws JSONException {
 		 
-		 JSONObject in = new JSONObject(input);
-		 JSONObject obj = in.getJSONObject("key");
-		 System.out.println(obj);
-		 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		JSONObject keyPart = new JSONObject(input);
+		JSONObject obj = keyPart.getJSONObject("key");
+		System.out.println(obj);
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-		 Long id = obj.getLong("id");
-		 System.out.println(id);
-		 Key textbookKey = KeyFactory.createKey("Textbook", id);
-		 datastore.delete(textbookKey);
+		Long id = obj.getLong("id");
+		Key textbookKey = KeyFactory.createKey("Textbook", id);
+		datastore.delete(textbookKey);
 		 
 	 }
 	 
-	 /* 
-	 * To update a book, you have to send back the unique id of the textbook as well.
-	 * When you call the retrieve method it returns the unique id for each book that user has
-	 * Store that with the rest of the textbook so it can be sent back
-	 * Only works if the unique ID (created by datastore when the textbook is created) provided 
-	 */
-	 @POST
-	 @Path("/update")
-	 @Consumes(MediaType.APPLICATION_JSON)
-	 public void updateTextbook(String input) {
-		 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
-		 JSONObject obj = new JSONObject(input);
-		 JSONObject keyValues = obj.getJSONObject("key");
+	@POST
+	@Path("/update")
+	@Consumes(MediaType.APPLICATION_JSON)
+ 	public void updateTextbook(String input) {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
+		JSONObject obj = new JSONObject(input);
+		JSONObject keyValues = obj.getJSONObject("key");
 
-		 Long id = Long.valueOf(keyValues.getString("id")).longValue();
-		 String title = obj.getString("title");
-		 String author = obj.getString("author");
-		 String isbn = obj.getString("isbn");
-		 String edition = obj.getString("edition");
-		 String name = obj.getString("name");
-		 String condition = obj.getString("condition");
-		 String type = obj.getString("type");
-		 String matched = "no";
-		 String email = obj.getString("email");
-		 String image = obj.getString("image");
-		 String uid = obj.getString("uid");
+		Long id = Long.valueOf(keyValues.getString("id")).longValue();
+		String title = obj.getString("title");
+		String author = obj.getString("author");
+		String isbn = obj.getString("isbn");
+		String edition = obj.getString("edition");
+		String condition = obj.getString("condition");
+		String type = obj.getString("type");
+		String uid = obj.getString("uid");
 	
-		 Key textbookKey = KeyFactory.createKey("Textbook", id);
-		 Query q = new Query(textbookKey);
-		 Entity textbook = datastore.prepare(q).asSingleEntity();
-		 	textbook.setProperty("name", name);
-		 	textbook.setProperty("uid", uid);
+		Key textbookKey = KeyFactory.createKey("Textbook", id);
+		Query q = new Query(textbookKey);
+		Entity textbook = datastore.prepare(q).asSingleEntity();
+			textbook.setProperty("uid", uid);
 		    textbook.setProperty("type", type);
 		    textbook.setProperty("title", title);
 		    textbook.setProperty("author", author);
 		    textbook.setProperty("isbn", isbn);
 		    textbook.setProperty("edition", edition);
 		    textbook.setProperty("condition", condition); 
-		    textbook.setProperty("matched", matched);
-		    textbook.setProperty("email", email);
-		    textbook.setProperty("image", image);
 		    
-		 datastore.put(textbook);
-	 }
+		datastore.put(textbook);
+	}
  
-	 @GET
-	 @Path("/test")
-	 public String testMethod() {
-		 return "this is a test";
-	 }
+	@GET
+	@Path("/test")
+	public String testMethod() {
+		return "this is a test";
+	}
 
-	 private void createUser(JSONObject obj) {
-	 	Entity user = new Entity("User");
+	private void createUser(JSONObject obj) {
+	
+		Entity user = new Entity("User");
 	 		user.setProperty("name", obj.getString("name"));
+	 		user.setProperty("uid", obj.getString("uid"));
 	 		user.setProperty("email", obj.getString("email"));
 			user.setProperty("location", obj.getString("location"));
 			user.setProperty("lat", obj.getString("lat"));
 			user.setProperty("lon", obj.getString("lon"));
+			user.setProperty("request_karma", 0);
+			user.setProperty("offer_karma", 0);
 		
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
 		datastore.put(user);
-	 }
+	}
+
+	private void updateUserKarma(String uid, String type) {
+		
+		Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uid);
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		
+		Query q = new Query("User").setFilter(userFilter);
+		PreparedQuery pq = datastore.prepare(q);
+		Entity user = datastore.prepare(q).asSingleEntity();
+		int updatedKarma;
+
+		if(type.equals("offer"))
+		{
+			updatedKarma = Integer.parseInt(user.getProperty("offer_karma").toString());
+			updatedKarma += 5;
+			user.setProperty("offer_karma", updatedKarma);
+		}
+		else
+		{
+			updatedKarma = Integer.parseInt(user.getProperty("request_karma").toString());
+			updatedKarma += 5;
+			user.setProperty("request_karma", updatedKarma);
+		}
+
+		datastore.put(user);
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
