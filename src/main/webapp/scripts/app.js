@@ -35,7 +35,6 @@ function DialogController($scope, $rootScope, $mdDialog) {
 //angular
   //.module('textShareApp', []);
 angular
-<<<<<<< HEAD
   .module( 'textChangrApp', [ 'ngAnimate', 'ngMaterial','directive.g+signin','ngRoute' ])
   .config( function($routeProvider) {
     $routeProvider
@@ -73,17 +72,6 @@ angular
       $rootScope.tabs = {
         maxIndex : 1,
         locked : true,
-=======
-  .module( 'textChangrApp', [ 'ngAnimate', 'ngMaterial','directive.g+signin' ])
-  .controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jsonFilter) {
-      var logResult = function (str, data, status, headers)
-      {
-        console.log(data);
-        return str + "\n\n" +
-          "data: " + data + "\n\n" +
-          "status: " + status + "\n\n" +
-          "headers: " + jsonFilter(headers()) + "\n\n";
->>>>>>> 4c5df99128172358101656711bdb8413ddfde1aa
       };
       $scope.currentTab = $routeParams.currentTab;
       switch($routeParams.currentTab) 
@@ -113,7 +101,6 @@ angular
         };
     });
 
-<<<<<<< HEAD
   })
   .service('googleService', function ($http, $q) {
     var clientId = '642821490386-5e5tfhghkcvsmjauaeu0mbnlrnjnl30n.apps.googleusercontent.com',
@@ -158,19 +145,6 @@ angular
                     data.uid = resp.id;
                     data.name = resp.displayName;
                 });
-=======
-      $scope.getBooksLength = function () {
-        return $rootScope.books.length;
-      };
-
-      $rootScope.books = [];
-      var req = {'uid':$scope.book.uid};
-      $http.post("resources/retrieve", req, null)
-          .success(function (data, status, headers, config)
-          {
-            $timeout(function() {
-              $scope.books = data;
->>>>>>> 4c5df99128172358101656711bdb8413ddfde1aa
             });
             deferred.resolve(data);
         } else {
@@ -329,13 +303,8 @@ angular
       return filtered;
     };
   })
-<<<<<<< HEAD
   .controller('SidebarController', function($scope, $mdSidenav) {
     
-=======
-  .controller('SidebarController', function($scope, $rootScope, $mdSidenav) {
-
->>>>>>> 4c5df99128172358101656711bdb8413ddfde1aa
     $scope.toggleLeft = function() {
       $mdSidenav('left').toggle();
     };
