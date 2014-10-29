@@ -1,0 +1,69 @@
+<section layout="horizontal" layout-fill ng-controller="SidebarController" flex>
+    <md-sidenav class="md-sidenav-left md-whiteframe-z1" style="z-index:8" component-id="left" layout="vertical" class="md-sidenav-left">
+        <div class="animate-switch-container" ng-controller="tabCtrl" ng-switch on="tabs.selectedIndex" >
+            <div class="animate-switch" ng-switch-when="0">
+                <div ng-include="'views/offers_side.html'"></div>
+            </div>
+            <div class="animate-switch" ng-switch-when="1">
+                <div ng-include="'views/requests_side.html'"></div>
+            </div>
+            <div class="animate-switch" ng-switch-when="2">
+                <div ng-include="'views/textchanges_side.html'"></div>
+            </div>
+        </div>
+    </md-sidenav>
+
+    <div layout="vertical" layout-fill="" tabindex="-1" role="main" style="background:#eee">
+        <md-toolbar class="md-theme-light app-toolbar" style="z-index:3">
+            <div class="md-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between">
+                <div ng-click="toggleLeft()">
+                    <md-button>Textchangr</md-button>
+                </div>
+            </div> 
+        </md-toolbar>
+        <md-toolbar class="md-theme-light md-whiteframe-z1">
+            <div class="md-toolbar-tools" ng-controller="tabCtrl" style="margin-bottom: 10px" style="z-index:3">
+                <md-tabs selected="tabs.selectedIndex" layout="horizontal" layout-align="start start">
+                    <md-tab label="Offers"></md-tab>
+                    <md-tab label="Requests"></md-tab>
+                    <md-tab label="Textchanges"></md-tab>
+                </md-tabs>
+            </div>
+        </md-toolbar>
+        <div layout="horizontal" layout-align="end start" ng-controller="addBookCtrl" style="position:relative">
+            <md-button class="md-button-fab md-theme-green" ng-click="dialog($event)" style="position: absolute; right:5%; top: -44px">
+                <md-icon icon="images/plus.svg" style="width: 24px; height: 24px;"></md-icon>
+            </md-button>
+        </div>
+        <md-content ng-controller="BookListCtrl">
+            <md-whiteframe class="md-whiteframe-z1" layout layout-fill style="background: #f9f9f9; z-index:2;">    
+                <div class="animate-switch-container" ng-controller="tabCtrl" ng-switch on="tabs.selectedIndex" >
+                    <div class="animate-switch"
+                        ng-switch-when="0"
+                        md-swipe-left="next()"
+                        md-swipe-right="previous()"
+                    >
+                        <div ng-include="'views/offers.html'"></div>
+                    </div>
+                    <div class="animate-switch"
+                        ng-switch-when="1"
+                        md-swipe-left="next()"
+                        md-swipe-right="previous()"
+                    >
+                        <div ng-include="'views/requests.html'"></div>
+                    </div>
+                    <div class="animate-switch"
+                        ng-switch-when="2"
+                        md-swipe-left="next()"
+                        md-swipe-right="previous()"  
+                    >
+                        <div ng-include="'views/textchanges.html'"></div>
+                    </div>    
+                </div>
+            </md-whiteframe>
+            <div layout-padding>
+            </div>
+        </md-content>
+
+    </div>
+</section>
