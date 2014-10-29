@@ -32,10 +32,11 @@ function DialogController($scope, $rootScope, $mdDialog) {
     };
 }
 
-//angular
-  //.module('textShareApp', []);
+
 angular
   .module( 'textChangrApp', [ 'ngAnimate', 'ngMaterial','directive.g+signin','ngRoute' ])
+
+
   .config( function($routeProvider) {
     $routeProvider
       .when('/login', {
@@ -67,6 +68,9 @@ angular
         redirectTo: '/login'
       });
   })
+
+/* Controllers  Start */
+
   .controller('mainCtrl', function($scope, $rootScope, $location, $routeParams)
   {
       $rootScope.tabs = {
@@ -102,67 +106,7 @@ angular
     });
 
   })
-  .service('googleService', function ($http, $q) {
-    var clientId = '642821490386-5e5tfhghkcvsmjauaeu0mbnlrnjnl30n.apps.googleusercontent.com',
-        apiKey = '',
-        scopes = 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email',
-        domain = '',
-        deferred = $q.defer();
 
-    this.login = function () {
-        gapi.auth.authorize({ 
-            client_id: clientId, 
-            scope: scopes, 
-            immediate: false, 
-            hd: domain 
-        }, this.handleAuthResult);
-
-        return deferred.promise;
-    }
-
-    this.handleClientLoad = function () {
-        gapi.client.setApiKey(apiKey);
-        gapi.auth.init(function () { });
-        window.setTimeout(checkAuth, 1);
-    };
-
-    this.checkAuth = function() {
-        gapi.auth.authorize({ 
-            client_id: clientId, 
-            scope: scopes, 
-            immediate: true, 
-            hd: domain 
-        }, this.handleAuthResult);
-    };
-
-    this.handleAuthResult = function(authResult) {
-        if (authResult && !authResult.error) {
-            var data = {};
-            gapi.client.load('oauth2', 'v2', function () {
-                var request = gapi.client.oauth2.userinfo.get();
-                request.execute(function (resp) {
-                    data.email = data.emails[0].value;
-                    data.uid = resp.id;
-                    data.name = resp.displayName;
-                });
-            });
-            deferred.resolve(data);
-        } else {
-            deferred.reject('error');
-        }
-    };
-
-    this.handleAuthClick = function(event) {
-        gapi.auth.authorize({ 
-            client_id: clientId, 
-            scope: scopes, 
-            immediate: false, 
-            hd: domain 
-        }, this.handleAuthResult);
-        return false;
-    };
-
-    })
   .controller('pageCtrl', function($scope, $rootScope, $timeout, $location, googleService) {
     
 
@@ -248,7 +192,8 @@ angular
       // Auth failure or signout detected
     });
   })
-  .controller('BookListCtrl', function($scope, $http, $timeout, jsonFilter) {
+
+.controller('BookListCtrl', function($scope, $http, $timeout, jsonFilter) {
       
       $scope.$watch('book.uid', function() {
         var req = {'uid':$scope.book.uid};
@@ -267,43 +212,8 @@ angular
 
       $scope.orderProp = 'title';
   })
-  .filter('isOffer', function () {
-    return function (items) {
-      var filtered = [];
-      for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-        if (item.propertyMap.type == 'offer') {
-          filtered.push(item);
-        }
-      }
-      return filtered;
-    };
-  })
-  .filter('isRequest', function () {
-    return function (items) {
-      var filtered = [];
-      for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-        if (item.propertyMap.type == 'request') {
-          filtered.push(item);
-        }
-      }
-      return filtered;
-    };
-  })
-  .filter('isMatch', function () {
-    return function (items) {
-      var filtered = [];
-      for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-        if (item.propertyMap.matched == 'yes') {
-          filtered.push(item);
-        }
-      }
-      return filtered;
-    };
-  })
-  .controller('SidebarController', function($scope, $mdSidenav) {
+
+.controller('SidebarController', function($scope, $mdSidenav) {
     
     $scope.toggleLeft = function() {
       $mdSidenav('left').toggle();
@@ -364,6 +274,122 @@ angular
     };
 
   })
+
+
+  /* Controllers  End */
+
+
+
+/*  Services Start   */
+
+
+  .service('googleService', function ($http, $q) {
+    var clientId = '642821490386-5e5tfhghkcvsmjauaeu0mbnlrnjnl30n.apps.googleusercontent.com',
+        apiKey = '',
+        scopes = 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email',
+        domain = '',
+        deferred = $q.defer();
+
+    this.login = function () {
+        gapi.auth.authorize({ 
+            client_id: clientId, 
+            scope: scopes, 
+            immediate: false, 
+            hd: domain 
+        }, this.handleAuthResult);
+
+        return deferred.promise;
+    }
+
+    this.handleClientLoad = function () {
+        gapi.client.setApiKey(apiKey);
+        gapi.auth.init(function () { });
+        window.setTimeout(checkAuth, 1);
+    };
+
+    this.checkAuth = function() {
+        gapi.auth.authorize({ 
+            client_id: clientId, 
+            scope: scopes, 
+            immediate: true, 
+            hd: domain 
+        }, this.handleAuthResult);
+    };
+
+    this.handleAuthResult = function(authResult) {
+        if (authResult && !authResult.error) {
+            var data = {};
+            gapi.client.load('oauth2', 'v2', function () {
+                var request = gapi.client.oauth2.userinfo.get();
+                request.execute(function (resp) {
+                    data.email = data.emails[0].value;
+                    data.uid = resp.id;
+                    data.name = resp.displayName;
+                });
+            });
+            deferred.resolve(data);
+        } else {
+            deferred.reject('error');
+        }
+    };
+
+    this.handleAuthClick = function(event) {
+        gapi.auth.authorize({ 
+            client_id: clientId, 
+            scope: scopes, 
+            immediate: false, 
+            hd: domain 
+        }, this.handleAuthResult);
+        return false;
+    };
+
+    })
+
+
+/*  Services End   */
+  
+
+/*    Filters Start    */  
+  .filter('isOffer', function () {
+    return function (items) {
+      var filtered = [];
+      for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        if (item.propertyMap.type == 'offer') {
+          filtered.push(item);
+        }
+      }
+      return filtered;
+    };
+  })
+  .filter('isRequest', function () {
+    return function (items) {
+      var filtered = [];
+      for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        if (item.propertyMap.type == 'request') {
+          filtered.push(item);
+        }
+      }
+      return filtered;
+    };
+  })
+  .filter('isMatch', function () {
+    return function (items) {
+      var filtered = [];
+      for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        if (item.propertyMap.matched == 'yes') {
+          filtered.push(item);
+        }
+      }
+      return filtered;
+    };
+  })
+  
+/*    Filters End    */
+
+
   /**
    *  Simple directive used to quickly construct `Floating Label` text fields
    *  NOTE: the label field is considered a constant specified as an attribute
