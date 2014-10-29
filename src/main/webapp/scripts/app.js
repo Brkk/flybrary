@@ -60,7 +60,7 @@ angular
         controller: ''
       })
       .when('/faq', {
-        templateUrl: 'partials/faq.html',
+        templateUrl: 'views/faq.html',
         controller: ''
       })
       .otherwise({
@@ -169,7 +169,7 @@ angular
     $rootScope.loggedIn = 0;
     $rootScope.books = [];
 
-    googleService.handleClientLoad();
+    /*googleService.handleClientLoad();
     
     $scope.checkGoogleAuth = function () {
       googleService.checkAuth().then(function (data) {
@@ -199,11 +199,11 @@ angular
       });
     };
 
-    $scope.checkGoogleAuth();
+    $scope.checkGoogleAuth();*/
 
 
   
-    /*$rootScope.logout = function() {   
+    $rootScope.logout = function() {   
         $location.path('/login').replace();
         gapi.auth.signOut();
         $scope.$apply();
@@ -246,7 +246,7 @@ angular
     });
     $rootScope.$on('event:google-plus-signin-failure', function (event,authResult) {
       // Auth failure or signout detected
-    });*/
+    });
   })
   .controller('BookListCtrl', function($scope, $http, $timeout, jsonFilter) {
       
