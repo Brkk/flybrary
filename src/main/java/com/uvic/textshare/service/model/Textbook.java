@@ -7,31 +7,36 @@ import com.google.appengine.api.users.User;
 public class Textbook {
 	private String title;
     private String author;
-    private Date addDate;
-    private User user;
     private String isbn;
     private String condition;
     private String edition;//edition or edition?
     private String type;
+    private Date addDate;
+    private Date matchDate;
+    private String uid;
     private String matched;
-    private String email;
-    private String image;
+    private String location;
+    private double lat;
+    private double lon;
     
     //need to add an ID field, maybe randomly generate it?
-    public Textbook(String title, String author, Date addDate, User user,
-			String isbn, String condition, String edition, String type, String matched, String email, String image) {
+    public Textbook(String title, String author, Date addDate, Date matchDate, String uid,
+			String isbn, String condition, String edition, String type, String matched, String location,
+			double lat, double lon) {
 		super();
 		this.title = title;
 		this.author = author;
 		this.addDate = addDate;
-		this.user = user;
+		this.matchDate = matchDate;
+		this.uid = uid;
 		this.isbn = isbn;
 		this.condition = condition;
 		this.edition = edition;
 		this.type = type;
 		this.matched = matched;
-		this.email = email;
-		this.image = image;
+		this.location = location;
+		this.lat = lat;
+		this.lon = lon;
 	}
 
 	public String getTitle() {
@@ -58,12 +63,20 @@ public class Textbook {
 		this.addDate = addDate;
 	}
 
-	public User getUser() {
-		return user;
+	public Date getMatchDate() {
+		return matchDate;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setMatchDate(Date matchDate) {
+		this.matchDate = matchDate;
+	}
+
+	public String getUser() {
+		return uid;
+	}
+
+	public void setUser(String uid) {
+		this.uid = uid;
 	}
 	
 	public String getIsbn() {
@@ -106,15 +119,28 @@ public class Textbook {
 		this.matched = matched;
 	}
 	
-	public String getEmail() {
-		return email;
+	public String getLocation() {
+		return location;
 	}
 	
-	public void setEmail(String email) {
-		this.email = email;
+	public void setLocation(String location) {
+		this.location = location;
 	}
-	public void setImage(String image) {
-		this.image = image;
+
+	public double getLat() {
+		return lat;
+	}
+	
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
+
+	public double getLon() {
+		return lon;
+	}
+	
+	public void setLon(double lon) {
+		this.lon = lon;
 	}
 
 }

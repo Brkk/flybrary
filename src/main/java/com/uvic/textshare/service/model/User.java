@@ -3,16 +3,22 @@ package com.uvic.textshare.service.model;
 public class User {
 	private String name;
 	private String email;
-	private String karma;
+	private String uid;
+	private int offer_karma;
+	private int request_karma;
 	private Double lat;
 	private Double lang;
-	public User(String name, String email, String karma, Double lat, Double lang) {
+	private String location;
+	public User(String name, String email, String uid, int offer_karma, int request_karma ,Double lat, Double lang, String location) {
 		super();
 		this.name = name;
 		this.email = email;
-		this.karma = karma;
+		this.uid = uid;
+		this.offer_karma = offer_karma;
+		this.request_karma = request_karma;
 		this.lat = lat;
 		this.lang = lang;
+		this.location = location;
 	}
 	public String getName() {
 		return name;
@@ -26,11 +32,23 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getKarma() {
-		return karma;
+	public String getUid() {
+		return uid;
 	}
-	public void setKarma(String karma) {
-		this.karma = karma;
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+	public int getOfferKarma() {
+		return offer_karma;
+	}
+	public void setOfferKarma(int offer_karma) {
+		this.offer_karma = offer_karma;
+	}
+	public int getRequestKarma() {
+		return request_karma;
+	}
+	public void setResquestKarma(int request_karma) {
+		this.request_karma = request_karma;
 	}
 	public Double getLat() {
 		return lat;
@@ -43,6 +61,12 @@ public class User {
 	}
 	public void setLang(Double lang) {
 		this.lang = lang;
+	}
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 }
