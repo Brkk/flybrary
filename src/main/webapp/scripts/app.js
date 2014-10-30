@@ -9,35 +9,12 @@
  * Main module of the application.
  */
 
-function DialogController($scope, $rootScope, $mdDialog) {
-    $scope.hide = function() {
-      $mdDialog.hide();
-    };
-    $scope.addBook = function(addBook) {
-      $mdDialog.hide($scope.book);
-    };
-    if(!$scope.book)
-    {
-      $rootScope.book = {
-         type: 'offer',
-         isbn: '',
-         title: '',
-         topic: '',
-         author: '',
-         edition: '',
-         condition: '',
-         uid: '',
-         name: ''
-      }
-    };
-}
 
 
-angular
-  .module( 'textChangrApp', [ 'ngAnimate', 'ngMaterial','directive.g+signin','ngRoute' ])
 
+var app = angular.module( 'textChangrApp', [ 'ngAnimate', 'ngMaterial','directive.g+signin','ngRoute' ]);
 
-  .config( function($routeProvider) {
+app.config( function($routeProvider) {
     $routeProvider
       .when('/login', {
         templateUrl: 'views/login.html',
@@ -71,7 +48,7 @@ angular
 
 /* Controllers  Start */
 
-  .controller('mainCtrl', function($scope, $rootScope, $location, $routeParams)
+app.controller('mainCtrl', function($scope, $rootScope, $location, $routeParams)
   {
       $rootScope.tabs = {
         maxIndex : 1,
@@ -107,7 +84,7 @@ angular
 
   })
 
-  .controller('pageCtrl', function($scope, $rootScope, $timeout, $location, googleService) {
+app.controller('pageCtrl', function($scope, $rootScope, $timeout, $location, googleService) {
     
 
     $rootScope.loggedIn = 0;
@@ -193,7 +170,7 @@ angular
     });
   })
 
-.controller('BookListCtrl', function($scope, $http, $timeout, jsonFilter) {
+app.controller('BookListCtrl', function($scope, $http, $timeout, jsonFilter) {
       
       $scope.$watch('book.uid', function() {
         var req = {'uid':$scope.book.uid};
@@ -213,14 +190,38 @@ angular
       $scope.orderProp = 'title';
   })
 
-.controller('SidebarController', function($scope, $mdSidenav) {
+app.controller('SidebarController', function($scope, $mdSidenav) {
     
     $scope.toggleLeft = function() {
       $mdSidenav('left').toggle();
     };
 
   })
-  .controller('addBookCtrl', function($scope, $mdDialog, $http, $timeout) {
+
+function DialogController($scope, $rootScope, $mdDialog) {
+    $scope.hide = function() {
+      $mdDialog.hide();
+    };
+    $scope.addBook = function(addBook) {
+      $mdDialog.hide($scope.book);
+    };
+    if(!$scope.book)
+    {
+      $rootScope.book = {
+         type: 'offer',
+         isbn: '',
+         title: '',
+         topic: '',
+         author: '',
+         edition: '',
+         condition: '',
+         uid: '',
+         name: ''
+      }
+    };
+}
+
+app.controller('addBookCtrl', function($scope, $mdDialog, $http, $timeout) {
     $scope.dialog = function(ev) {
       $mdDialog.show({
         templateUrl: 'views/addBook.html',
@@ -263,7 +264,7 @@ angular
       });
     };
   })
-  .controller('tabCtrl', function($scope, $location, $timeout) {
+app.controller('tabCtrl', function($scope, $location, $timeout) {
 
     $scope.next = function() {
       $scope.tabs.selectedIndex = Math.min( $scope.tabs.maxIndex, $scope.tabs.selectedIndex + 1) ;
@@ -283,7 +284,7 @@ angular
 /*  Services Start   */
 
 
-  .service('googleService', function ($http, $q) {
+app.service('googleService', function ($http, $q) {
     var clientId = '642821490386-5e5tfhghkcvsmjauaeu0mbnlrnjnl30n.apps.googleusercontent.com',
         apiKey = '',
         scopes = 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email',
@@ -350,7 +351,7 @@ angular
   
 
 /*    Filters Start    */  
-  .filter('isOffer', function () {
+app.filter('isOffer', function () {
     return function (items) {
       var filtered = [];
       for (var i = 0; i < items.length; i++) {
@@ -362,7 +363,7 @@ angular
       return filtered;
     };
   })
-  .filter('isRequest', function () {
+app.filter('isRequest', function () {
     return function (items) {
       var filtered = [];
       for (var i = 0; i < items.length; i++) {
@@ -394,7 +395,7 @@ angular
    *  Simple directive used to quickly construct `Floating Label` text fields
    *  NOTE: the label field is considered a constant specified as an attribute
    */
-  .directive('tfFloat', function() {
+app.directive('tfFloat', function() {
     return {
       restrict: 'E',
       replace: true,

@@ -1,5 +1,6 @@
 <section layout="horizontal" layout-fill ng-controller="SidebarController" flex>
-    <md-sidenav class="md-sidenav-left md-whiteframe-z1" style="z-index:8" component-id="left" layout="vertical" class="md-sidenav-left">
+    <md-sidenav class="md-sidenav-left md-whiteframe-z1" style="z-index:8" component-id="left"
+     layout="vertical" class="md-sidenav-left">
         <div class="animate-switch-container" ng-controller="tabCtrl" ng-switch on="tabs.selectedIndex" >
             <div class="animate-switch" ng-switch-when="0">
                 <div ng-include="'views/offers_side.html'"></div>

@@ -102,7 +102,6 @@
 
 .animate-switch-container {
   position:relative;
-
   width: 100%;
   height:100%;
   overflow:hidden;
@@ -112,17 +111,20 @@
 .first {
   height: 100%;
   width: 100%;
-
   background-size: 100% 100%;
 }
 
+.container {
+  background-image: url("../images/low_contrast_linen.png");
+  background-repeat: repeat;  
+}
 
-.clr { clear: both;}
-#wrapper {
+#loginBox {
   margin: 50px auto;
   width: 540px;
   height:300px;
-  background: #fff;
+  text-align: center;
+  background-color: rgba(66, 74, 137, 0.7);
 
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -132,20 +134,23 @@
   padding: 40px;
 }
 
-.join {
+#loginTitle {
   color: #222;
   font-size: 44px;
   font-weight:700;
-  float: left;
   text-shadow: 1px 0 1px #777;
 }
-/*.lock {
-  float: right;
-  background:url("http://i.imgur.com/Jsq8WUM.png") no-repeat;
-  width:14px;
-  height:18px;
-  margin-top: 12px;
-}*/
+
+#tagline {
+  color: #222;
+  font-style: italic;
+  font-size: 24px;
+}
+
+.login-options{
+  color: #222;
+  font-size: 14px;
+}
 
 /* from james */
 
