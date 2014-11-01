@@ -26,4 +26,21 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
     <servlet-name>Jersey Web Application</servlet-name>
   	<url-pattern>/resources/*</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>mailhandler</servlet-name>
+    <servlet-class>MailHandlerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>mailhandler</servlet-name>
+    <url-pattern>/_ah/mail/*</url-pattern>
+  </servlet-mapping>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>mail</web-resource-name>
+      <url-pattern>/_ah/mail/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
 </web-app>
