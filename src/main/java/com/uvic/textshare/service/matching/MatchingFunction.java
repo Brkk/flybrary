@@ -26,12 +26,12 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.uvic.textshare.service.model.Textbook;
 
 public class MatchingFunction {
-	
+
 	public static String checkForMatch(String title, String author, String edition, String condition, String type, String uid, String location) {
-		
+
 		String searchType;
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		
+
 		if(type.equals("offer")) {
 			 searchType = "request";
 		} else {
@@ -49,14 +49,14 @@ public class MatchingFunction {
 
 		Query q = new Query("Textbook").setFilter(searchFilter).addSort("date", Query.SortDirection.ASCENDING);
 		List<Entity> textbooks = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
-		
+
 		//If there is a match, use the first one and inform both users.
 		if(!textbooks.isEmpty())
 		{
 			Entity matchedBook = textbooks.get(0);
 			String uid2 = (String) matchedBook.getProperty("uid");
 			Date matchDate = new Date();
-			
+
 			//retreive first user
 			Filter uidFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uid);
 			Query query = new Query("Users").setFilter(uidFilter);
@@ -66,79 +66,79 @@ public class MatchingFunction {
 			Query query2 = new Query("Users").setFilter(uidFilter2);
 			Entity user2 = datastore.prepare(query2).asSingleEntity();
 
-			//sendEmailToUser(user1.getProperty("name"), user1.getProperty("email"),user2.getProperty("name"), user2.getProperty("email"), title);
-			//sendEmailToUser(user2.getProperty("name"), user2.getProperty("email"),user1.getProperty("name"), user1.getProperty("email"), title);
+			sendEmailToUser(user1.getProperty("name").toString(), user1.getProperty("email").toString(),user2.getProperty("name").toString(), user2.getProperty("email").toString(), title);
+			sendEmailToUser(user2.getProperty("name").toString(), user2.getProperty("email").toString(),user1.getProperty("name").toString(), user1.getProperty("email").toString(), title);
 			matchedBook.setProperty("matched", "yes");
 			matchedBook.setProperty("matchDate", matchDate);
 			datastore.put(matchedBook);
 			return "yes";
-		} 
-		else 
+		}
+		else
 			return "no";
-		
+
 	}
-	
+
 	//Take a look at this method here, I created it using a hashmap to switch filters and broaden the results
 	//Ps. not ready yet but working
 	public static boolean checkForMatchObj(Textbook textbook) {
-		
+
 			String searchType;
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-			
+
 			if(textbook.getType().equals("offer")) {
 				 searchType = "request";
 			} else {
 				searchType = "offer";
 			}
-			
+
 			//Set up filters for matching
 			String[] filters = {"type","title","matched","author","edition"};
 			HashMap<String,Filter> hm = new HashMap<String,Filter>();
-			
+
 			//Add the filters into a hashmap
 			hm.put("type", new FilterPredicate("type", FilterOperator.EQUAL, searchType));
 			hm.put("author", new FilterPredicate("author", FilterOperator.EQUAL, textbook.getAuthor()));
 			hm.put("title", new FilterPredicate("title", FilterOperator.EQUAL, textbook.getTitle()));
 			hm.put("edition", new FilterPredicate("edition", FilterOperator.EQUAL, textbook.getEdition()));
 			hm.put("matched", new FilterPredicate("matched", FilterOperator.EQUAL, textbook.getMatched()));
-					
+
 			Filter searchFilter;
 			Query q;
-	
+
 			while(hm.size()>2){
-				
+
 				//This line below is just a way to guarantee that when the for run doesn't even run once
 				//there will be the required filters, search one more time, and decide if there is or not any book matched
 				searchFilter = CompositeFilterOperator.and(hm.get(filters[0]), hm.get(filters[1]), hm.get(filters[2]));
-				
+
 				//This for picks a filter at a time and add it to the required ones.
 				//For example type, title and matched are required, then it adds first edition, and in the next loop, author
 				for(int i=3; i<hm.size(); i++){
 					searchFilter = CompositeFilterOperator.and(hm.get(filters[i]), hm.get(filters[0]), hm.get(filters[1]), hm.get(filters[2]));
 				}
-				
+
 				q = new Query("Textbook").setFilter(searchFilter).addSort("date", Query.SortDirection.ASCENDING);
 				//we could return this list, there'd more options
 				List<Entity> textbooks = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
-				
+
 				//At this point we have to consider that there might be an exact book with the exact same version
 				//But if not, we still can retrieve some options, right?
 				if(!textbooks.isEmpty())
-				{	
+				{
 					//Show if there is any match
 					for(Entity a:textbooks)
 					System.out.println("You have a matched textbook\n\n"+textbook+"\n\n\nMatched book:\n"+a);
 					return true;
-					
-				} else 
+
+				} else
 				{
 					System.out.println("No textbook found");
 					System.out.println("Removing: "+filters[hm.size()-1]);
 					//removes the filter used to search
 					hm.remove(filters[hm.size()-1]);
-				}	
+				}
 			}
-			
+
 			System.out.println("No book found");
 			return false;
 		}
@@ -151,15 +151,15 @@ public class MatchingFunction {
 			// user here would be the Name of the user.
 		    Properties props = new Properties();
 		    Session session = Session.getDefaultInstance(props, null);
-		    
+
 		    //Create the mail body and send it to both of the users from team.textshare@gmail.com
 		    String msgBody = "Hello fellow student,\n"
 		    		+ ""
-		    		+ "We are glad to tell you that we have found a match to the " + title + ". You can reach " 
+		    		+ "We are glad to tell you that we have found a match to the " + title + ". You can reach "
 		    		+ matchedUserName + " by email from this address " + matchedUserEmail + ". Have a nice day.\n\n"
 		    		+ "Regards,\n"
-		    		+ "Team Text Share";    		
-		
+		    		+ "Team Text Share";
+
 		    try {
 		        Message msg = new MimeMessage(session);
 		        try {
@@ -176,7 +176,7 @@ public class MatchingFunction {
 		        msg.setSubject(title + " matched with a textbook in our database!");
 		        msg.setText(msgBody);
 		        Transport.send(msg);
-		
+
 		    } catch (AddressException e) {
 		        // ...
 		    } catch (MessagingException e) {
