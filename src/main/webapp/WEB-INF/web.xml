@@ -28,7 +28,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
   </servlet-mapping>
   <servlet>
     <servlet-name>mailhandler</servlet-name>
-    <servlet-class>MailHandlerServlet</servlet-class>
+    <servlet-class>com.uvic.textshare.service.rest.MailHandlerServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>mailhandler</servlet-name>
