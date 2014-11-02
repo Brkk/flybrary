@@ -186,6 +186,53 @@ public class TextbookResource {
 			user.setUnindexedProperty("lon", lon);
 		datastore.put(user);
 	}
+	
+	
+	/*
+	 * Required JSON string for this method to work
+	 * {
+			key: 
+				{ 
+					id: 4785074604081152 
+				}
+			propertyMap: 
+			{
+				uid: "1234567890"
+				title: "math"
+				isbn: "123123"
+				type: "request"
+			}
+		}
+	 * 
+	 * 
+	 */
+	@POST
+	@Path("/unmatchTextbook")
+	@Consumes(MediaType.APPLICATION_JSON)
+ 	public void unmatchTextbook(String input) {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
+		JSONObject obj = new JSONObject(input);
+		JSONObject propertyValues = obj.getJSONObject("propertyMap");
+		JSONObject keyValues = obj.getJSONObject("key");
+
+		Long id = Long.valueOf(keyValues.getString("id")).longValue();
+		String title = propertyValues.getString("title");
+		String isbn = propertyValues.getString("isbn");
+		String type = propertyValues.getString("type");
+		String uid = propertyValues.getString("uid");
+		//Check for a match again
+		String matched = MatchingFunction.checkForMatch(isbn, uid, type, title);
+		
+		//Not found
+		if(matched.equals("no")) {
+			Key textbookKey = KeyFactory.createKey("Textbook", id);
+			Query q = new Query(textbookKey);
+			Entity textbook = datastore.prepare(q).asSingleEntity();
+				textbook.setProperty("matched", "no");
+				textbook.setProperty("matchDate", null);
+			datastore.put(textbook);
+		}
+	}
 
 	private void createUser(JSONObject obj) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
