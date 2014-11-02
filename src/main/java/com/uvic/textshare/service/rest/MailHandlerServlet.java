@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Properties;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.servlet.http.*;
 
 public class MailHandlerServlet extends HttpServlet {
@@ -14,8 +15,11 @@ public class MailHandlerServlet extends HttpServlet {
       Properties props = new Properties();
       Session session = Session.getDefaultInstance(props, null);
       MimeMessage message = new MimeMessage(session, req.getInputStream());
-      //System.out.println("Message from: " + message.getFrom().toString());
-      //System.out.println("test");
+
+      MimeMultipart content=(MimeMultipart)message.getContent();
+      System.out.println("Message content: " + content.getBodyPart(0).getContent());
+      System.out.println("Message from: " + message.getFrom()[0].toString());
+      System.out.println("test");
     } catch (Exception e) {
         e.printStackTrace();
     }

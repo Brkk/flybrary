@@ -12,7 +12,6 @@ public class Resources extends Application {
   public Set<Class<?>> getClasses() {
     Set<Class<?>> s = new HashSet<Class<?>>();
     s.add(TextbookResource.class);
-    s.add(MailHandlerServlet.class);
     return s;
   }
 }
