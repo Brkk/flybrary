@@ -6,10 +6,13 @@ public class User {
 	private String uid;
 	private int offer_karma;
 	private int request_karma;
-	private Double lat;
-	private Double lang;
+	private double lat;
+	private double lang;
 	private String location;
-	public User(String name, String email, String uid, int offer_karma, int request_karma ,Double lat, Double lang, String location) {
+	private double radius; 
+
+
+	public User(String name, String email, String uid, int offer_karma, int request_karma ,double lat, double lang, String location) {
 		super();
 		this.name = name;
 		this.email = email;
@@ -50,13 +53,13 @@ public class User {
 	public void setResquestKarma(int request_karma) {
 		this.request_karma = request_karma;
 	}
-	public Double getLat() {
+	public double getLat() {
 		return lat;
 	}
 	public void setLat(Double lat) {
 		this.lat = lat;
 	}
-	public Double getLang() {
+	public double getLang() {
 		return lang;
 	}
 	public void setLang(Double lang) {
