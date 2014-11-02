@@ -59,11 +59,12 @@ public class MatchingFunction {
 
 		Query q = new Query("Textbook").setFilter(searchFilter).addSort("date", Query.SortDirection.ASCENDING);
 		List<Entity> textbooks = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
-		
+
 		//If there is a match, use the first one and inform both users.
 		if(!textbooks.isEmpty())
 		{
 			//Retrieve first user
+
 			Filter uidFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uid);
 			Query query = new Query("User").setFilter(uidFilter);
 			Entity user1 = datastore.prepare(query).asSingleEntity();
@@ -124,16 +125,15 @@ public class MatchingFunction {
 			// user here would be the Name of the user.
 		    Properties props = new Properties();
 		    Session session = Session.getDefaultInstance(props, null);
-		    
+
 		    //Create the mail body and send it to both of the users from team.textshare@gmail.com
 		    String msgBody = "Hello fellow student,\n"
-		    		+ ""
 		    		+ "Isn't this a lucky day for ya. Remember that time you used flybrary for " + title + ". Well, we found "
 		    		+ "you match. You can leave whatever you are doing and reach your lovely match " 
 		    		+ matchedUserName + " using your favorite email from " + matchedUserEmail + ". Have a fantastic day and remember to always fly with flybrary.\n\n"
 		    		+ "Regards,\n"
 		    		+ "Kisses from Team Flybrary";    		
-		
+
 		    try {
 		        Message msg = new MimeMessage(session);
 		        try {
@@ -150,7 +150,7 @@ public class MatchingFunction {
 		        msg.setSubject(title + " got a match, don't forget to check it eh");
 		        msg.setText(msgBody);
 		        Transport.send(msg);
-		
+
 		    } catch (AddressException e) {
 		        // ...
 		    } catch (MessagingException e) {

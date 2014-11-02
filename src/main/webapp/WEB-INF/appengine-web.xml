@@ -3,4 +3,7 @@
   <application>textchngr</application>
   <version>1</version>
   <threadsafe>true</threadsafe>
+  <inbound-services>
+    <service>mail</service>
+  </inbound-services>
 </appengine-web-app>
