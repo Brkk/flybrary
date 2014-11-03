@@ -82,7 +82,6 @@ public class TextbookResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String addTextbook(String input)	throws ParseException {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		//Parse the input parameters from the JSON object sent from client side
 		JSONObject text = new JSONObject(input);
 		Date addDate = new Date();
 		Date matchDate = null; 
@@ -114,6 +113,7 @@ public class TextbookResource {
 		String bookOwner = text.getString("uid");
 		String typeOfEntry = text.getString("type");
 		updateUserKarma(bookOwner, typeOfEntry);
+		
 		if(typeOfEntry.equals("offer"))
 			TextbookResource.numberOf_offered_books++;
 		else
@@ -122,7 +122,7 @@ public class TextbookResource {
 		String json = new Gson().toJson(textbook);
 		return json;
 	}
-	 //not key, just key.
+	
 	@POST
 	@Path("/delete")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -199,19 +199,17 @@ public class TextbookResource {
 	@Path("/unmatchTextbook")
 	@Consumes(MediaType.APPLICATION_JSON)
  	public void unmatchTextbook(String input) {
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
 		JSONObject obj = new JSONObject(input);
-
 		Long id = Long.valueOf(obj.getString("id")).longValue();
 		String title = obj.getString("title");
 		String isbn = obj.getString("isbn");
 		String type = obj.getString("type");
 		String uid = obj.getString("uid");
-		//Check for a match again
+
 		String matched = MatchingFunction.checkForMatch(isbn, uid, type, title);
-		
-		//Not found
+
 		if(matched.equals("no")) {
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
 			Key textbookKey = KeyFactory.createKey("Textbook", id);
 			Query q = new Query(textbookKey);
 			Entity textbook = datastore.prepare(q).asSingleEntity();
@@ -280,14 +278,3 @@ public class TextbookResource {
 		datastore.put(user);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
