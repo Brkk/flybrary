@@ -24,19 +24,11 @@ import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 
-import java.security.InvalidKeyException;
-import java.security.*;
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.DESedeKeySpec;
-
 public class MatchingFunction {
 
 	public static String checkForMatch(String isbn, String uid, String type, String title) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		
 		double lat;
 		double lon;
 		double lat2;
@@ -108,10 +100,11 @@ public class MatchingFunction {
 				secondUsersName = String.valueOf(user2.getProperty("name"));
 				secondUsersEmail = String.valueOf(user2.getProperty("email"));
 
-				//Check if the matched books are within each others raidus.
+				//Check if the matched books are within each others radius.
 				withinRadius = distance(lat, lon, lat2, lon2, radius, radius2);
+				
 				//If they are send out email
-				if(true) {
+				if(withinRadius) {
 					matchDate = new Date();
 
 					Entity match = new Entity("Match");
