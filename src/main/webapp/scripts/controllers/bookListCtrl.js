@@ -1,8 +1,14 @@
-app.controller('BookListCtrl', function($scope, $http, $timeout, jsonFilter, user) {
+app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jsonFilter, user) {
       
-      user.getBooks();
+  user.getBooks().then(
+    function(data){
+      $rootScope.bookList = data;
+    }), 
+    function (err) {
+      console.log('Failed: ' + err);
+    });
 
-      $scope.orderProp = 'title';
+  $scope.orderProp = 'title';
   });
 
 

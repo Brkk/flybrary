@@ -1,4 +1,4 @@
-app.service('user', function ($http, $rootScope, $scope) {
+app.service('user', function ($http, $rootScope, $scope, $q) {
     var uid = '',
         email ='',
         name = '',
@@ -18,6 +18,7 @@ app.service('user', function ($http, $rootScope, $scope) {
             condition: '',
             image: ''
         },
+        deferred = $q.defer(),
         bookList = [];
 
 
@@ -104,11 +105,14 @@ app.service('user', function ($http, $rootScope, $scope) {
             .success(function (data, status, headers, config)
             {
               bookList = data.map(parseBook);
+              deferred.resolve(bookList);
             })
             .error(function (data, status, headers, config)
             {
-
+                deferred.reject('error');
             });
+
+            return deferred.promise;
         };
 
         this.addBook = function (){
@@ -116,11 +120,13 @@ app.service('user', function ($http, $rootScope, $scope) {
             .success(function (data, status, headers, config)
             {
               bookList.push(parseBook(data));
+              deferred.resolve(bookList);
             })
             .error(function (data, status, headers, config)
             {
-
+                deferred.reject('error');
             });
+            return deferred.promise;
         };
 
         this.deleteBook = function (){
