@@ -75,7 +75,8 @@ public class TextbookResource {
 	@POST
 	@Path("/add")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void addTextbook(String input)	throws ParseException {
+	@Produces(MediaType.APPLICATION_JSON)
+	public String addTextbook(String input)	throws ParseException {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		//Parse the input parameters from the JSON object sent from client side
 		JSONObject text = new JSONObject(input);
@@ -107,20 +108,21 @@ public class TextbookResource {
 		String bookOwner = text.getString("uid");
 		String typeOfEntry = text.getString("type");
 		updateUserKarma(bookOwner, typeOfEntry);
+		
+		String json = new Gson().toJson(textbook);
+		return json;
 	}
-	 
+	 //not key, just key.
 	@POST
 	@Path("/delete")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void deleteTextbook(String input) throws JSONException {
-		JSONObject keyPart = new JSONObject(input);
-		JSONObject obj = keyPart.getJSONObject("key");
+		JSONObject obj = new JSONObject(input);
 		
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Long id = obj.getLong("id");
+		Long id = Long.valueOf(obj.getString("id")).longValue();
 		Key textbookKey = KeyFactory.createKey("Textbook", id);
-		datastore.delete(textbookKey);
-		 
+		datastore.delete(textbookKey);	 
 	 }
 	 
 	@POST
@@ -129,22 +131,18 @@ public class TextbookResource {
  	public void updateTextbook(String input) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
 		JSONObject obj = new JSONObject(input);
-		JSONObject keyValues = obj.getJSONObject("key");
 
-		Long id = Long.valueOf(keyValues.getString("id")).longValue();
+		Long id = Long.valueOf(obj.getString("id")).longValue();
 		String title = obj.getString("title");
 		String author = obj.getString("author");
 		String isbn = obj.getString("isbn");
 		String edition = obj.getString("edition");
 		String condition = obj.getString("condition");
-		String type = obj.getString("type");
-		String uid = obj.getString("uid");
+
 	
 		Key textbookKey = KeyFactory.createKey("Textbook", id);
 		Query q = new Query(textbookKey);
 		Entity textbook = datastore.prepare(q).asSingleEntity();
-			textbook.setProperty("uid", uid);
-		    textbook.setProperty("type", type);
 		    textbook.setProperty("title", title);
 		    textbook.setProperty("author", author);
 		    textbook.setProperty("isbn", isbn);
@@ -191,12 +189,7 @@ public class TextbookResource {
 	/*
 	 * Required JSON string for this method to work
 	 * {
-			key: 
-				{ 
-					id: 4785074604081152 
-				}
-			propertyMap: 
-			{
+				id: "4785074604081152"
 				uid: "1234567890"
 				title: "math"
 				isbn: "123123"
@@ -212,14 +205,12 @@ public class TextbookResource {
  	public void unmatchTextbook(String input) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
 		JSONObject obj = new JSONObject(input);
-		JSONObject propertyValues = obj.getJSONObject("propertyMap");
-		JSONObject keyValues = obj.getJSONObject("key");
 
-		Long id = Long.valueOf(keyValues.getString("id")).longValue();
-		String title = propertyValues.getString("title");
-		String isbn = propertyValues.getString("isbn");
-		String type = propertyValues.getString("type");
-		String uid = propertyValues.getString("uid");
+		Long id = Long.valueOf(obj.getString("id")).longValue();
+		String title = obj.getString("title");
+		String isbn = obj.getString("isbn");
+		String type = obj.getString("type");
+		String uid = obj.getString("uid");
 		//Check for a match again
 		String matched = MatchingFunction.checkForMatch(isbn, uid, type, title);
 		

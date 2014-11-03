@@ -1,7 +1,6 @@
 package com.uvic.textshare.service.matching;
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.Date;
@@ -143,7 +142,7 @@ public class MatchingFunction {
 		    Properties props = new Properties();
 		    Session session = Session.getDefaultInstance(props, null);
 
-		    //Create the mail body and send it to both of the users from team.textshare@gmail.com
+		    //Create the mail body and send it to both of the users from email@textchngr.appspotmail.com
 		    String msgBody = "Hello fellow student,\n"
 		    		+ "Isn't this a lucky day for ya. Remember that time you used flybrary for " + title + ". Well, we found "
 		    		+ "you match. You can leave whatever you are doing and reach your lovely match "
