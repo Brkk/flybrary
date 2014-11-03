@@ -38,11 +38,11 @@ import com.google.gson.Gson;
 @SuppressWarnings("unused")
 @Path("/")
 public class TextbookResource {
-	 
-	 private static int numberOf_offered_books;
-	 private static int numberOf_requested_books;
-	 private static int numberOf_matches;
-	 
+	
+	private static int numberOf_offered_books;
+	private static int numberOf_requested_books;
+	private static int numberOf_matches;
+	
 	 @POST
 	 @Path("/retrieve") 
 	 @Consumes(MediaType.APPLICATION_JSON)
@@ -80,7 +80,7 @@ public class TextbookResource {
 	@Path("/add")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String addTextbook(String input)	throws ParseException {
+	public String addTextbook(String input) throws ParseException {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		JSONObject text = new JSONObject(input);
 		Date addDate = new Date();
@@ -91,10 +91,8 @@ public class TextbookResource {
 				text.getString("type"),
 				text.getString("title"));
 		 
-		if(matched.equals("yes")) {
+		if(matched.equals("yes"))
 			matchDate = new Date();
-			numberOf_matches++;
-		}
 
 		// Create an textbook entity using the user input 
 		Entity textbook = new Entity("Textbook");
@@ -127,12 +125,14 @@ public class TextbookResource {
 	@Path("/delete")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void deleteTextbook(String input) throws JSONException {
-		JSONObject obj = new JSONObject(input);
+		JSONObject keyPart = new JSONObject(input);
+		JSONObject obj = keyPart.getJSONObject("key");
 		
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Long id = Long.valueOf(obj.getString("id")).longValue();
+		Long id = obj.getLong("id");
 		Key textbookKey = KeyFactory.createKey("Textbook", id);
-		datastore.delete(textbookKey);	 
+		datastore.delete(textbookKey);
+		 
 	 }
 	 
 	@POST
@@ -141,18 +141,22 @@ public class TextbookResource {
  	public void updateTextbook(String input) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
 		JSONObject obj = new JSONObject(input);
+		JSONObject keyValues = obj.getJSONObject("key");
 
-		Long id = Long.valueOf(obj.getString("id")).longValue();
+		Long id = Long.valueOf(keyValues.getString("id")).longValue();
 		String title = obj.getString("title");
 		String author = obj.getString("author");
 		String isbn = obj.getString("isbn");
 		String edition = obj.getString("edition");
 		String condition = obj.getString("condition");
-
+		String type = obj.getString("type");
+		String uid = obj.getString("uid");
 	
 		Key textbookKey = KeyFactory.createKey("Textbook", id);
 		Query q = new Query(textbookKey);
 		Entity textbook = datastore.prepare(q).asSingleEntity();
+			textbook.setProperty("uid", uid);
+		    textbook.setProperty("type", type);
 		    textbook.setProperty("title", title);
 		    textbook.setProperty("author", author);
 		    textbook.setProperty("isbn", isbn);
@@ -200,6 +204,7 @@ public class TextbookResource {
 	@Consumes(MediaType.APPLICATION_JSON)
  	public void unmatchTextbook(String input) {
 		JSONObject obj = new JSONObject(input);
+
 		Long id = Long.valueOf(obj.getString("id")).longValue();
 		String title = obj.getString("title");
 		String isbn = obj.getString("isbn");
@@ -218,7 +223,7 @@ public class TextbookResource {
 			datastore.put(textbook);
 		}
 	}
-	
+
 	//Returns the last 5 textbooks added
 	@GET
 	@Path("/getLast5")
