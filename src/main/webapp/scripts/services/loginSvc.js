@@ -1,8 +1,8 @@
 app.service('googleService', function ($http, $q) {
     var clientId = '642821490386-5e5tfhghkcvsmjauaeu0mbnlrnjnl30n.apps.googleusercontent.com',
-        apiKey = '',
+        apiKey = 'AIzaSyA1duUBotiNnlcHHqnH2oIWwM4JhyozhoQ',
         scopes = 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email',
-        domain = '',
+        domain = 'flybrary.ca',
         deferred = $q.defer();
 
     this.login = function () {
