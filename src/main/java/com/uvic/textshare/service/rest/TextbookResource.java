@@ -39,6 +39,10 @@ import com.google.gson.Gson;
 @Path("/")
 public class TextbookResource {
 	 
+	 private static int numberOf_offered_books;
+	 private static int numberOf_requested_books;
+	 private static int numberOf_matches;
+	 
 	 @POST
 	 @Path("/retrieve") 
 	 @Consumes(MediaType.APPLICATION_JSON)
@@ -88,8 +92,10 @@ public class TextbookResource {
 				text.getString("type"),
 				text.getString("title"));
 		 
-		if(matched.equals("yes"))
+		if(matched.equals("yes")) {
 			matchDate = new Date();
+			numberOf_matches++;
+		}
 
 		// Create an textbook entity using the user input 
 		Entity textbook = new Entity("Textbook");
@@ -108,6 +114,10 @@ public class TextbookResource {
 		String bookOwner = text.getString("uid");
 		String typeOfEntry = text.getString("type");
 		updateUserKarma(bookOwner, typeOfEntry);
+		if(typeOfEntry.equals("offer"))
+			TextbookResource.numberOf_offered_books++;
+		else
+			TextbookResource.numberOf_requested_books++;
 		
 		String json = new Gson().toJson(textbook);
 		return json;
@@ -185,20 +195,6 @@ public class TextbookResource {
 		datastore.put(user);
 	}
 	
-	
-	/*
-	 * Required JSON string for this method to work
-	 * {
-				id: "4785074604081152"
-				uid: "1234567890"
-				title: "math"
-				isbn: "123123"
-				type: "request"
-			}
-		}
-	 * 
-	 * 
-	 */
 	@POST
 	@Path("/unmatchTextbook")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -223,6 +219,27 @@ public class TextbookResource {
 				textbook.setProperty("matchDate", null);
 			datastore.put(textbook);
 		}
+	}
+	
+	//Returns the last 5 textbooks added
+	@GET
+	@Path("/getLast5")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getLast5() {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+	    Query query = new Query("Textbook").addSort("date", Query.SortDirection.DESCENDING);
+	    List<Entity> textbooks = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(5));
+	 	String json = new Gson().toJson(textbooks);
+	 	return json;
+	}
+	
+	@GET
+	@Path("/getStatistics")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getStatistics() {
+		Statistics stats = new Statistics(numberOf_offered_books, numberOf_requested_books, numberOf_matches);
+		String json = new Gson().toJson(stats);
+		return json;
 	}
 
 	private void createUser(JSONObject obj) {
