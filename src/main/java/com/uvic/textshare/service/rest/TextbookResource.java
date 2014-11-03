@@ -152,8 +152,6 @@ public class TextbookResource {
 		Key textbookKey = KeyFactory.createKey("Textbook", id);
 		Query q = new Query(textbookKey);
 		Entity textbook = datastore.prepare(q).asSingleEntity();
-			textbook.setProperty("uid", uid);
-		    textbook.setProperty("type", type);
 		    textbook.setProperty("title", title);
 		    textbook.setProperty("author", author);
 		    textbook.setProperty("isbn", isbn);
