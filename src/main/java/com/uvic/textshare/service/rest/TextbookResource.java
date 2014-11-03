@@ -38,7 +38,11 @@ import com.google.gson.Gson;
 @SuppressWarnings("unused")
 @Path("/")
 public class TextbookResource {
-	 
+	
+	private static int numberOf_offered_books;
+	private static int numberOf_requested_books;
+	private static int numberOf_matches;
+	
 	 @POST
 	 @Path("/retrieve") 
 	 @Consumes(MediaType.APPLICATION_JSON)
@@ -75,9 +79,9 @@ public class TextbookResource {
 	@POST
 	@Path("/add")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void addTextbook(String input)	throws ParseException {
+	@Produces(MediaType.APPLICATION_JSON)
+	public String addTextbook(String input) throws ParseException {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		//Parse the input parameters from the JSON object sent from client side
 		JSONObject text = new JSONObject(input);
 		Date addDate = new Date();
 		Date matchDate = null; 
@@ -87,8 +91,10 @@ public class TextbookResource {
 				text.getString("type"),
 				text.getString("title"));
 		 
-		if(matched.equals("yes"))
+		if(matched.equals("yes")) {
 			matchDate = new Date();
+			numberOf_matches++;
+		}
 
 		// Create an textbook entity using the user input 
 		Entity textbook = new Entity("Textbook");
@@ -107,17 +113,23 @@ public class TextbookResource {
 		String bookOwner = text.getString("uid");
 		String typeOfEntry = text.getString("type");
 		updateUserKarma(bookOwner, typeOfEntry);
+		
+		if(typeOfEntry.equals("offer"))
+			TextbookResource.numberOf_offered_books++;
+		else
+			TextbookResource.numberOf_requested_books++;
+		
+		String json = new Gson().toJson(textbook);
+		return json;
 	}
-	 
+	
 	@POST
 	@Path("/delete")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void deleteTextbook(String input) throws JSONException {
-		JSONObject keyPart = new JSONObject(input);
-		JSONObject obj = keyPart.getJSONObject("key");
-		
+		JSONObject obj = new JSONObject(input);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Long id = obj.getLong("id");
+		Long id = Long.valueOf(obj.getString("id")).longValue();
 		Key textbookKey = KeyFactory.createKey("Textbook", id);
 		datastore.delete(textbookKey);
 		 
@@ -129,22 +141,17 @@ public class TextbookResource {
  	public void updateTextbook(String input) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
 		JSONObject obj = new JSONObject(input);
-		JSONObject keyValues = obj.getJSONObject("key");
 
-		Long id = Long.valueOf(keyValues.getString("id")).longValue();
+		Long id = Long.valueOf(obj.getString("id")).longValue();
 		String title = obj.getString("title");
 		String author = obj.getString("author");
 		String isbn = obj.getString("isbn");
 		String edition = obj.getString("edition");
 		String condition = obj.getString("condition");
-		String type = obj.getString("type");
-		String uid = obj.getString("uid");
 	
 		Key textbookKey = KeyFactory.createKey("Textbook", id);
 		Query q = new Query(textbookKey);
 		Entity textbook = datastore.prepare(q).asSingleEntity();
-			textbook.setProperty("uid", uid);
-		    textbook.setProperty("type", type);
 		    textbook.setProperty("title", title);
 		    textbook.setProperty("author", author);
 		    textbook.setProperty("isbn", isbn);
@@ -187,44 +194,22 @@ public class TextbookResource {
 		datastore.put(user);
 	}
 	
-	
-	/*
-	 * Required JSON string for this method to work
-	 * {
-			key: 
-				{ 
-					id: 4785074604081152 
-				}
-			propertyMap: 
-			{
-				uid: "1234567890"
-				title: "math"
-				isbn: "123123"
-				type: "request"
-			}
-		}
-	 * 
-	 * 
-	 */
 	@POST
 	@Path("/unmatchTextbook")
 	@Consumes(MediaType.APPLICATION_JSON)
  	public void unmatchTextbook(String input) {
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
 		JSONObject obj = new JSONObject(input);
-		JSONObject propertyValues = obj.getJSONObject("propertyMap");
-		JSONObject keyValues = obj.getJSONObject("key");
 
-		Long id = Long.valueOf(keyValues.getString("id")).longValue();
-		String title = propertyValues.getString("title");
-		String isbn = propertyValues.getString("isbn");
-		String type = propertyValues.getString("type");
-		String uid = propertyValues.getString("uid");
-		//Check for a match again
+		Long id = Long.valueOf(obj.getString("id")).longValue();
+		String title = obj.getString("title");
+		String isbn = obj.getString("isbn");
+		String type = obj.getString("type");
+		String uid = obj.getString("uid");
+
 		String matched = MatchingFunction.checkForMatch(isbn, uid, type, title);
-		
-		//Not found
+
 		if(matched.equals("no")) {
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
 			Key textbookKey = KeyFactory.createKey("Textbook", id);
 			Query q = new Query(textbookKey);
 			Entity textbook = datastore.prepare(q).asSingleEntity();
@@ -232,6 +217,27 @@ public class TextbookResource {
 				textbook.setProperty("matchDate", null);
 			datastore.put(textbook);
 		}
+	}
+
+	//Returns the last 5 textbooks added
+	@GET
+	@Path("/getLast5")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getLast5() {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+	    Query query = new Query("Textbook").addSort("date", Query.SortDirection.DESCENDING);
+	    List<Entity> textbooks = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(5));
+	 	String json = new Gson().toJson(textbooks);
+	 	return json;
+	}
+	
+	@GET
+	@Path("/getStatistics")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getStatistics() {
+		Statistics stats = new Statistics(numberOf_offered_books, numberOf_requested_books, numberOf_matches);
+		String json = new Gson().toJson(stats);
+		return json;
 	}
 
 	private void createUser(JSONObject obj) {
@@ -272,14 +278,3 @@ public class TextbookResource {
 		datastore.put(user);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-

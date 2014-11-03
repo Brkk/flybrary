@@ -112,7 +112,7 @@ public class MatchingFunction {
 				//Check if the matched books are within each others raidus.
 				withinRadius = distance(lat, lon, lat2, lon2, radius, radius2);
 				//If they are send out email
-				if(true) {
+				if(withinRadius) {
 					matchDate = new Date();
 
 					Entity match = new Entity("Match");
