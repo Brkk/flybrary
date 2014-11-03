@@ -11,7 +11,6 @@
 
 
 
-
 var app = angular.module( 'textChangrApp', [ 'ngAnimate', 'ngMaterial','directive.g+signin','ngRoute', 'ui.bootstrap' ]);
 
 app.config( function($routeProvider) {
@@ -223,27 +222,22 @@ function DialogController($scope, $rootScope, $mdDialog) {
 
 
 app.controller('typeAheadCtrl', function($scope, $http) {
-      // $scope.selected = '';
-      
           $scope.updateList = function(title){
               return $http({
                 method: 'GET',
-                url: 'https://www.googleapis.com/books/v1/volumes?q='+title+'&maxResults=5'
+                url: 'https://www.googleapis.com/books/v1/volumes?q='+title+'&maxResults=5&key=AIzaSyCkpwvdSnV5ROhYWamvKaBmH7NQ-0ZLk_4'
               }).then(function ($response)
               {
-                // var result = [];
-                // $scope.booksList = $response.data['items'];
-                // angular.forEach($scope.booksList, function(obj){
-                      // result.push(obj['volumeInfo']['title']);
-                // })
                 return $response.data['items'];
               });
         }
 
           $scope.onSelect = function (item) {
               console.log($scope.asyncSelected);
+              $scope.book.title = $scope.asyncSelected['volumeInfo']['title'];
               $scope.book.author = $scope.asyncSelected['volumeInfo']['authors'][0];
               $scope.book.isbn = $scope.asyncSelected['volumeInfo']['industryIdentifiers'][0]['identifier'];
+              $scope.book.imageUrl = $scope.asyncSelected['volumeInfo']['imageLinks']['thumbnail'];
           };
 })
 
