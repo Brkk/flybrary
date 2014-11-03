@@ -9,20 +9,18 @@ public class Textbook {
     private String author;
     private String isbn;
     private String condition;
-    private String edition;//edition or edition?
+    private String edition;
     private String type;
     private Date addDate;
     private Date matchDate;
     private String uid;
     private String matched;
-    private String location;
     private double lat;
     private double lon;
     
     //need to add an ID field, maybe randomly generate it?
     public Textbook(String title, String author, Date addDate, Date matchDate, String uid,
-			String isbn, String condition, String edition, String type, String matched, String location,
-			double lat, double lon) {
+			String isbn, String condition, String edition, String type, String matched, double lat, double lon) {
 		super();
 		this.title = title;
 		this.author = author;
@@ -34,7 +32,6 @@ public class Textbook {
 		this.edition = edition;
 		this.type = type;
 		this.matched = matched;
-		this.location = location;
 		this.lat = lat;
 		this.lon = lon;
 	}
@@ -117,14 +114,6 @@ public class Textbook {
 
 	public void setMatched(String matched) {
 		this.matched = matched;
-	}
-	
-	public String getLocation() {
-		return location;
-	}
-	
-	public void setLocation(String location) {
-		this.location = location;
 	}
 
 	public double getLat() {

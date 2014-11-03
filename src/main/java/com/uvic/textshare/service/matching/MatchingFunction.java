@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -23,15 +24,37 @@ import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
-import com.uvic.textshare.service.model.Textbook;
+
+import java.security.InvalidKeyException;
+import java.security.*;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESedeKeySpec;
 
 public class MatchingFunction {
-	
-	public static String checkForMatch(String title, String author, String edition, String condition, String type, String uid, String location) {
-		
-		String searchType;
+
+	public static String checkForMatch(String isbn, String uid, String type, String title) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		
+		double lat;
+		double lon;
+		double lat2;
+		double lon2;
+		double radius;
+		double radius2;
+
+		String searchType;
+		String uid2;
+		String firstUsersName;
+		String secondUsersName;
+		String firsUsersEmail;
+		String secondUsersEmail;
+
+		Boolean withinRadius = false;
+		Date matchDate = null;
+
 		if(type.equals("offer")) {
 			 searchType = "request";
 		} else {
@@ -40,130 +63,100 @@ public class MatchingFunction {
 
 		//Set up filters for matching
 		Filter typeFilter = new FilterPredicate("type", FilterOperator.EQUAL, searchType);
-		Filter authorFilter = new FilterPredicate("author", FilterOperator.EQUAL, author);
-		Filter titleFilter = new FilterPredicate("title", FilterOperator.EQUAL, title);
-		Filter editionFilter = new FilterPredicate("edition", FilterOperator.EQUAL, edition);
-		Filter matchFilter = new FilterPredicate("matched", FilterOperator.EQUAL, "no");
-		Filter locationFilter = new FilterPredicate("location", FilterOperator.EQUAL, location);
-		Filter searchFilter = CompositeFilterOperator.and(titleFilter, authorFilter, editionFilter, typeFilter, matchFilter, locationFilter);
+		Filter isbnFilter = new FilterPredicate("isbn", FilterOperator.EQUAL, isbn);
+		Filter searchFilter = CompositeFilterOperator.and(typeFilter, isbnFilter);
 
 		Query q = new Query("Textbook").setFilter(searchFilter).addSort("date", Query.SortDirection.ASCENDING);
 		List<Entity> textbooks = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
-		
+
 		//If there is a match, use the first one and inform both users.
 		if(!textbooks.isEmpty())
 		{
-			Entity matchedBook = textbooks.get(0);
-			String uid2 = (String) matchedBook.getProperty("uid");
-			Date matchDate = new Date();
-			
-			//retreive first user
-			Filter uidFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uid);
-			Query query = new Query("Users").setFilter(uidFilter);
-			Entity user1 = datastore.prepare(query).asSingleEntity();
-			//retrieve second user
-			Filter uidFilter2 = new FilterPredicate("uid", FilterOperator.EQUAL, uid2);
-			Query query2 = new Query("Users").setFilter(uidFilter2);
-			Entity user2 = datastore.prepare(query2).asSingleEntity();
+			//Retrieve first user
 
-			//sendEmailToUser(user1.getProperty("name"), user1.getProperty("email"),user2.getProperty("name"), user2.getProperty("email"), title);
-			//sendEmailToUser(user2.getProperty("name"), user2.getProperty("email"),user1.getProperty("name"), user1.getProperty("email"), title);
-			matchedBook.setProperty("matched", "yes");
-			matchedBook.setProperty("matchDate", matchDate);
-			datastore.put(matchedBook);
-			return "yes";
-		} 
-		else 
-			return "no";
-		
-	}
-	
-	//Take a look at this method here, I created it using a hashmap to switch filters and broaden the results
-	//Ps. not ready yet but working
-	public static boolean checkForMatchObj(Textbook textbook) {
-		
-			String searchType;
-			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-			
-			if(textbook.getType().equals("offer")) {
-				 searchType = "request";
-			} else {
-				searchType = "offer";
-			}
-			
-			//Set up filters for matching
-			String[] filters = {"type","title","matched","author","edition"};
-			HashMap<String,Filter> hm = new HashMap<String,Filter>();
-			
-			//Add the filters into a hashmap
-			hm.put("type", new FilterPredicate("type", FilterOperator.EQUAL, searchType));
-			hm.put("author", new FilterPredicate("author", FilterOperator.EQUAL, textbook.getAuthor()));
-			hm.put("title", new FilterPredicate("title", FilterOperator.EQUAL, textbook.getTitle()));
-			hm.put("edition", new FilterPredicate("edition", FilterOperator.EQUAL, textbook.getEdition()));
-			hm.put("matched", new FilterPredicate("matched", FilterOperator.EQUAL, textbook.getMatched()));
-					
-			Filter searchFilter;
-			Query q;
-	
-			while(hm.size()>2){
-				
-				//This line below is just a way to guarantee that when the for run doesn't even run once
-				//there will be the required filters, search one more time, and decide if there is or not any book matched
-				searchFilter = CompositeFilterOperator.and(hm.get(filters[0]), hm.get(filters[1]), hm.get(filters[2]));
-				
-				//This for picks a filter at a time and add it to the required ones.
-				//For example type, title and matched are required, then it adds first edition, and in the next loop, author
-				for(int i=3; i<hm.size(); i++){
-					searchFilter = CompositeFilterOperator.and(hm.get(filters[i]), hm.get(filters[0]), hm.get(filters[1]), hm.get(filters[2]));
+			Filter uidFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uid);
+			Query query = new Query("User").setFilter(uidFilter);
+			Entity user1 = datastore.prepare(query).asSingleEntity();
+
+			//Get user name, email and radius.
+			radius = (Double)user1.getProperty("radius");
+			lat = (Double)user1.getProperty("lat");
+			lon = (Double)user1.getProperty("lon");
+			firstUsersName = String.valueOf(user1.getProperty("name"));
+			firsUsersEmail = String.valueOf(user1.getProperty("email"));
+
+			for(int i = 0; i < textbooks.size(); i++) {
+				Entity matchedBook = textbooks.get(i);
+				uid2 = (String) matchedBook.getProperty("uid");
+
+				//1 second delay to slow down Datastore access time
+				try {
+					TimeUnit.MILLISECONDS.sleep(1000);
+				} catch (InterruptedException e) {
+
+					e.printStackTrace();
 				}
-				
-				q = new Query("Textbook").setFilter(searchFilter).addSort("date", Query.SortDirection.ASCENDING);
-				//we could return this list, there'd more options
-				List<Entity> textbooks = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
-				
-				//At this point we have to consider that there might be an exact book with the exact same version
-				//But if not, we still can retrieve some options, right?
-				if(!textbooks.isEmpty())
-				{	
-					//Show if there is any match
-					for(Entity a:textbooks)
-					System.out.println("You have a matched textbook\n\n"+textbook+"\n\n\nMatched book:\n"+a);
-					return true;
-					
-				} else 
-				{
-					System.out.println("No textbook found");
-					System.out.println("Removing: "+filters[hm.size()-1]);
-					//removes the filter used to search
-					hm.remove(filters[hm.size()-1]);
-				}	
+
+				//Retrieve second user from Datastore
+				Filter uidFilter2 = new FilterPredicate("uid", FilterOperator.EQUAL, uid2);
+				Query query2 = new Query("User").setFilter(uidFilter2);
+				Entity user2 = datastore.prepare(query2).asSingleEntity();
+
+				//Get second users information
+				lat2 = (Double)user2.getProperty("lat");
+				lon2 = (Double)user2.getProperty("lon");
+				radius2 = (Double)user2.getProperty("radius");
+				secondUsersName = String.valueOf(user2.getProperty("name"));
+				secondUsersEmail = String.valueOf(user2.getProperty("email"));
+
+				//Check if the matched books are within each others raidus.
+				withinRadius = distance(lat, lon, lat2, lon2, radius, radius2);
+				//If they are send out email
+				if(true) {
+					matchDate = new Date();
+
+					Entity match = new Entity("Match");
+						match.setProperty("matchDate", matchDate.toString());
+						match.setProperty("firsUsersEmail", firsUsersEmail);
+						match.setProperty("secondUsersEmail", secondUsersEmail);
+					datastore.put(match);
+
+					sendEmailToUser(firstUsersName, firsUsersEmail, secondUsersName, secondUsersEmail, title, matchDate.toString());
+					sendEmailToUser(secondUsersName, secondUsersEmail, firstUsersName, firsUsersEmail, title, matchDate.toString());
+					matchedBook.setProperty("matched", "yes");
+					matchedBook.setProperty("matchDate", matchDate);
+					datastore.put(matchedBook);
+
+					return "yes";
+				}
 			}
-			
-			System.out.println("No book found");
-			return false;
 		}
+		return "no";
+	}
 
 	/*
 	 * Input: Both users names, email addresses and the title of the matched book.
 	 * Output: Email sent to both users from "team.texshare@gmail.com"
 	 */
-	private static void sendEmailToUser(String receiverName, String receiverEmail, String matchedUserName, String matchedUserEmail, String title) {
+	private static void sendEmailToUser(String receiverName, String receiverEmail, String matchedUserName, String matchedUserEmail, String title, String matchDate) {
 			// user here would be the Name of the user.
 		    Properties props = new Properties();
 		    Session session = Session.getDefaultInstance(props, null);
-		    
+
 		    //Create the mail body and send it to both of the users from team.textshare@gmail.com
 		    String msgBody = "Hello fellow student,\n"
-		    		+ ""
-		    		+ "We are glad to tell you that we have found a match to the " + title + ". You can reach " 
-		    		+ matchedUserName + " by email from this address " + matchedUserEmail + ". Have a nice day.\n\n"
+		    		+ "Isn't this a lucky day for ya. Remember that time you used flybrary for " + title + ". Well, we found "
+		    		+ "you match. You can leave whatever you are doing and reach your lovely match "
+		    		+ matchedUserName + " by replying to this email . Have a fantastic day and remember to always fly with flybrary.\n\n"
 		    		+ "Regards,\n"
-		    		+ "Team Text Share";    		
-		
+		    		+ "Kisses from Team Flybrary\n\n<MATCH_DATE>"
+						+ matchDate
+						+"<MATCH_DATE>";
+
 		    try {
 		        Message msg = new MimeMessage(session);
 		        try {
-					msg.setFrom(new InternetAddress("team.textshare@gmail.com", "Team Text Share"));
+					msg.setFrom(new InternetAddress("email@textchngr.appspotmail.com", "Team Flybrary"));
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace(); //log these errors
 				}
@@ -173,14 +166,42 @@ public class MatchingFunction {
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace(); //log these errors
 				}
-		        msg.setSubject(title + " matched with a textbook in our database!");
+		        msg.setSubject(title + " got a match, don't forget to check it eh");
 		        msg.setText(msgBody);
 		        Transport.send(msg);
-		
+
 		    } catch (AddressException e) {
 		        // ...
 		    } catch (MessagingException e) {
 		        // ...
 		    }
-		}
+	}
+
+	//Calculates the distance between two co-ordinates and compares it to the given radiuses
+	private static boolean distance(double lat1, double lon1, double lat2, double lon2, double radius, double radius2) {
+		double theta = lon1 - lon2;
+	  	double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+	  	dist = Math.acos(dist);
+	  	dist = rad2deg(dist);
+	  	dist = dist * 60 * 1.1515;
+	  	dist = dist * 1.609344;
+	  	if(dist <= radius && dist <= radius2)
+	  	{
+			return true;
+	  	}
+	  	else
+	  	{
+			return false;
+	  	}
+	}
+
+	//Converts degrees to radiant
+	private static double deg2rad(double deg) {
+	  return (deg * Math.PI / 180.0);
+	}
+
+	//Converts radiant to degrees
+	private static double rad2deg(double rad) {
+	  return (rad * 180 / Math.PI);
+	}
 }

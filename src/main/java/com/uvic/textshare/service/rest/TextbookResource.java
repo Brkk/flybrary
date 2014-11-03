@@ -52,11 +52,10 @@ public class TextbookResource {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		 
 		/*
-		*	If the user exists, retreieve its entries
-		*	Else create a new user and return an emtpy entries list
+		*	If the user exists, retrieve its entries
+		*	Else create a new user and return an empty entries list
 		*/
 		Query q = new Query("User").setFilter(userFilter);
-		PreparedQuery pq = datastore.prepare(q);
 		Entity user = datastore.prepare(q).asSingleEntity();
 		 
 		if(user == null) {
@@ -68,7 +67,6 @@ public class TextbookResource {
 			Query q2 = new Query("Textbook").setFilter(userFilter);
 		 	PreparedQuery pd2 = datastore.prepare(q2);
 		 	List<Entity> textbooks = pd2.asList(FetchOptions.Builder.withDefaults());
-		 	
 		 	String json = new Gson().toJson(textbooks);
 		 	return json;
 		}
@@ -78,22 +76,16 @@ public class TextbookResource {
 	@Path("/add")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void addTextbook(String input)	throws ParseException {
-		
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		//Parse the input parameters from the JSON object sent from client side
 		JSONObject text = new JSONObject(input);
-
-		// UserService userService = UserServiceFactory.getUerService();
-		// User user = userService.getCurrentUser();
 		Date addDate = new Date();
 		Date matchDate = null; 
 		String matched = MatchingFunction.checkForMatch(
-				text.getString("title"), 
-				text.getString("author"), 
-				text.getString("edition"), 
-				text.getString("condition"), 
-				text.getString("type"),
+				text.getString("isbn"), 
 				text.getString("uid"),
-		 		"Victoria");
+				text.getString("type"),
+				text.getString("title"));
 		 
 		if(matched.equals("yes"))
 			matchDate = new Date();
@@ -110,10 +102,6 @@ public class TextbookResource {
 		    textbook.setProperty("date", addDate);	 
 		    textbook.setProperty("matchDate", matchDate);
 		    textbook.setProperty("matched", matched);
-		    textbook.setProperty("location", "Victoria");
-		    
-		//Add the created entity on the Datastore.
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		datastore.put(textbook);
 
 		String bookOwner = text.getString("uid");
@@ -121,48 +109,14 @@ public class TextbookResource {
 		updateUserKarma(bookOwner, typeOfEntry);
 	}
 	 
-	/*
-	*	Doesnt try to match the book -- user this method on DEVSERVER to create indexes.
-	*/
-	@POST
-	@Path("/onlyAdd")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void addTextbookTest(String input) {
-		
-		JSONObject propertyMap = new JSONObject(input);
-		JSONObject obj = propertyMap.getJSONObject("propertyMap");
-		Date date = new Date();
-
-		 		 
-		// Create an textbook entity using the user input 
-		Entity textbook = new Entity("Textbook");
-		    textbook.setProperty("uid", obj.getString("uid"));
-		    textbook.setProperty("type", obj.getString("type"));
-		    textbook.setProperty("title", obj.getString("title"));
-		    textbook.setProperty("author", obj.getString("author"));
-		    textbook.setProperty("isbn", obj.getString("isbn"));
-		    textbook.setProperty("edition", obj.getString("edition"));
-		    textbook.setProperty("condition", obj.getString("condition"));
-		    textbook.setProperty("date", date);	 
-		    textbook.setProperty("matchDate", date);
-		    textbook.setProperty("matched", "no");
-		    textbook.setProperty("location", "Victoria");
-		    
-		//Add the created entity on the Datastore.
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		datastore.put(textbook);
-	 }  
-	 
 	@POST
 	@Path("/delete")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void deleteTextbook(String input) throws JSONException {
-		 
 		JSONObject keyPart = new JSONObject(input);
 		JSONObject obj = keyPart.getJSONObject("key");
-		System.out.println(obj);
+		
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
 		Long id = obj.getLong("id");
 		Key textbookKey = KeyFactory.createKey("Textbook", id);
 		datastore.delete(textbookKey);
@@ -170,7 +124,7 @@ public class TextbookResource {
 	 }
 	 
 	@POST
-	@Path("/update")
+	@Path("/updateTextbook")
 	@Consumes(MediaType.APPLICATION_JSON)
  	public void updateTextbook(String input) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
@@ -195,40 +149,110 @@ public class TextbookResource {
 		    textbook.setProperty("author", author);
 		    textbook.setProperty("isbn", isbn);
 		    textbook.setProperty("edition", edition);
-		    textbook.setProperty("condition", condition); 
-		    
+		    textbook.setProperty("condition", condition);    
 		datastore.put(textbook);
 	}
- 
-	@GET
-	@Path("/test")
-	public String testMethod() {
-		return "this is a test";
+	
+	@POST
+	@Path("/updateUserRadius")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void updateUserRadius(String input) {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		JSONObject obj = new JSONObject(input);
+		String uid = obj.getString("uid");
+		double radius = obj.getDouble("radius");
+
+		Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uid);
+		Query q = new Query("User").setFilter(userFilter);
+		Entity user = datastore.prepare(q).asSingleEntity();
+			user.setUnindexedProperty("radius", radius);
+		datastore.put(user);
+	}
+
+	@POST
+	@Path("/updateUserLocation")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void updateUserLocation(String input) {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		JSONObject obj = new JSONObject(input);
+		String uid = obj.getString("uid");
+		double lat = obj.getDouble("lat");
+		double lon = obj.getDouble("lon");
+
+		Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uid);
+		Query q = new Query("User").setFilter(userFilter);
+		Entity user = datastore.prepare(q).asSingleEntity();
+			user.setUnindexedProperty("lat", lat);
+			user.setUnindexedProperty("lon", lon);
+		datastore.put(user);
+	}
+	
+	
+	/*
+	 * Required JSON string for this method to work
+	 * {
+			key: 
+				{ 
+					id: 4785074604081152 
+				}
+			propertyMap: 
+			{
+				uid: "1234567890"
+				title: "math"
+				isbn: "123123"
+				type: "request"
+			}
+		}
+	 * 
+	 * 
+	 */
+	@POST
+	@Path("/unmatchTextbook")
+	@Consumes(MediaType.APPLICATION_JSON)
+ 	public void unmatchTextbook(String input) {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
+		JSONObject obj = new JSONObject(input);
+		JSONObject propertyValues = obj.getJSONObject("propertyMap");
+		JSONObject keyValues = obj.getJSONObject("key");
+
+		Long id = Long.valueOf(keyValues.getString("id")).longValue();
+		String title = propertyValues.getString("title");
+		String isbn = propertyValues.getString("isbn");
+		String type = propertyValues.getString("type");
+		String uid = propertyValues.getString("uid");
+		//Check for a match again
+		String matched = MatchingFunction.checkForMatch(isbn, uid, type, title);
+		
+		//Not found
+		if(matched.equals("no")) {
+			Key textbookKey = KeyFactory.createKey("Textbook", id);
+			Query q = new Query(textbookKey);
+			Entity textbook = datastore.prepare(q).asSingleEntity();
+				textbook.setProperty("matched", "no");
+				textbook.setProperty("matchDate", null);
+			datastore.put(textbook);
+		}
 	}
 
 	private void createUser(JSONObject obj) {
-	
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
 		Entity user = new Entity("User");
 	 		user.setProperty("name", obj.getString("name"));
 	 		user.setProperty("uid", obj.getString("uid"));
 	 		user.setProperty("email", obj.getString("email"));
 			user.setProperty("location", obj.getString("location"));
-			user.setProperty("lat", obj.getString("lat"));
-			user.setProperty("lon", obj.getString("lon"));
-			user.setProperty("request_karma", 0);
-			user.setProperty("offer_karma", 0);
-		
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
+			user.setUnindexedProperty("lat", obj.getDouble("lat"));
+			user.setUnindexedProperty("lon", obj.getDouble("lon"));
+			user.setUnindexedProperty("request_karma", 0);
+			user.setUnindexedProperty("offer_karma", 0);
+			user.setUnindexedProperty("radius", 15.0); //default value for radius.
 		datastore.put(user);
 	}
 
 	private void updateUserKarma(String uid, String type) {
-		
-		Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uid);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		
+		Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uid);
 		Query q = new Query("User").setFilter(userFilter);
-		PreparedQuery pq = datastore.prepare(q);
 		Entity user = datastore.prepare(q).asSingleEntity();
 		int updatedKarma;
 
@@ -236,15 +260,15 @@ public class TextbookResource {
 		{
 			updatedKarma = Integer.parseInt(user.getProperty("offer_karma").toString());
 			updatedKarma += 5;
-			user.setProperty("offer_karma", updatedKarma);
+			user.setUnindexedProperty("offer_karma", updatedKarma);
 		}
 		else
 		{
 			updatedKarma = Integer.parseInt(user.getProperty("request_karma").toString());
 			updatedKarma += 5;
-			user.setProperty("request_karma", updatedKarma);
+			user.setUnindexedProperty("request_karma", updatedKarma);
 		}
-
+		
 		datastore.put(user);
 	}
 }

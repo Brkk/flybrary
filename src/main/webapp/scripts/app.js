@@ -12,7 +12,7 @@
 
 
 
-var app = angular.module( 'textChangrApp', [ 'ngAnimate', 'ngMaterial','directive.g+signin','ngRoute' ]);
+var app = angular.module( 'textChangrApp', [ 'ngAnimate', 'ngMaterial','directive.g+signin','ngRoute', 'ui.bootstrap' ]);
 
 app.config( function($routeProvider) {
     $routeProvider
@@ -221,6 +221,32 @@ function DialogController($scope, $rootScope, $mdDialog) {
     };
 }
 
+
+app.controller('typeAheadCtrl', function($scope, $http) {
+      // $scope.selected = '';
+      
+          $scope.updateList = function(title){
+              return $http({
+                method: 'GET',
+                url: 'https://www.googleapis.com/books/v1/volumes?q='+title+'&maxResults=5'
+              }).then(function ($response)
+              {
+                // var result = [];
+                // $scope.booksList = $response.data['items'];
+                // angular.forEach($scope.booksList, function(obj){
+                      // result.push(obj['volumeInfo']['title']);
+                // })
+                return $response.data['items'];
+              });
+        }
+
+          $scope.onSelect = function (item) {
+              console.log($scope.asyncSelected);
+              $scope.book.author = $scope.asyncSelected['volumeInfo']['authors'][0];
+              $scope.book.isbn = $scope.asyncSelected['volumeInfo']['industryIdentifiers'][0]['identifier'];
+          };
+})
+
 app.controller('addBookCtrl', function($scope, $mdDialog, $http, $timeout) {
     $scope.dialog = function(ev) {
       $mdDialog.show({
@@ -264,6 +290,11 @@ app.controller('addBookCtrl', function($scope, $mdDialog, $http, $timeout) {
       });
     };
   })
+
+
+
+
+
 app.controller('tabCtrl', function($scope, $location, $timeout) {
 
     $scope.next = function() {

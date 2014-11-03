@@ -8,17 +8,39 @@
       <h2>Add Book</h2>
 
       <md-content>
-        <form style="padding: 20px;">
+        <form style="padding: 30px;">
           <div class="row">
-            <tf-float label="Title" value="book.title"> </tf-float>
-            <tf-float label="Author" value="book.author"> </tf-float>
+
+            <!-- <div ng-controller="typeAheadCtrl"> -->
+            <md-input-group ng-controller="typeAheadCtrl" ng-disabled="isDisabled"> 
+                <label for="title">Title</label>
+                <md-input id="inputSearch" class="md-flex" type="text" ng-model="asyncSelected" 
+                typeahead-editable="false" 
+                typeahead="option as option['volumeInfo']['title'] for option in updateList($viewValue)" 
+                typeahead-min-length='3'  
+                typeahead-on-select='onSelect(asyncSelected)'
+                size=40>
+              </md-input-group>
+              <md-input-group ng-disabled="isDisabled"> 
+                <label for="author">Author</label>
+                <md-input id="author" value="{{book.author}}" size=40>
+              </md-input-group>
           </div>
           <div class="row">
-            <tf-float label="Condition" value="book.condition" class="long"> </tf-float>
-            <tf-float label="Edition" value="book.edition"> </tf-float>
+            <md-input-group ng-disabled="isDisabled"> 
+              <label for="condition">Condition</label>
+              <md-input id="condition" value="" size=40>
+            </md-input-group>
+            <md-input-group ng-disabled="isDisabled"> 
+              <label for="edition">Edition</label>
+              <md-input id="edition" value="" size=40>
+            </md-input-group>
           </div>
           <div class="row">
-            <tf-float label="ISBN" value="book.isbn"> </tf-float>
+            <md-input-group ng-disabled="isDisabled"> 
+              <label for="isbn">ISBN</label>
+              <md-input id="isbn" value="{{book.isbn}}" size=40>
+            </md-input-group>
           </div>
         </form>
       </md-content>
