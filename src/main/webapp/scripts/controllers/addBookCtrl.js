@@ -17,7 +17,15 @@ app.controller('dialogCtrl', function($scope, $mdDialog, $http, $timeout, user) 
         controller: 'addBookCtrl'
       }).then(function(addBookConfirmed) {
           if (addBookConfirmed){
-            user.addBook();
+            user.addBook().then(
+              function(data)
+              {
+                  $rootScope.bookList = data;
+              },
+              function(err)
+              {
+                  console.log('Failed: ' + err);
+              });
           }
       
       });
