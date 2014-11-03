@@ -1,0 +1,14 @@
+<md-list>
+    <md-item ng-repeat="book in books | orderBy:orderProp | isMatch">
+        <md-item-content>
+            <div class="md-tile-left">
+                <img ng-src="images/{{book.propertyMap.image}}" class="img">
+            </div>
+            <div class="md-tile-content">
+                <h3>{{book.propertyMap.title}}</h3>
+                <h4>{{book.propertyMap.author}}</h4>
+            </div>
+        </md-item-content>
+        <md-divider ng-if="!$last"></md-divider>
+    </md-item>
+</md-list>
