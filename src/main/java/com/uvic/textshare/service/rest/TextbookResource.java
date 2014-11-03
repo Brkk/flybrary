@@ -91,8 +91,10 @@ public class TextbookResource {
 				text.getString("type"),
 				text.getString("title"));
 		 
-		if(matched.equals("yes"))
+		if(matched.equals("yes")) {
 			matchDate = new Date();
+			numberOf_matches++;
+		}
 
 		// Create an textbook entity using the user input 
 		Entity textbook = new Entity("Textbook");
@@ -125,11 +127,9 @@ public class TextbookResource {
 	@Path("/delete")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void deleteTextbook(String input) throws JSONException {
-		JSONObject keyPart = new JSONObject(input);
-		JSONObject obj = keyPart.getJSONObject("key");
-		
+		JSONObject obj = new JSONObject(input);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Long id = obj.getLong("id");
+		Long id = Long.valueOf(obj.getString("id")).longValue();
 		Key textbookKey = KeyFactory.createKey("Textbook", id);
 		datastore.delete(textbookKey);
 		 
@@ -141,16 +141,13 @@ public class TextbookResource {
  	public void updateTextbook(String input) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
 		JSONObject obj = new JSONObject(input);
-		JSONObject keyValues = obj.getJSONObject("key");
 
-		Long id = Long.valueOf(keyValues.getString("id")).longValue();
+		Long id = Long.valueOf(obj.getString("id")).longValue();
 		String title = obj.getString("title");
 		String author = obj.getString("author");
 		String isbn = obj.getString("isbn");
 		String edition = obj.getString("edition");
 		String condition = obj.getString("condition");
-		String type = obj.getString("type");
-		String uid = obj.getString("uid");
 	
 		Key textbookKey = KeyFactory.createKey("Textbook", id);
 		Query q = new Query(textbookKey);
