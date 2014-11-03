@@ -25,17 +25,26 @@ import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 
+import java.security.InvalidKeyException;
+import java.security.*;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESedeKeySpec;
+
 public class MatchingFunction {
-	
+
 	public static String checkForMatch(String isbn, String uid, String type, String title) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		double lat; 
+		double lat;
 		double lon;
 		double lat2;
 		double lon2;
 		double radius;
 		double radius2;
-		
+
 		String searchType;
 		String uid2;
 		String firstUsersName;
@@ -45,7 +54,7 @@ public class MatchingFunction {
 
 		Boolean withinRadius = false;
 		Date matchDate = null;
-		
+
 		if(type.equals("offer")) {
 			 searchType = "request";
 		} else {
@@ -79,7 +88,7 @@ public class MatchingFunction {
 			for(int i = 0; i < textbooks.size(); i++) {
 				Entity matchedBook = textbooks.get(i);
 				uid2 = (String) matchedBook.getProperty("uid");
-				
+
 				//1 second delay to slow down Datastore access time
 				try {
 					TimeUnit.MILLISECONDS.sleep(1000);
@@ -87,33 +96,41 @@ public class MatchingFunction {
 
 					e.printStackTrace();
 				}
-				
+
 				//Retrieve second user from Datastore
 				Filter uidFilter2 = new FilterPredicate("uid", FilterOperator.EQUAL, uid2);
 				Query query2 = new Query("User").setFilter(uidFilter2);
 				Entity user2 = datastore.prepare(query2).asSingleEntity();
-				
+
 				//Get second users information
 				lat2 = (Double)user2.getProperty("lat");
 				lon2 = (Double)user2.getProperty("lon");
 				radius2 = (Double)user2.getProperty("radius");
 				secondUsersName = String.valueOf(user2.getProperty("name"));
 				secondUsersEmail = String.valueOf(user2.getProperty("email"));
-				
+
 				//Check if the matched books are within each others raidus.
 				withinRadius = distance(lat, lon, lat2, lon2, radius, radius2);
 				//If they are send out email
-				if(withinRadius == true) {
-					//sendEmailToUser(firstUsersName, firsUsersEmail, secondUsersName, secondUsersEmail, title);
-					//sendEmailToUser(secondUsersName, secondUsersEmail, firstUsersName, firsUsersEmail, title);
+				if(true) {
 					matchDate = new Date();
+
+					Entity match = new Entity("Match");
+						match.setProperty("matchDate", matchDate.toString());
+						match.setProperty("firsUsersEmail", firsUsersEmail);
+						match.setProperty("secondUsersEmail", secondUsersEmail);
+					datastore.put(match);
+
+					sendEmailToUser(firstUsersName, firsUsersEmail, secondUsersName, secondUsersEmail, title, matchDate.toString());
+					sendEmailToUser(secondUsersName, secondUsersEmail, firstUsersName, firsUsersEmail, title, matchDate.toString());
 					matchedBook.setProperty("matched", "yes");
 					matchedBook.setProperty("matchDate", matchDate);
 					datastore.put(matchedBook);
+
 					return "yes";
 				}
 			}
-		} 
+		}
 		return "no";
 	}
 
@@ -121,7 +138,7 @@ public class MatchingFunction {
 	 * Input: Both users names, email addresses and the title of the matched book.
 	 * Output: Email sent to both users from "team.texshare@gmail.com"
 	 */
-	private static void sendEmailToUser(String receiverName, String receiverEmail, String matchedUserName, String matchedUserEmail, String title) {
+	private static void sendEmailToUser(String receiverName, String receiverEmail, String matchedUserName, String matchedUserEmail, String title, String matchDate) {
 			// user here would be the Name of the user.
 		    Properties props = new Properties();
 		    Session session = Session.getDefaultInstance(props, null);
@@ -129,15 +146,17 @@ public class MatchingFunction {
 		    //Create the mail body and send it to both of the users from team.textshare@gmail.com
 		    String msgBody = "Hello fellow student,\n"
 		    		+ "Isn't this a lucky day for ya. Remember that time you used flybrary for " + title + ". Well, we found "
-		    		+ "you match. You can leave whatever you are doing and reach your lovely match " 
-		    		+ matchedUserName + " using your favorite email from " + matchedUserEmail + ". Have a fantastic day and remember to always fly with flybrary.\n\n"
+		    		+ "you match. You can leave whatever you are doing and reach your lovely match "
+		    		+ matchedUserName + " by replying to this email . Have a fantastic day and remember to always fly with flybrary.\n\n"
 		    		+ "Regards,\n"
-		    		+ "Kisses from Team Flybrary";    		
+		    		+ "Kisses from Team Flybrary\n\n<MATCH_DATE>"
+						+ matchDate
+						+"<MATCH_DATE>";
 
 		    try {
 		        Message msg = new MimeMessage(session);
 		        try {
-					msg.setFrom(new InternetAddress("team.textshare@gmail.com", "Team Flybrary"));
+					msg.setFrom(new InternetAddress("email@textchngr.appspotmail.com", "Team Flybrary"));
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace(); //log these errors
 				}
@@ -176,12 +195,12 @@ public class MatchingFunction {
 	  	}
 	}
 
-	//Converts degrees to radiant 
+	//Converts degrees to radiant
 	private static double deg2rad(double deg) {
 	  return (deg * Math.PI / 180.0);
 	}
 
-	//Converts radiant to degrees 
+	//Converts radiant to degrees
 	private static double rad2deg(double rad) {
 	  return (rad * 180 / Math.PI);
 	}
