@@ -1,9 +1,9 @@
 <section layout="horizontal" layout-fill ng-controller="SidebarController" flex>
-    <md-sidenav class="md-sidenav-left md-whiteframe-z1" style="z-index:8" component-id="left"
+    <md-sidenav  class="md-sidenav-left md-whiteframe-z1" style="z-index:8" component-id="left"
      layout="vertical" class="md-sidenav-left">
         <div class="animate-switch-container" ng-controller="tabCtrl" ng-switch on="tabs.selectedIndex" >
             <div class="animate-switch" ng-switch-when="0">
-                <div ng-include="'views/offers_side.html'"></div>
+                <div ng-include="'views/offers-side.html'"></div>
             </div>
             <div class="animate-switch" ng-switch-when="1">
                 <div ng-include="'views/requests_side.html'"></div>
@@ -18,7 +18,7 @@
         <md-toolbar class="md-theme-light app-toolbar" style="z-index:3">
             <div class="md-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between">
                 <div ng-click="toggleLeft()">
-                    <md-button>Textchangr</md-button>
+                    <md-button>Flybrary</md-button>
                 </div>
             </div> 
         </md-toolbar>
@@ -27,7 +27,7 @@
                 <md-tabs selected="tabs.selectedIndex" layout="horizontal" layout-align="start start">
                     <md-tab label="Offers"></md-tab>
                     <md-tab label="Requests"></md-tab>
-                    <md-tab label="Textchanges"></md-tab>
+                    <md-tab label="Matches"></md-tab>
                 </md-tabs>
             </div>
         </md-toolbar>
@@ -44,7 +44,7 @@
                         md-swipe-left="next()"
                         md-swipe-right="previous()"
                     >
-                        <div ng-include="'views/offers.html'"></div>
+                    <div ng-include="'views/offers.html'"></div>
                     </div>
                     <div class="animate-switch"
                         ng-switch-when="1"
