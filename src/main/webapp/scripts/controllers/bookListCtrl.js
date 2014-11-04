@@ -3,7 +3,7 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
   user.getBooks().then(
     function(data){
       $rootScope.bookList = data;
-    }), 
+    }, 
     function (err) {
       console.log('Failed: ' + err);
     });
@@ -37,7 +37,7 @@ app.filter('isRequest', function () {
       return filtered;
     };
   });
-  .filter('isMatch', function () {
+app.filter('isMatch', function () {
     return function (items) {
       var filtered = [];
       for (var i = 0; i < items.length; i++) {

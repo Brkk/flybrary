@@ -1,4 +1,9 @@
 app.controller('addBookCtrl', function ($scope, $rootScope, $mdDialog, user) {
+    
+    $scope.newbookProperties = user.activeBookProperties;
+    $scope.$watch('newbookProperties', function() {
+      user.activeBookProperties = $scope.newbookProperties;
+    });
     $scope.hide = function() {
       $mdDialog.hide(false);
     };

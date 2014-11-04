@@ -1,7 +1,7 @@
 'use strict';
 
 
-var app = angular.module( 'flybraryApp', [ 'ngAnimate', 'ngMaterial','ngRoute', 'ui.bootstrap' ]);
+var app = angular.module( 'flybraryApp', [ 'services', 'ngAnimate', 'ngMaterial','ngRoute', 'ui.bootstrap' ]);
 
 app.config( function($routeProvider) {
     $routeProvider

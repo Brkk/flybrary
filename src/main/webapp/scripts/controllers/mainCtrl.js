@@ -1,5 +1,8 @@
 app.controller('mainCtrl', function($scope, $rootScope, $location, $mdSidenav, $routeParams)
   {
+     
+      $rootScope.activeType = user.activeType;
+
       $rootScope.tabs = {
         maxIndex : 2,
         locked : true,
@@ -22,12 +25,18 @@ app.controller('mainCtrl', function($scope, $rootScope, $location, $mdSidenav, $
         switch($scope.tabs.selectedIndex)
         {
           case 0:
+            $scope.activeType = 'offer';
+            user.activeType = $scope.activeType;
             $location.path('/main/offers').replace();
             break;
           case 1:
+            $scope.activeType = 'request';
+            user.activeType = $scope.activeType;
             $location.path('/main/requests').replace();
             break;
           case 2:
+            $scope.activeType = 'matches';
+            user.activeType = $scope.activeType;
             $location.path('/main/matches').replace();
             break;
         };
