@@ -218,6 +218,22 @@ public class TextbookResource {
 			datastore.put(textbook);
 		}
 	}
+	
+	@POST
+	@Path("/getUser")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getUserLocation(String input) {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		JSONObject obj = new JSONObject(input);
+		String uid = obj.getString("uid");
+
+		Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uid);
+		Query q = new Query("User").setFilter(userFilter);
+		Entity user = datastore.prepare(q).asSingleEntity();
+		String json = new Gson().toJson(user);
+		return json;
+	}
 
 	//Returns the last 5 textbooks added
 	@GET
