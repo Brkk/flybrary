@@ -23,19 +23,13 @@ import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.uvic.textshare.service.model.Delay;
+import com.uvic.textshare.service.model.LatLonRadius;
 
 public class MatchingFunction {
 
 	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 	
 	public String checkForMatch(String isbn, String uid, String type, String title) {
-		
-		double lat;
-		double lon;
-		double lat2;
-		double lon2;
-		double radius;
-		double radius2;
 		String searchType;
 		String firstUsersName;
 		String secondUsersName;
@@ -52,26 +46,24 @@ public class MatchingFunction {
 	
 		List<Entity> textbooks = getTextbooks(searchType, isbn);	
 
-		//If there is a match, use the first one and inform both users.
 		if(!textbooks.isEmpty())
 		{
 			
 			Entity user = getUser(uid);
-			
-			radius = (Double)user.getProperty("radius");
-			lat = (Double)user.getProperty("lat");
-			lon = (Double)user.getProperty("lon");
+			LatLonRadius first = new LatLonRadius((Double)user.getProperty("lat"),
+					(Double)user.getProperty("lon"),
+					(Double)user.getProperty("radius"));
 			
 			firstUsersName = String.valueOf(user.getProperty("name"));
 			firsUsersEmail = String.valueOf(user.getProperty("email"));
 
 			for(int i = 0; i < textbooks.size(); i++) {
 				Entity matchedBook = textbooks.get(i);
-				lat2 = (Double)matchedBook.getProperty("lat");
-				lon2 = (Double)matchedBook.getProperty("lon");
-				radius2 = (Double)matchedBook.getProperty("radius");
+				LatLonRadius second = new LatLonRadius((Double)matchedBook.getProperty("lat"),
+						(Double)matchedBook.getProperty("lon"),
+						(Double)matchedBook.getProperty("radius"));
 
-				withinRadius = distance(lat, lon, lat2, lon2, radius, radius2, type);
+				withinRadius = distance(first, second, type);
 
 				if(withinRadius) {
 					matchDate = new Date();
@@ -80,8 +72,8 @@ public class MatchingFunction {
 					user = getUser(uid);
 					secondUsersName = String.valueOf(user.getProperty("name"));
 					secondUsersEmail = String.valueOf(user.getProperty("email"));
-					Delay.oneSecondDelay();
 					
+					Delay.oneSecondDelay();
 					Entity match = new Entity("Match");
 						match.setProperty("matchDate", matchDate.toString());
 						match.setProperty("firsUsersEmail", firsUsersEmail);
@@ -147,7 +139,14 @@ public class MatchingFunction {
 	}
 
 	//Calculates the distance between two co-ordinates and compares it to the given radiuses
-	private boolean distance(double lat1, double lon1, double lat2, double lon2, double radius, double radius2, String type) {
+	private boolean distance(LatLonRadius first, LatLonRadius second, String type) {		
+		double lon1 = first.getLon();
+		double lat1 = first.getLat();
+		double radius1 = first.getRadius();
+		double lon2 = second.getLon();
+		double lat2 = second.getLat();
+		double radius2 = second.getRadius();
+		
 		double theta = lon1 - lon2;
 	  	double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
 	  	dist = Math.acos(dist);
@@ -158,7 +157,7 @@ public class MatchingFunction {
 	  	if(type.equals("offer") && dist <= radius2) {
 	  		return true;
 	  	}
-	  	else if(dist <= radius && dist <= radius2){
+	  	else if(dist <= radius1 && dist <= radius2){
 	  		return true;
 	  	}
 	  	else
@@ -183,11 +182,9 @@ public class MatchingFunction {
 	}
 	
 	private List<Entity> getTextbooks(String searchType, String isbn) {
-		//Set up filters for matching
 		Filter typeFilter = new FilterPredicate("type", FilterOperator.EQUAL, searchType);
 		Filter isbnFilter = new FilterPredicate("isbn", FilterOperator.EQUAL, isbn);
 		Filter searchFilter = CompositeFilterOperator.and(typeFilter, isbnFilter);
-
 		Query q = new Query("Textbook").setFilter(searchFilter).addSort("date", Query.SortDirection.ASCENDING);
 		List<Entity> textbooks = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
 		return textbooks;

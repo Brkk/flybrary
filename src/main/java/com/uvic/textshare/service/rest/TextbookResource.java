@@ -45,6 +45,11 @@ public class TextbookResource {
 	private static int numberOf_matches;
 	
 	MatchingFunction matchingFunction = new MatchingFunction();
+/*
+ * 
+ * Start of REST Methods
+ * 
+ */
 	
 	 @POST
 	 @Path("/retrieve") 
@@ -252,7 +257,7 @@ public class TextbookResource {
 	@Path("/getUser")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getUserLocation(String input) {
+	public String getUser(String input) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		JSONObject obj = new JSONObject(input);
 		String uid = obj.getString("uid");
@@ -267,11 +272,10 @@ public class TextbookResource {
 		return json;
 	}
 
-	//Returns the last 5 textbooks added
 	@GET
-	@Path("/getLast5")
+	@Path("/getLastFiveBooks")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getLast5() {
+	public String getLastFiveBooks() {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 	    Query query = new Query("Textbook").addSort("date", Query.SortDirection.DESCENDING);
 	    List<Entity> textbooks = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(5));
@@ -288,6 +292,18 @@ public class TextbookResource {
 		return json;
 	}
 
+/* 
+ * 
+ * End of REST Methods 
+ * 
+ */
+
+/*
+ * 
+ * Start of Service Methods
+ * 	
+ */
+	
 	private void createUser(JSONObject obj) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
 		Entity user = new Entity("User");
@@ -325,4 +341,10 @@ public class TextbookResource {
 		
 		datastore.put(user);
 	}
+
+/*
+ * 
+ * End of Service Methods
+ * 
+ */
 }
