@@ -40,7 +40,10 @@ app.service('user', function ($http, $rootScope, $scope, $q) {
                 author: activeBookProperties.author,
                 edition: activeBookProperties.edition,
                 condition: activeBookProperties.condition,
-                isbn: activeBookProperties.isbn
+                isbn: activeBookProperties.isbn,
+                lat : +(location.lat),
+                lon : +(location.lon),
+                radius : +(location.radius)
             };
         };
 

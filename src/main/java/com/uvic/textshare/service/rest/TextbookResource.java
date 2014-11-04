@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import com.uvic.textshare.service.matching.MatchingFunction;
 import com.uvic.textshare.service.model.*;
@@ -43,6 +44,13 @@ public class TextbookResource {
 	private static int numberOf_requested_books;
 	private static int numberOf_matches;
 	
+	MatchingFunction matchingFunction = new MatchingFunction();
+/*
+ * 
+ * Start of REST Methods
+ * 
+ */
+	
 	 @POST
 	 @Path("/retrieve") 
 	 @Consumes(MediaType.APPLICATION_JSON)
@@ -55,10 +63,6 @@ public class TextbookResource {
 		Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, user_id);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		 
-		/*
-		*	If the user exists, retrieve its entries
-		*	Else create a new user and return an empty entries list
-		*/
 		Query q = new Query("User").setFilter(userFilter);
 		Entity user = datastore.prepare(q).asSingleEntity();
 		 
@@ -85,7 +89,7 @@ public class TextbookResource {
 		JSONObject text = new JSONObject(input);
 		Date addDate = new Date();
 		Date matchDate = null; 
-		String matched = MatchingFunction.checkForMatch(
+		String matched = matchingFunction.checkForMatch(
 				text.getString("isbn"), 
 				text.getString("uid"),
 				text.getString("type"),
@@ -95,8 +99,7 @@ public class TextbookResource {
 			matchDate = new Date();
 			numberOf_matches++;
 		}
-
-		// Create an textbook entity using the user input 
+ 
 		Entity textbook = new Entity("Textbook");
 		    textbook.setProperty("uid", text.getString("uid"));
 		    textbook.setProperty("type", text.getString("type"));
@@ -108,6 +111,9 @@ public class TextbookResource {
 		    textbook.setProperty("date", addDate);	 
 		    textbook.setProperty("matchDate", matchDate);
 		    textbook.setProperty("matched", matched);
+		    textbook.setUnindexedProperty("lat", text.getDouble("lat"));
+		    textbook.setUnindexedProperty("lon", text.getDouble("lon"));
+		    textbook.setUnindexedProperty("radius", text.getDouble("radius"));
 		datastore.put(textbook);
 
 		String bookOwner = text.getString("uid");
@@ -174,6 +180,19 @@ public class TextbookResource {
 		Entity user = datastore.prepare(q).asSingleEntity();
 			user.setUnindexedProperty("radius", radius);
 		datastore.put(user);
+		
+		q = new Query("Textbook").setFilter(userFilter);
+		List<Entity> textbooks = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults()); 
+		
+		if(!textbooks.isEmpty()) {
+			for(int i = 0; i < textbooks.size(); i++) {
+				Delay.oneSecondDelay();
+				Entity textbook = textbooks.get(i);
+					textbook.setUnindexedProperty("radius", radius);
+				datastore.put(textbook);
+			}
+		}
+		
 	}
 
 	@POST
@@ -185,13 +204,29 @@ public class TextbookResource {
 		String uid = obj.getString("uid");
 		double lat = obj.getDouble("lat");
 		double lon = obj.getDouble("lon");
+		String address = obj.getString("location");
 
 		Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uid);
 		Query q = new Query("User").setFilter(userFilter);
 		Entity user = datastore.prepare(q).asSingleEntity();
 			user.setUnindexedProperty("lat", lat);
 			user.setUnindexedProperty("lon", lon);
+			user.setUnindexedProperty("address", address);
 		datastore.put(user);
+		
+		q = new Query("Textbook").setFilter(userFilter);
+		List<Entity> textbooks = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults()); 
+		
+		if(!textbooks.isEmpty()) {
+			for(int i = 0; i < textbooks.size(); i++) {
+				Delay.oneSecondDelay();
+				Entity textbook = textbooks.get(i);
+					textbook.setUnindexedProperty("lat", lat);
+					textbook.setUnindexedProperty("lon", lon);
+					textbook.setUnindexedProperty("address", address);
+				datastore.put(textbook);
+			}
+		}
 	}
 	
 	@POST
@@ -199,14 +234,13 @@ public class TextbookResource {
 	@Consumes(MediaType.APPLICATION_JSON)
  	public void unmatchTextbook(String input) {
 		JSONObject obj = new JSONObject(input);
-
 		Long id = Long.valueOf(obj.getString("id")).longValue();
 		String title = obj.getString("title");
 		String isbn = obj.getString("isbn");
 		String type = obj.getString("type");
 		String uid = obj.getString("uid");
 
-		String matched = MatchingFunction.checkForMatch(isbn, uid, type, title);
+		String matched = matchingFunction.checkForMatch(isbn, uid, type, title);
 
 		if(matched.equals("no")) {
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
@@ -218,12 +252,30 @@ public class TextbookResource {
 			datastore.put(textbook);
 		}
 	}
-
-	//Returns the last 5 textbooks added
-	@GET
-	@Path("/getLast5")
+	
+	@POST
+	@Path("/getUser")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getLast5() {
+	public String getUser(String input) {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		JSONObject obj = new JSONObject(input);
+		String uid = obj.getString("uid");
+
+		Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uid);
+		Query q = new Query("User").setFilter(userFilter);
+		Entity user = datastore.prepare(q).asSingleEntity();
+		if(user == null)
+			return "{}";
+		
+		String json = new Gson().toJson(user);
+		return json;
+	}
+
+	@GET
+	@Path("/getLastFiveBooks")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getLastFiveBooks() {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 	    Query query = new Query("Textbook").addSort("date", Query.SortDirection.DESCENDING);
 	    List<Entity> textbooks = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(5));
@@ -240,13 +292,25 @@ public class TextbookResource {
 		return json;
 	}
 
+/* 
+ * 
+ * End of REST Methods 
+ * 
+ */
+
+/*
+ * 
+ * Start of Service Methods
+ * 	
+ */
+	
 	private void createUser(JSONObject obj) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
 		Entity user = new Entity("User");
 	 		user.setProperty("name", obj.getString("name"));
 	 		user.setProperty("uid", obj.getString("uid"));
 	 		user.setProperty("email", obj.getString("email"));
-			user.setProperty("location", obj.getString("location"));
+			user.setProperty("address", obj.getString("location"));
 			user.setUnindexedProperty("lat", obj.getDouble("lat"));
 			user.setUnindexedProperty("lon", obj.getDouble("lon"));
 			user.setUnindexedProperty("request_karma", 0);
@@ -277,4 +341,10 @@ public class TextbookResource {
 		
 		datastore.put(user);
 	}
+
+/*
+ * 
+ * End of Service Methods
+ * 
+ */
 }
