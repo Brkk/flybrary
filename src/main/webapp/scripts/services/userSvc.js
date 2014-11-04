@@ -108,7 +108,7 @@ var userSvc = angular.module( 'userSvc', [])
             author: book.propertyMap.author.value,
             condition: book.propertyMap.condition,
             edition: book.propertyMap.edition,
-            image: book.propertyMap.image,
+            image: book.propertyMap.image.value,
             isbn: book.propertyMap.isbn,
             matched: book.propertyMap.matched
         };
