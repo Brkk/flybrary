@@ -46,9 +46,9 @@ var login = angular.module('loginSvc', ['userSvc'])
             gapi.client.load('oauth2', 'v2', function () {
                 var request = gapi.client.oauth2.userinfo.get();
                 request.execute(function (resp) {
-                    user.email = resp.emails[0].value;
+                    user.email = resp.email;
                     user.uid = resp.id;
-                    user.name = resp.displayName;       
+                    user.name = resp.name;   
                 });
             });
             deferred.resolve(data);

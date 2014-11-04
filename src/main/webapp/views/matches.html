@@ -1,5 +1,5 @@
 <md-list>
-    <md-item ng-repeat="book in books | orderBy:orderProp | isMatch">
+    <md-item ng-repeat="book in bookList track by book.key | orderBy:orderProp | isMatch">
         <md-item-content>
             <div class="md-tile-left">
                 <img ng-src="images/{{book.image}}" class="img">

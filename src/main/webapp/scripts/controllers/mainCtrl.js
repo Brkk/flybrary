@@ -1,11 +1,12 @@
-app.controller('mainCtrl', function($scope, $rootScope, $location, $mdSidenav, $routeParams)
+app.controller('mainCtrl', function($scope, $rootScope, user, $location, $mdSidenav, $routeParams)
   {
      
-      $rootScope.activeType = user.activeType;
+      $rootScope.actionType = user.actionType;
 
       $rootScope.tabs = {
-        maxIndex : 2,
-        locked : true,
+        maxIndex: 2,
+        locked: true,
+        selectedIndex: 3
       };
 
       $scope.currentTab = $routeParams.currentTab;
@@ -25,22 +26,22 @@ app.controller('mainCtrl', function($scope, $rootScope, $location, $mdSidenav, $
         switch($scope.tabs.selectedIndex)
         {
           case 0:
-            $scope.activeType = 'offer';
-            user.activeType = $scope.activeType;
+            $scope.actionType = 'offer';
+            user.actionType = $scope.actionType;
             $location.path('/main/offers').replace();
             break;
           case 1:
-            $scope.activeType = 'request';
-            user.activeType = $scope.activeType;
+            $scope.actionType = 'request';
+            user.actionType = $scope.actionType;
             $location.path('/main/requests').replace();
             break;
           case 2:
-            $scope.activeType = 'matches';
-            user.activeType = $scope.activeType;
+            $scope.actionType = 'matches';
+            user.actionType = $scope.actionType;
             $location.path('/main/matches').replace();
             break;
         };
-    });
+    }, true);
 
   $scope.next = function() {
       $scope.tabs.selectedIndex = Math.min( $scope.tabs.maxIndex, $scope.tabs.selectedIndex + 1) ;

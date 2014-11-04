@@ -21,5 +21,6 @@ app.controller('typeAheadCtrl', function($scope, $http, user) {
               console.log($scope.asyncSelected);
               $scope.newBookProperties.author = $scope.asyncSelected['volumeInfo']['authors'][0];
               $scope.newBookProperties.isbn = $scope.asyncSelected['volumeInfo']['industryIdentifiers'][0]['identifier'];
+              $scope.newBookProperties.title = $scope.asyncSelected['volumeInfo']['title'];
           };
 });

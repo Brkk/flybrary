@@ -1,5 +1,8 @@
 app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jsonFilter, user) {
       
+  $rootScope.bookList = [];
+  $scope.$watch('bookList',function(){},true);
+  
   user.getBooks().then(
     function(data){
       $rootScope.bookList = data;
@@ -16,6 +19,10 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
 app.filter('isOffer', function () {
     return function (items) {
       var filtered = [];
+
+      if(!items)
+        return [];
+
       for (var i = 0; i < items.length; i++) {
         var item = items[i];
         if (item.activeType == 'offer') {
@@ -28,6 +35,10 @@ app.filter('isOffer', function () {
 app.filter('isRequest', function () {
     return function (items) {
       var filtered = [];
+
+      if(!items)
+        return [];
+
       for (var i = 0; i < items.length; i++) {
         var item = items[i];
         if (item.activeType == 'request') {
@@ -40,6 +51,10 @@ app.filter('isRequest', function () {
 app.filter('isMatch', function () {
     return function (items) {
       var filtered = [];
+
+      if(!items)
+        return [];
+
       for (var i = 0; i < items.length; i++) {
         var item = items[i];
         if (item.matched == 'yes') {

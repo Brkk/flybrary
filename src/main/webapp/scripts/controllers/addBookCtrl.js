@@ -1,16 +1,15 @@
 app.controller('addBookCtrl', function ($scope, $rootScope, $mdDialog, user) {
     
-    $scope.newbookProperties = user.activeBookProperties;
+    $rootScope.newBookProperties = user.activeBookProperties;
     $scope.$watch('newbookProperties', function() {
-      user.activeBookProperties = $scope.newbookProperties;
-    });
+      user.activeBookProperties = $scope.newBookProperties;
+    }, true);
     $scope.hide = function() {
       $mdDialog.hide(false);
     };
     $scope.addBookClicked = function(addBook) {
       $mdDialog.hide(true);
     };
-    
 });
 
 
@@ -25,7 +24,7 @@ app.controller('dialogCtrl', function($scope, $mdDialog, $http, $timeout, user) 
             user.addBook().then(
               function(data)
               {
-                  $rootScope.bookList = data;
+
               },
               function(err)
               {

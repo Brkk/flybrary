@@ -1,0 +1,16 @@
+<div ng-controller="MapGeolocationCtrl" class="ng-scope" layout-fill>
+<map 
+	center="{{location.lat}},{{location.long}}" 
+	zoom="{{location.zoom}}" 
+	pan-control="true" 
+	zoom-control="true" 
+	zoom-control-options="{style:'DEFAULT'}"
+	layout-fill
+	flex
+	>
+		<div id="panel">
+		  <input id="address" type="textbox" value="Sydney, NSW">
+		  <input type="button" value="Geocode" onclick="codeAddress()">
+		</div>
+	</map>
+</div>
