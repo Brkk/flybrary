@@ -47,7 +47,8 @@ var userSvc = angular.module( 'userSvc', [])
             isbn: this.activeBookProperties.isbn,
             lat : +(this.location.lat),
             lon : +(this.location.lon),
-            radius : +(this.location.radius)
+            radius : +(this.location.radius),
+            image: this.activeBookProperties.image
         };
     };
 

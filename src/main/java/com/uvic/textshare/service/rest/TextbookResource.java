@@ -69,11 +69,11 @@ public class TextbookResource {
 		Query q = new Query("User").setFilter(userFilter);
 		Entity user = datastore.prepare(q).asSingleEntity();
 		 
-		if(user == null) {
+		if(user == null && !user_id.equals("")) {
 			createUser(obj);
 		 	return "[]";
 		} 
-		else 
+		else
 		{	
 			Query q2 = new Query("Textbook").setFilter(userFilter);
 		 	PreparedQuery pd2 = datastore.prepare(q2);
