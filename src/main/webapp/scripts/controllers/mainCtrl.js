@@ -1,4 +1,4 @@
-app.controller('mainCtrl', function($scope, $rootScope, $location, $mdSidenav, $routeParams)
+app.controller('mainCtrl', function($scope, $rootScope, $location, $mdSidenav, $routeParams, user)
   {
      
       $rootScope.activeType = user.activeType;

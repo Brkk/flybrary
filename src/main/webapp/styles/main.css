@@ -115,8 +115,9 @@
 }
 
 .login-container {
-  background-image: url("../images/low_contrast_linen.png");
-  background-repeat: repeat;  
+  background-image: url("../images/flying_high2.jpg");
+  background-repeat: no-repeat;
+  position: relative;  
   width:100%;
 }
 
