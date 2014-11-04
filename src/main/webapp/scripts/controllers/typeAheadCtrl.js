@@ -22,7 +22,7 @@ app.controller('typeAheadCtrl', function($scope, $http, user) {
               $scope.newBookProperties.author = $scope.asyncSelected['volumeInfo']['authors'][0];
               $scope.newBookProperties.isbn = $scope.asyncSelected['volumeInfo']['industryIdentifiers'][0]['identifier'];
               $scope.newBookProperties.title = $scope.asyncSelected['volumeInfo']['title'];
-              $scope.newBookProperties.imageUrl = $scope.asyncSelected['volumeInfo']['imageLinks']['thumbnail'];
+              $scope.newBookProperties.image = $scope.asyncSelected['volumeInfo']['imageLinks']['thumbnail'];
 
           };
 });

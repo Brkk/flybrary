@@ -22,7 +22,7 @@ var login = angular.module('loginSvc', ['userSvc'])
 
     this.logout = function () {
         gapi.auth.signOut();
-    }and can you 
+    }
 
     this.handleClientLoad = function () {
         gapi.client.setApiKey(apiKey);
