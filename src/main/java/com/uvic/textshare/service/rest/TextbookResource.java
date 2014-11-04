@@ -118,6 +118,7 @@ public class TextbookResource {
 		    textbook.setProperty("date", addDate);	 
 		    textbook.setUnindexedProperty("matchDate", matchDate);
 		    textbook.setProperty("matched", matched);
+		    textbook.setUnindexedProperty("image", text.getString("image"));
 		    textbook.setUnindexedProperty("lat", text.getDouble("lat"));
 		    textbook.setUnindexedProperty("lon", text.getDouble("lon"));
 		    textbook.setUnindexedProperty("radius", text.getDouble("radius"));
@@ -161,12 +162,14 @@ public class TextbookResource {
 		String isbn = obj.getString("isbn");
 		String edition = obj.getString("edition");
 		String condition = obj.getString("condition");
+		String image = obj.getString("image");
 	
 		Key textbookKey = KeyFactory.createKey("Textbook", id);
 		Query q = new Query(textbookKey);
 		Entity textbook = datastore.prepare(q).asSingleEntity();
 		    textbook.setUnindexedProperty("title", title);
 		    textbook.setUnindexedProperty("author", author);
+		    textbook.setUnindexedProperty("image", image);
 		    textbook.setProperty("isbn", isbn);
 		    textbook.setProperty("edition", edition);
 		    textbook.setProperty("condition", condition);    
