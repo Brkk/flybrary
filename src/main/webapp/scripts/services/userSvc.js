@@ -45,9 +45,10 @@ var userSvc = angular.module( 'userSvc', [])
             edition: this.activeBookProperties.edition,
             condition: this.activeBookProperties.condition,
             isbn: this.activeBookProperties.isbn,
-            lat : +(this.location.lat),
-            lon : +(this.location.lon),
-            radius : +(this.location.radius)
+            image: this.activeBookProperties.image,
+            lat: +(this.location.lat),
+            lon: +(this.location.lon),
+            radius: +(this.location.radius)
         };
     };
 
@@ -107,7 +108,7 @@ var userSvc = angular.module( 'userSvc', [])
             author: book.propertyMap.author.value,
             condition: book.propertyMap.condition,
             edition: book.propertyMap.edition,
-            image: book.propertyMap.image,
+            image: book.propertyMap.image.value,
             isbn: book.propertyMap.isbn,
             matched: book.propertyMap.matched
         };
