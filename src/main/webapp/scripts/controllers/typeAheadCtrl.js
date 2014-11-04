@@ -5,7 +5,7 @@ app.controller('typeAheadCtrl', function($scope, $http, user) {
           $scope.updateList = function(title){
               return $http({
                 method: 'GET',
-                url: 'https://www.googleapis.com/books/v1/volumes?q='+title+'&maxResults=5'
+                url: 'https://www.googleapis.com/books/v1/volumes?q='+title+'&maxResults=5&key=AIzaSyCkpwvdSnV5ROhYWamvKaBmH7NQ-0ZLk_4'
               }).then(function ($response)
               {
                 // var result = [];
@@ -22,5 +22,7 @@ app.controller('typeAheadCtrl', function($scope, $http, user) {
               $scope.newBookProperties.author = $scope.asyncSelected['volumeInfo']['authors'][0];
               $scope.newBookProperties.isbn = $scope.asyncSelected['volumeInfo']['industryIdentifiers'][0]['identifier'];
               $scope.newBookProperties.title = $scope.asyncSelected['volumeInfo']['title'];
+              $scope.newBookProperties.imageUrl = $scope.asyncSelected['volumeInfo']['imageLinks']['thumbnail'];
+
           };
 });
