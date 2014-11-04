@@ -4,7 +4,7 @@ app.controller('pageCtrl', function($scope, $rootScope, $location, $timeout, goo
 	$rootScope.login = function () {
 		googleService.login().then(
 		function(data) {
-			$location.path('/main').replace();
+			$location.path('/main/offers').replace();
 		},
 		function(err) {
 

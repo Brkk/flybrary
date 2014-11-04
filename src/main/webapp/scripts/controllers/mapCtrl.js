@@ -39,7 +39,7 @@ app.controller('mainCtrl', function($scope, $rootScope, user, $location)
     	center: new google.maps.LatLng(-34.397, 150.644)
     	radius: 15
     })
-    map = 
+    //map = 
   }
 
   function codeAddress() {

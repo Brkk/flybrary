@@ -4,15 +4,11 @@
 var app = angular.module( 'flybraryApp', [ 'services', 'ngAnimate', 'ngMaterial','ngRoute', 'ui.bootstrap' ]);
 
 app.config( function($routeProvider) {
+    
     $routeProvider
       .when('/login', {
         templateUrl: 'views/login.html',
         controller: ''
-      })
-      .when('/main', {
-        templateUrl: 'views/main.html',
-        controller: 'mainCtrl',
-        redirectTo: '/main/offers'
       })
       .when('/main/:currentTab', {
         templateUrl: 'views/main.html',
