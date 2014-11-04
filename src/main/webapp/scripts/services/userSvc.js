@@ -132,18 +132,8 @@ var userSvc = angular.module( 'userSvc', [])
         $http.post("resources/add", this.generateAdd(), null)
         .success(function (data, status, headers, config)
         {
-          bookList.push(parseBook(data));
-          deferred.resolve(bookList);
-
-          this.activeBookProperties = {
-            isbn: '',
-            title: '',
-            key: '',
-            author: '',
-            edition: '',
-            condition: '',
-            image: ''
-        };
+            bookList.push(parseBook(data));
+            deferred.resolve(bookList);
         })
         .error(function (data, status, headers, config)
         {

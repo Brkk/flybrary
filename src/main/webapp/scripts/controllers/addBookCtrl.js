@@ -25,6 +25,15 @@ app.controller('dialogCtrl', function($scope, $mdDialog, $http, $timeout, user) 
               function(data)
               {
                 $scope.bookList = user.bookList;
+                $scope.activeBookProperties = {
+                  isbn: '',
+                  title: '',
+                  key: '',
+                  author: '',
+                  edition: '',
+                  condition: '',
+                  image: ''
+                };
               },
               function(err)
               {
