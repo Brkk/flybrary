@@ -1,4 +1,4 @@
-app.service('googleService', function ($http, $q) {
+app.service('googleService', function ($http, $q, user) {
     var clientId = '642821490386-5e5tfhghkcvsmjauaeu0mbnlrnjnl30n.apps.googleusercontent.com',
         apiKey = 'AIzaSyA1duUBotiNnlcHHqnH2oIWwM4JhyozhoQ',
         scopes = 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email',
@@ -37,9 +37,10 @@ app.service('googleService', function ($http, $q) {
             gapi.client.load('oauth2', 'v2', function () {
                 var request = gapi.client.oauth2.userinfo.get();
                 request.execute(function (resp) {
-                    data.email = data.emails[0].value;
-                    data.uid = resp.id;
-                    data.name = resp.displayName;
+                    user.email = data.emails[0].value;
+                    user.uid = resp.id;
+                    user.name = resp.displayName;
+                    
                 });
             });
             deferred.resolve(data);

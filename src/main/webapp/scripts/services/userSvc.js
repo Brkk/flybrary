@@ -26,7 +26,7 @@ app.service('user', function ($http, $rootScope, $scope, $q) {
             return {
                 uid: uid,
                 name: name,
-                location: location.address,
+                address: location.address,
                 lat: +(location.lat),
                 lon: +(location.lon)
             };
@@ -135,7 +135,9 @@ app.service('user', function ($http, $rootScope, $scope, $q) {
 
         this.updateBook = function (){
             $http.post("resources/update", generateUpdate(), null)
-        };        
+        };
+
+
 };
 
 
