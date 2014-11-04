@@ -307,10 +307,10 @@ public class TextbookResource {
 	private void createUser(JSONObject obj) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
 		Entity user = new Entity("User");
-	 		user.setProperty("name", obj.getString("name"));
+	 		user.setUnindexedProperty("name", obj.getString("name"));
 	 		user.setProperty("uid", obj.getString("uid"));
-	 		user.setProperty("email", obj.getString("email"));
-			user.setProperty("address", obj.getString("location"));
+	 		user.setUnindexedProperty("email", obj.getString("email"));
+			user.setUnindexedProperty("address", obj.getString("location"));
 			user.setUnindexedProperty("lat", obj.getDouble("lat"));
 			user.setUnindexedProperty("lon", obj.getDouble("lon"));
 			user.setUnindexedProperty("request_karma", 0);
