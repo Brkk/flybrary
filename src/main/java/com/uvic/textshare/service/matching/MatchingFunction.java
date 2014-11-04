@@ -85,10 +85,10 @@ public class MatchingFunction {
 					
 					Delay.oneSecondDelay();
 					matchedBook.setProperty("matched", "yes");
-					matchedBook.setUnindexedProperty("matchDate", matchDate);
+					matchedBook.setUnindexedProperty("matchDate", matchDate.toString());
 					datastore.put(matchedBook);
 
-					return "yes";
+					return "yes-" + matchDate.toString();
 				}
 			}
 		}

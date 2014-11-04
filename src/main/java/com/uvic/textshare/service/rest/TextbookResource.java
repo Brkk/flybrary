@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.lang.String;
 
 import com.uvic.textshare.service.matching.MatchingFunction;
 import com.uvic.textshare.service.model.*;
@@ -59,6 +60,8 @@ public class TextbookResource {
 		 
 		//Create a filter for retrieving all the books associated with that user
 		JSONObject obj = new JSONObject(input);
+		System.out.println(obj);
+	
 		String user_id = obj.getString("uid");
 		Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, user_id);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -88,15 +91,19 @@ public class TextbookResource {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		JSONObject text = new JSONObject(input);
 		Date addDate = new Date();
-		Date matchDate = null; 
-		String matched = matchingFunction.checkForMatch(
+		String matchDate = null; 
+		String response = matchingFunction.checkForMatch(
 				text.getString("isbn"), 
 				text.getString("uid"),
 				text.getString("type"),
 				text.getString("title"));
 		 
+		
+		String[] parts = response.split("-");
+		String matched = parts[0];
+		
 		if(matched.equals("yes")) {
-			matchDate = new Date();
+			matchDate = parts[1];
 			numberOf_matches++;
 		}
  
