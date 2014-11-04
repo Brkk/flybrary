@@ -22,7 +22,7 @@
 			                <label for="title">Title</label>
 			                <md-input id="inputSearch" type="text" ng-model="asyncSelected" 
 			                typeahead-editable="false" 
-			                typeahead="option as option['volumeInfo']['title'] | limitTo:30 for option in updateList($viewValue)" 
+			                typeahead="option as option['volumeInfo']['title'] | limitTo:25 for option in updateList($viewValue)" 
 			                typeagead
 			                typeahead-min-length='5'  
 			                typeahead-on-select='onSelect(asyncSelected)'
@@ -30,26 +30,26 @@
 			              </md-input-group>
 			              <md-input-group ng-disabled="isDisabled"> 
 			                <label for="author">Author</label>
-			                <md-input id="author" ng-model="book.author" style="width: 210px;">
+			                <md-input id="author" ng-model="newBookProperties.author" style="width: 210px;">
 			              </md-input-group>
 			          </div>
 			          <div class="row">
 			            <md-input-group ng-disabled="isDisabled"> 
 			              <label for="condition">Condition</label>
-			              <md-input id="condition" ng-model="book.condition" style="width: 210px;">
+			              <md-input id="condition" ng-model="newBookProperties.condition" style="width: 210px;">
 			            </md-input-group>
 
 
 
 			            <md-input-group ng-disabled="isDisabled"> 
 			              <label for="edition">Edition</label>
-			              <md-input id="edition" ng-model="book.edition" style="width: 210px;">
+			              <md-input id="edition" ng-model="newBookProperties.edition" style="width: 210px;">
 			            </md-input-group>
 			          </div>
 			          <div class="row">
 			            <md-input-group ng-disabled="isDisabled"> 
 			              <label for="isbn">ISBN</label>
-			              <md-input id="isbn" ng-model="book.isbn" style="width: 210px;">
+			              <md-input id="isbn" ng-model="newBookProperties.isbn" style="width: 210px;">
 			            </md-input-group>
 			          </div>
 			        </form>
@@ -59,7 +59,7 @@
 
 
 
-			<div><img ng-src="{{book.imageUrl}}" style="max-width: 50%;" /></div> 
+			<div><img ng-src="{{newBookProperties.imageUrl}}" style="max-width: 50%;" /></div> 
 		</div> <!-- horizontal -->
     </div>
 
