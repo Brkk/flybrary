@@ -24,11 +24,11 @@ app.controller('dialogCtrl', function($scope, $mdDialog, $http, $timeout, user) 
             user.addBook().then(
               function(data)
               {
-
+                $scope.bookList = user.bookList;
               },
               function(err)
               {
-                  console.log('Failed: ' + err);
+                console.log('Failed: ' + err);
               });
           }
       
