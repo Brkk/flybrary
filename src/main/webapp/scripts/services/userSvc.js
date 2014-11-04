@@ -45,17 +45,10 @@ var userSvc = angular.module( 'userSvc', [])
             edition: this.activeBookProperties.edition,
             condition: this.activeBookProperties.condition,
             isbn: this.activeBookProperties.isbn,
-<<<<<<< HEAD
-            image: this.activeBookProperties.image,
-            lat: +(this.location.lat),
-            lon: +(this.location.lon),
-            radius: +(this.location.radius)
-=======
             lat : +(this.location.lat),
             lon : +(this.location.lon),
             radius : +(this.location.radius),
             image: this.activeBookProperties.image
->>>>>>> 593765748c12fb7eecc4d93c55f36802bc4e7add
         };
     };
 
