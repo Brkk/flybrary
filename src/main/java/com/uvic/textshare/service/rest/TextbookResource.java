@@ -103,13 +103,13 @@ public class TextbookResource {
 		Entity textbook = new Entity("Textbook");
 		    textbook.setProperty("uid", text.getString("uid"));
 		    textbook.setProperty("type", text.getString("type"));
-		    textbook.setProperty("title", text.getString("title"));
-		    textbook.setProperty("author", text.getString("author"));
+		    textbook.setUnindexedProperty("title", text.getString("title"));
+		    textbook.setUnindexedProperty("author", text.getString("author"));
 		    textbook.setProperty("isbn", text.getString("isbn"));
 		    textbook.setProperty("edition", text.getString("edition"));
 		    textbook.setProperty("condition", text.getString("condition"));
 		    textbook.setProperty("date", addDate);	 
-		    textbook.setProperty("matchDate", matchDate);
+		    textbook.setUnindexedProperty("matchDate", matchDate);
 		    textbook.setProperty("matched", matched);
 		    textbook.setUnindexedProperty("lat", text.getDouble("lat"));
 		    textbook.setUnindexedProperty("lon", text.getDouble("lon"));
@@ -158,8 +158,8 @@ public class TextbookResource {
 		Key textbookKey = KeyFactory.createKey("Textbook", id);
 		Query q = new Query(textbookKey);
 		Entity textbook = datastore.prepare(q).asSingleEntity();
-		    textbook.setProperty("title", title);
-		    textbook.setProperty("author", author);
+		    textbook.setUnindexedProperty("title", title);
+		    textbook.setUnindexedProperty("author", author);
 		    textbook.setProperty("isbn", isbn);
 		    textbook.setProperty("edition", edition);
 		    textbook.setProperty("condition", condition);    
@@ -248,7 +248,7 @@ public class TextbookResource {
 			Query q = new Query(textbookKey);
 			Entity textbook = datastore.prepare(q).asSingleEntity();
 				textbook.setProperty("matched", "no");
-				textbook.setProperty("matchDate", null);
+				textbook.setUnindexedProperty("matchDate", null);
 			datastore.put(textbook);
 		}
 	}

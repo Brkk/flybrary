@@ -76,8 +76,8 @@ public class MatchingFunction {
 					Delay.oneSecondDelay();
 					Entity match = new Entity("Match");
 						match.setProperty("matchDate", matchDate.toString());
-						match.setProperty("firsUsersEmail", firsUsersEmail);
-						match.setProperty("secondUsersEmail", secondUsersEmail);
+						match.setUnindexedProperty("firsUsersEmail", firsUsersEmail);
+						match.setUnindexedProperty("secondUsersEmail", secondUsersEmail);
 					datastore.put(match);
 					
 					sendEmailToUser(firstUsersName, firsUsersEmail, secondUsersName, secondUsersEmail, title, matchDate.toString());
@@ -85,7 +85,7 @@ public class MatchingFunction {
 					
 					Delay.oneSecondDelay();
 					matchedBook.setProperty("matched", "yes");
-					matchedBook.setProperty("matchDate", matchDate);
+					matchedBook.setUnindexedProperty("matchDate", matchDate);
 					datastore.put(matchedBook);
 
 					return "yes";
