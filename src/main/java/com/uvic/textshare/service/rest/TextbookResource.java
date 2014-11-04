@@ -57,29 +57,34 @@ public class TextbookResource {
 	 @Consumes(MediaType.APPLICATION_JSON)
 	 @Produces(MediaType.APPLICATION_JSON)
 	 public String getTextbook(String input) {
-		 
-		//Create a filter for retrieving all the books associated with that user
-		JSONObject obj = new JSONObject(input);
-		System.out.println(obj);
-	
-		String user_id = obj.getString("uid");
-		Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, user_id);
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		 
-		Query q = new Query("User").setFilter(userFilter);
-		Entity user = datastore.prepare(q).asSingleEntity();
-		 
-		if(user == null && !user_id.equals("")) {
-			createUser(obj);
-		 	return "[]";
-		} 
-		else
-		{	
-			Query q2 = new Query("Textbook").setFilter(userFilter);
-		 	PreparedQuery pd2 = datastore.prepare(q2);
-		 	List<Entity> textbooks = pd2.asList(FetchOptions.Builder.withDefaults());
-		 	String json = new Gson().toJson(textbooks);
-		 	return json;
+		try {
+			//Create a filter for retrieving all the books associated with that user
+			JSONObject obj = new JSONObject(input);
+			System.out.println(obj);
+		
+			String user_id = obj.getString("uid");
+			Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, user_id);
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+			 
+			Query q = new Query("User").setFilter(userFilter);
+			Entity user = datastore.prepare(q).asSingleEntity();
+			 
+			if(user == null && !user_id.equals("")) {
+				createUser(obj);
+			 	return "[]";
+			} 
+			else
+			{	
+				Query q2 = new Query("Textbook").setFilter(userFilter);
+			 	PreparedQuery pd2 = datastore.prepare(q2);
+			 	List<Entity> textbooks = pd2.asList(FetchOptions.Builder.withDefaults());
+			 	String json = new Gson().toJson(textbooks);
+			 	return json;
+			}
+		} catch(NullPointerException e)
+		{
+			e.printStackTrace();
+			return "[]"; //something went wrong
 		}
 	}
 	 
@@ -88,53 +93,58 @@ public class TextbookResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String addTextbook(String input) throws ParseException {
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		JSONObject text = new JSONObject(input);
-		Date addDate = new Date();
-		String matchDate = null; 
-		String response = matchingFunction.checkForMatch(
-				text.getString("isbn"), 
-				text.getString("uid"),
-				text.getString("type"),
-				text.getString("title"));
-		 
-		
-		String[] parts = response.split("-");
-		String matched = parts[0];
-		
-		if(matched.equals("yes")) {
-			matchDate = parts[1];
-			numberOf_matches++;
+		try {
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+			JSONObject text = new JSONObject(input);
+			Date addDate = new Date();
+			String matchDate = null; 
+			String response = matchingFunction.checkForMatch(
+					text.getString("isbn"), 
+					text.getString("uid"),
+					text.getString("type"),
+					text.getString("title"));
+			 
+			
+			String[] parts = response.split("-");
+			String matched = parts[0];
+			
+			if(matched.equals("yes")) {
+				matchDate = parts[1];
+				numberOf_matches++;
+			}
+	 
+			Entity textbook = new Entity("Textbook");
+			    textbook.setProperty("uid", text.getString("uid"));
+			    textbook.setProperty("type", text.getString("type"));
+			    textbook.setUnindexedProperty("title", text.getString("title"));
+			    textbook.setUnindexedProperty("author", text.getString("author"));
+			    textbook.setProperty("isbn", text.getString("isbn"));
+			    textbook.setProperty("edition", text.getString("edition"));
+			    textbook.setProperty("condition", text.getString("condition"));
+			    textbook.setProperty("date", addDate);	 
+			    textbook.setUnindexedProperty("matchDate", matchDate);
+			    textbook.setProperty("matched", matched);
+			    textbook.setUnindexedProperty("image", text.getString("image"));
+			    textbook.setUnindexedProperty("lat", text.getDouble("lat"));
+			    textbook.setUnindexedProperty("lon", text.getDouble("lon"));
+			    textbook.setUnindexedProperty("radius", text.getDouble("radius"));
+			datastore.put(textbook);
+	
+			String bookOwner = text.getString("uid");
+			String typeOfEntry = text.getString("type");
+			updateUserKarma(bookOwner, typeOfEntry);
+			
+			if(typeOfEntry.equals("offer"))
+				TextbookResource.numberOf_offered_books++;
+			else
+				TextbookResource.numberOf_requested_books++;
+			
+			String json = new Gson().toJson(textbook);
+			return json;
+		} catch(NullPointerException e) {
+			e.printStackTrace();
+			return "{}"; //something went wrong!
 		}
- 
-		Entity textbook = new Entity("Textbook");
-		    textbook.setProperty("uid", text.getString("uid"));
-		    textbook.setProperty("type", text.getString("type"));
-		    textbook.setUnindexedProperty("title", text.getString("title"));
-		    textbook.setUnindexedProperty("author", text.getString("author"));
-		    textbook.setProperty("isbn", text.getString("isbn"));
-		    textbook.setProperty("edition", text.getString("edition"));
-		    textbook.setProperty("condition", text.getString("condition"));
-		    textbook.setProperty("date", addDate);	 
-		    textbook.setUnindexedProperty("matchDate", matchDate);
-		    textbook.setProperty("matched", matched);
-		    textbook.setUnindexedProperty("image", text.getString("image"));
-		    textbook.setUnindexedProperty("lat", text.getDouble("lat"));
-		    textbook.setUnindexedProperty("lon", text.getDouble("lon"));
-		    textbook.setUnindexedProperty("radius", text.getDouble("radius"));
-		datastore.put(textbook);
-
-		String bookOwner = text.getString("uid");
-		String typeOfEntry = text.getString("type");
-		updateUserKarma(bookOwner, typeOfEntry);
-		
-		if(typeOfEntry.equals("offer"))
-			TextbookResource.numberOf_offered_books++;
-		else
-			TextbookResource.numberOf_requested_books++;
-		
-		String json = new Gson().toJson(textbook);
-		return json;
 	}
 	
 	@POST
@@ -148,7 +158,7 @@ public class TextbookResource {
 		datastore.delete(textbookKey);
 		 
 	 }
-	 
+	// too costly to use, goona get rid of it
 	@POST
 	@Path("/updateTextbook")
 	@Consumes(MediaType.APPLICATION_JSON)
