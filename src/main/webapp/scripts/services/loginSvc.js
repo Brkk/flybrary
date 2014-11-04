@@ -48,10 +48,10 @@ var login = angular.module('loginSvc', ['userSvc'])
                 request.execute(function (resp) {
                     user.email = resp.email;
                     user.uid = resp.id;
-                    user.name = resp.name;   
+                    user.name = resp.name;
+                    deferred.resolve(data);
                 });
             });
-            deferred.resolve(data);
         } else {
             deferred.reject('error');
         }
