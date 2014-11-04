@@ -1,11 +1,9 @@
 package com.uvic.textshare.service.matching;
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -24,34 +22,25 @@ import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
-
-import java.security.InvalidKeyException;
-import java.security.*;
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.DESedeKeySpec;
+import com.uvic.textshare.service.model.Delay;
 
 public class MatchingFunction {
 
-	public static String checkForMatch(String isbn, String uid, String type, String title) {
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+	
+	public String checkForMatch(String isbn, String uid, String type, String title) {
+		
 		double lat;
 		double lon;
 		double lat2;
 		double lon2;
 		double radius;
 		double radius2;
-
 		String searchType;
-		String uid2;
 		String firstUsersName;
 		String secondUsersName;
 		String firsUsersEmail;
 		String secondUsersEmail;
-
 		Boolean withinRadius = false;
 		Date matchDate = null;
 
@@ -60,69 +49,49 @@ public class MatchingFunction {
 		} else {
 			searchType = "offer";
 		}
-
-		//Set up filters for matching
-		Filter typeFilter = new FilterPredicate("type", FilterOperator.EQUAL, searchType);
-		Filter isbnFilter = new FilterPredicate("isbn", FilterOperator.EQUAL, isbn);
-		Filter searchFilter = CompositeFilterOperator.and(typeFilter, isbnFilter);
-
-		Query q = new Query("Textbook").setFilter(searchFilter).addSort("date", Query.SortDirection.ASCENDING);
-		List<Entity> textbooks = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
+	
+		List<Entity> textbooks = getTextbooks(searchType, isbn);	
 
 		//If there is a match, use the first one and inform both users.
 		if(!textbooks.isEmpty())
 		{
-			//Retrieve first user
-
-			Filter uidFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uid);
-			Query query = new Query("User").setFilter(uidFilter);
-			Entity user1 = datastore.prepare(query).asSingleEntity();
-
-			//Get user name, email and radius.
-			radius = (Double)user1.getProperty("radius");
-			lat = (Double)user1.getProperty("lat");
-			lon = (Double)user1.getProperty("lon");
-			firstUsersName = String.valueOf(user1.getProperty("name"));
-			firsUsersEmail = String.valueOf(user1.getProperty("email"));
+			
+			Entity user = getUser(uid);
+			
+			radius = (Double)user.getProperty("radius");
+			lat = (Double)user.getProperty("lat");
+			lon = (Double)user.getProperty("lon");
+			
+			firstUsersName = String.valueOf(user.getProperty("name"));
+			firsUsersEmail = String.valueOf(user.getProperty("email"));
 
 			for(int i = 0; i < textbooks.size(); i++) {
 				Entity matchedBook = textbooks.get(i);
-				uid2 = (String) matchedBook.getProperty("uid");
+				lat2 = (Double)matchedBook.getProperty("lat");
+				lon2 = (Double)matchedBook.getProperty("lon");
+				radius2 = (Double)matchedBook.getProperty("radius");
 
-				//1 second delay to slow down Datastore access time
-				try {
-					TimeUnit.MILLISECONDS.sleep(1000);
-				} catch (InterruptedException e) {
+				withinRadius = distance(lat, lon, lat2, lon2, radius, radius2, type);
 
-					e.printStackTrace();
-				}
-
-				//Retrieve second user from Datastore
-				Filter uidFilter2 = new FilterPredicate("uid", FilterOperator.EQUAL, uid2);
-				Query query2 = new Query("User").setFilter(uidFilter2);
-				Entity user2 = datastore.prepare(query2).asSingleEntity();
-
-				//Get second users information
-				lat2 = (Double)user2.getProperty("lat");
-				lon2 = (Double)user2.getProperty("lon");
-				radius2 = (Double)user2.getProperty("radius");
-				secondUsersName = String.valueOf(user2.getProperty("name"));
-				secondUsersEmail = String.valueOf(user2.getProperty("email"));
-
-				//Check if the matched books are within each others raidus.
-				withinRadius = distance(lat, lon, lat2, lon2, radius, radius2);
-				//If they are send out email
 				if(withinRadius) {
 					matchDate = new Date();
-
+					
+					uid = (String) matchedBook.getProperty("uid");
+					user = getUser(uid);
+					secondUsersName = String.valueOf(user.getProperty("name"));
+					secondUsersEmail = String.valueOf(user.getProperty("email"));
+					Delay.oneSecondDelay();
+					
 					Entity match = new Entity("Match");
 						match.setProperty("matchDate", matchDate.toString());
 						match.setProperty("firsUsersEmail", firsUsersEmail);
 						match.setProperty("secondUsersEmail", secondUsersEmail);
 					datastore.put(match);
-
+					
 					sendEmailToUser(firstUsersName, firsUsersEmail, secondUsersName, secondUsersEmail, title, matchDate.toString());
 					sendEmailToUser(secondUsersName, secondUsersEmail, firstUsersName, firsUsersEmail, title, matchDate.toString());
+					
+					Delay.oneSecondDelay();
 					matchedBook.setProperty("matched", "yes");
 					matchedBook.setProperty("matchDate", matchDate);
 					datastore.put(matchedBook);
@@ -138,7 +107,7 @@ public class MatchingFunction {
 	 * Input: Both users names, email addresses and the title of the matched book.
 	 * Output: Email sent to both users from "team.texshare@gmail.com"
 	 */
-	private static void sendEmailToUser(String receiverName, String receiverEmail, String matchedUserName, String matchedUserEmail, String title, String matchDate) {
+	private void sendEmailToUser(String receiverName, String receiverEmail, String matchedUserName, String matchedUserEmail, String title, String matchDate) {
 			// user here would be the Name of the user.
 		    Properties props = new Properties();
 		    Session session = Session.getDefaultInstance(props, null);
@@ -178,30 +147,49 @@ public class MatchingFunction {
 	}
 
 	//Calculates the distance between two co-ordinates and compares it to the given radiuses
-	private static boolean distance(double lat1, double lon1, double lat2, double lon2, double radius, double radius2) {
+	private boolean distance(double lat1, double lon1, double lat2, double lon2, double radius, double radius2, String type) {
 		double theta = lon1 - lon2;
 	  	double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
 	  	dist = Math.acos(dist);
 	  	dist = rad2deg(dist);
 	  	dist = dist * 60 * 1.1515;
 	  	dist = dist * 1.609344;
-	  	if(dist <= radius && dist <= radius2)
-	  	{
-			return true;
+	  	
+	  	if(type.equals("offer") && dist <= radius2) {
+	  		return true;
+	  	}
+	  	else if(dist <= radius && dist <= radius2){
+	  		return true;
 	  	}
 	  	else
-	  	{
-			return false;
-	  	}
+	  		return false;
 	}
 
 	//Converts degrees to radiant
-	private static double deg2rad(double deg) {
+	private double deg2rad(double deg) {
 	  return (deg * Math.PI / 180.0);
 	}
 
 	//Converts radiant to degrees
-	private static double rad2deg(double rad) {
+	private double rad2deg(double rad) {
 	  return (rad * 180 / Math.PI);
+	}
+	
+	private Entity getUser(String uid) {
+		Filter uidFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uid);
+		Query query = new Query("User").setFilter(uidFilter);
+		Entity user = datastore.prepare(query).asSingleEntity();
+		return user;
+	}
+	
+	private List<Entity> getTextbooks(String searchType, String isbn) {
+		//Set up filters for matching
+		Filter typeFilter = new FilterPredicate("type", FilterOperator.EQUAL, searchType);
+		Filter isbnFilter = new FilterPredicate("isbn", FilterOperator.EQUAL, isbn);
+		Filter searchFilter = CompositeFilterOperator.and(typeFilter, isbnFilter);
+
+		Query q = new Query("Textbook").setFilter(searchFilter).addSort("date", Query.SortDirection.ASCENDING);
+		List<Entity> textbooks = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
+		return textbooks;
 	}
 }
