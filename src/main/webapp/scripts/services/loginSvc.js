@@ -1,8 +1,11 @@
-app.service('googleService', function ($http, $q, user) {
+var login = angular.module('loginSvc', ['userSvc'])
+
+.service('googleService', function ($http, $q, user, $location) {
     var clientId = '642821490386-5e5tfhghkcvsmjauaeu0mbnlrnjnl30n.apps.googleusercontent.com',
         apiKey = 'AIzaSyA1duUBotiNnlcHHqnH2oIWwM4JhyozhoQ',
         scopes = 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email',
-        domain = 'flybrary.ca',
+        domain = '',//'flybrary.ca',
+        cookies = 'single_host_origin',
         deferred = $q.defer();
 
     this.login = function () {
@@ -10,10 +13,15 @@ app.service('googleService', function ($http, $q, user) {
             client_id: clientId, 
             scope: scopes, 
             immediate: false, 
+            cookie_policy: cookies,
             hd: domain 
         }, this.handleAuthResult);
 
         return deferred.promise;
+    }
+
+    this.logout = function () {
+        gapi.auth.signOut();
     }
 
     this.handleClientLoad = function () {
@@ -27,6 +35,7 @@ app.service('googleService', function ($http, $q, user) {
             client_id: clientId, 
             scope: scopes, 
             immediate: true, 
+            cookie_policy: cookies,
             hd: domain 
         }, this.handleAuthResult);
     };
@@ -37,10 +46,9 @@ app.service('googleService', function ($http, $q, user) {
             gapi.client.load('oauth2', 'v2', function () {
                 var request = gapi.client.oauth2.userinfo.get();
                 request.execute(function (resp) {
-                    user.email = data.emails[0].value;
+                    user.email = resp.emails[0].value;
                     user.uid = resp.id;
-                    user.name = resp.displayName;
-                    
+                    user.name = resp.displayName;       
                 });
             });
             deferred.resolve(data);
@@ -54,9 +62,10 @@ app.service('googleService', function ($http, $q, user) {
             client_id: clientId, 
             scope: scopes, 
             immediate: false, 
+            cookie_policy: cookies,
             hd: domain 
         }, this.handleAuthResult);
         return false;
     };
 
-    })
+    });

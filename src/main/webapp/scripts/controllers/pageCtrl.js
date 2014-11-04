@@ -1,16 +1,14 @@
 
 app.controller('pageCtrl', function($scope, $rootScope, $timeout, $location, googleService, user) {
-    
+
 	$rootScope.login = function () {
 		googleService.login();
 	};
 
-    googleService.handleClientLoad();
+    //googleService.handleClientLoad();
     
-    $rootScope.checkGoogleAuth = function () {
-      googleService.checkAuth();
+    $rootScope.logout = function () {
+    	googleService.logout();
     };
-
-    $scope.checkGoogleAuth();    
    
   });

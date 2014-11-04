@@ -1,4 +1,7 @@
-app.service('user', function ($http, $rootScope, $scope, $q) {
+
+var userSvc = angular.module( 'userSvc', [])
+
+.service('user', function ($http, $q) {
     var uid = '',
         email ='',
         name = '',
@@ -22,7 +25,7 @@ app.service('user', function ($http, $rootScope, $scope, $q) {
         bookList = [];
 
 
-        this.generateRetrieve = function (){
+        function generateRetrieve(){
             return {
                 uid: uid,
                 name: name,
@@ -30,9 +33,9 @@ app.service('user', function ($http, $rootScope, $scope, $q) {
                 lat: +(location.lat),
                 lon: +(location.lon)
             };
-        };
+        }
 
-        this.generateAdd = function (){
+        function generateAdd(){
             return {
                 uid: uid,
                 type: actionType,
@@ -45,15 +48,15 @@ app.service('user', function ($http, $rootScope, $scope, $q) {
                 lon : +(location.lon),
                 radius : +(location.radius)
             };
-        };
+        }
 
-        this.generateDelete = function (){
+        function generateDelete(){
             return {
                 key: activeBookProperties.key
             };
-        };
+        }
 
-        this.generateUpdate = function (){
+        function generateUpdate(){
             return {
                 key: activeBookProperties.key,
                 title: activeBookProperties.title,
@@ -62,35 +65,40 @@ app.service('user', function ($http, $rootScope, $scope, $q) {
                 condition: activeBookProperties.condition,
                 isbn: activeBookProperties.isbn
             };
-        };
+        }
 
-        this.generateRadius = function (){
+        function generateRadius(){
             return {
                 uid: uid,
                 radius: +(location.radius)
             };
-        };
+        }
 
-        this.generateLocation = function (){
+        function generateUser(){
+            return {
+                uid: uid
+            };
+        }
+
+        function generateLocation(){
             return {
                 uid: uid,
                 lon: +(location.lon),
                 lat: +(location.lat)
             };
-        };
+        }
 
-        this.generateUnmatch = function (){
+        function generateUnmatch(){
             return {
                 key: activeBookProperties.key,
                 uid: uid,
                 title: activeBookProperties.title,
                 author: activeBookProperties.author
             };
-        };
+        }
 
-        this.parseBook = function (book){
-            return 
-            {   
+        function parseBook(book){
+            return {   
                 key: book.key.id,
                 title: book.propertyMap.title,
                 actionType: book.propertyMap.type,
@@ -101,13 +109,13 @@ app.service('user', function ($http, $rootScope, $scope, $q) {
                 isbn: book.propertyMap.isbn,
                 matched: book.propertyMap.matched
             };
-        };
+        }
 
         this.getBooks = function (){
             $http.post("resources/retrieve", generateRetrieve(), null)
             .success(function (data, status, headers, config)
             {
-              bookList = data.map(parseBook);
+              bookList = data.map(parseBook(book));
               deferred.resolve(bookList);
             })
             .error(function (data, status, headers, config)
@@ -140,11 +148,23 @@ app.service('user', function ($http, $rootScope, $scope, $q) {
             $http.post("resources/update", generateUpdate(), null)
         };
 
+        this.getUser = function (){
+            $http.post("resources/getUser", generateRetrieve(), null)
+            .success(function (data, status, headers, config)
+            {
+                location.lat = data.lat,
+                location.lon = data.lon,
+                location.radius = data.radius,
+                location.address = data.address
+                deferred.resolve(location);
+            })
+            .error(function (data, status, headers, config)
+            {
+                deferred.reject('error');
+            });
 
-};
+            return deferred.promise;
+        };
 
 
-
-
-
-
+});

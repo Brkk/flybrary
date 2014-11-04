@@ -1,14 +1,14 @@
-<section layout="horizontal" layout-fill ng-controller="SidebarController" flex>
+<section layout="horizontal" layout-fill ng-controller="mainCtrl" flex>
     <md-sidenav  class="md-sidenav-left md-whiteframe-z1" style="z-index:8" component-id="left"
      layout="vertical" class="md-sidenav-left">
-        <div class="animate-switch-container" ng-controller="tabCtrl" ng-switch on="tabs.selectedIndex" >
-            <div class="animate-switch" ng-switch-when="0">
+        <div ng-switch on="tabs.selectedIndex" >
+            <div ng-switch-when="0">
                 <div ng-include="'views/offers-side.html'"></div>
             </div>
-            <div class="animate-switch" ng-switch-when="1">
+            <div ng-switch-when="1">
                 <div ng-include="'views/requests_side.html'"></div>
             </div>
-            <div class="animate-switch" ng-switch-when="2">
+            <div ng-switch-when="2">
                 <div ng-include="'views/textchanges_side.html'"></div>
             </div>
         </div>
@@ -33,7 +33,7 @@
         </md-toolbar>
         <div layout="horizontal" layout-align="end start" ng-controller="addBookCtrl" style="position:relative">
             <md-button class="md-button-fab md-theme-green" ng-click="dialog($event)" style="position: absolute; right:5%; top: -44px">
-                <md-icon icon="images/plus.svg" style="width: 24px; height: 24px;"></md-icon>
+                <md-icon icon="images/plus.svg" style="width: 24px; height: 24px; color:white"></md-icon>
             </md-button>
         </div>
         <md-content ng-controller="BookListCtrl">

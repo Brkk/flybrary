@@ -19,7 +19,7 @@ app.controller('typeAheadCtrl', function($scope, $http, user) {
 
           $scope.onSelect = function (item) {
               console.log($scope.asyncSelected);
-              user.activeBookProperties.author = $scope.asyncSelected['volumeInfo']['authors'][0];
-              user.activeBookProperties.isbn = $scope.asyncSelected['volumeInfo']['industryIdentifiers'][0]['identifier'];
+              $scope.newBookProperties.author = $scope.asyncSelected['volumeInfo']['authors'][0];
+              $scope.newBookProperties.isbn = $scope.asyncSelected['volumeInfo']['industryIdentifiers'][0]['identifier'];
           };
 });
