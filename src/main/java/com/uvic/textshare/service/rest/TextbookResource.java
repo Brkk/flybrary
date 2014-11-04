@@ -185,12 +185,14 @@ public class TextbookResource {
 		String uid = obj.getString("uid");
 		double lat = obj.getDouble("lat");
 		double lon = obj.getDouble("lon");
+		String address = obj.getString("location");
 
 		Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uid);
 		Query q = new Query("User").setFilter(userFilter);
 		Entity user = datastore.prepare(q).asSingleEntity();
 			user.setUnindexedProperty("lat", lat);
 			user.setUnindexedProperty("lon", lon);
+			user.setUnindexedProperty("address", address);
 		datastore.put(user);
 	}
 	
@@ -231,6 +233,9 @@ public class TextbookResource {
 		Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uid);
 		Query q = new Query("User").setFilter(userFilter);
 		Entity user = datastore.prepare(q).asSingleEntity();
+		if(user == null)
+			return "{}";
+		
 		String json = new Gson().toJson(user);
 		return json;
 	}
@@ -262,7 +267,7 @@ public class TextbookResource {
 	 		user.setProperty("name", obj.getString("name"));
 	 		user.setProperty("uid", obj.getString("uid"));
 	 		user.setProperty("email", obj.getString("email"));
-			user.setProperty("location", obj.getString("location"));
+			user.setProperty("address", obj.getString("location"));
 			user.setUnindexedProperty("lat", obj.getDouble("lat"));
 			user.setUnindexedProperty("lon", obj.getDouble("lon"));
 			user.setUnindexedProperty("request_karma", 0);
