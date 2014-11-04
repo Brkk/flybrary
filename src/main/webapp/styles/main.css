@@ -115,18 +115,20 @@
 }
 
 .login-container {
-  background-image: url("../images/low_contrast_linen.png");
-  background-repeat: repeat;  
-  width:100%;
+  background-image: url("../images/flying_high2.png");
+  background-repeat: no-repeat;
+  height: 100%;
+  background-size: 100%;
 }
 
-#loginBox {
-  margin: 50px auto;
+
+
+#login-box {
+  margin: auto;
   width: 540px;
   height:300px;
   text-align: center;
-  background-color: rgba(66, 74, 137, 0.7);
-
+  background-color: rgba(66, 74, 137, 0); 
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   -o-border-radius: 5px;
@@ -135,22 +137,18 @@
   padding: 40px;
 }
 
-#loginTitle {
-  color: #222;
-  font-size: 44px;
-  font-weight:700;
-  text-shadow: 1px 0 1px #777;
-}
 
 #tagline {
   color: #222;
   font-style: italic;
   font-size: 24px;
+  text-align: center;
 }
 
 .login-options{
   color: #222;
   font-size: 14px;
+  text-align: center;
 }
 
 /* from james */
