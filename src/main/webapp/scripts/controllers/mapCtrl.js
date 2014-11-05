@@ -1,4 +1,4 @@
-app.controller('mainCtrl', function($scope, $rootScope, user, $location)
+app.controller('mapCtrl', function($scope, $rootScope, user, $location)
 {
 	
 	

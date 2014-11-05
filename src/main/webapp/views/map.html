@@ -1,16 +1,26 @@
-<div ng-controller="MapGeolocationCtrl" class="ng-scope" layout-fill>
-<map 
-	center="{{location.lat}},{{location.long}}" 
-	zoom="{{location.zoom}}" 
-	pan-control="true" 
-	zoom-control="true" 
-	zoom-control-options="{style:'DEFAULT'}"
-	layout-fill
-	flex
-	>
-		<div id="panel">
-		  <input id="address" type="textbox" value="Victoria, BC">
-		  <input type="button" value="Geocode" onclick="codeAddress()">
-		</div>
+
+
+<section ng-controller="locationCtrl" layout-fill flex layout='vertical'>
+	<map 
+		center="48.4284207,-123.36564440000001" 
+		zoom="8" 
+		layout-fill
+		flex
+		>
+	  	<marker
+	      position="[48.4284207,-123.36564440000001]"
+	      visible="false">
+	  	</marker>
+		<shape id="circle" name="circle" stroke-color='#FF0000'
+	      stroke-opacity="0.8"stroke-weight="2" 
+	      center="[{{location.lat}},{{location.lon}}]" radius="{{location.radius}}" editable="false" >
+	    </shape> 
 	</map>
-</div>
+	<div layout>
+    	<div flex layout layout-align="center center">
+        	<span>Radius</span>
+      	</div>
+		<md-slider md-theme="red" flex min="5000" max="30000" ng-model="location.radius"></md-slider>
+    </div>
+	
+</section>

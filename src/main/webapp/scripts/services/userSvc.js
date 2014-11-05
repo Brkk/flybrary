@@ -8,7 +8,7 @@ var userSvc = angular.module( 'userSvc', [])
     this.location = {
             lat: '',
             lon: '',
-            radius: '',
+            radius: 15000,
             address: ''
         };
     this.actionType = '';

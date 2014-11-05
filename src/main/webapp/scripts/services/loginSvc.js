@@ -49,7 +49,17 @@ var login = angular.module('loginSvc', ['userSvc'])
                     user.email = resp.email;
                     user.uid = resp.id;
                     user.name = resp.name;
-                    deferred.resolve(data);
+
+                    user.getUser().then(function(data){
+                        //add user location to location
+                    	location.lat = data.lat;
+                    	location.lon = data.lon;
+                    	location.address = data.location;
+                        // start loading the book list
+                        deferred.resolve(data);
+                    }, function(err){
+
+                    });   
                 });
             });
         } else {
