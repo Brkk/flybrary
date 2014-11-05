@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="../bower_components/angular-material/angular-material.css">
     <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-social-buttons.css" />
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap-social-buttons.css" />
     <link rel="stylesheet" href="styles/main.css">
 
     <script src="https://apis.google.com/js/client.js"></script>
@@ -25,20 +27,39 @@
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 	<script src="../bower_components/ngmap/build/scripts/ng-map.js"></script>
-	
-	
+
+
     <script src="scripts/services/userSvc.js"></script>
     <script src="scripts/services/loginSvc.js"></script>
 
     <script src="scripts/services/services.js"></script>
     <script src="scripts/app.js"></script>
-    
-    <script src="scripts/controllers/pageCtrl.js"></script>  
+
+    <script src="scripts/controllers/pageCtrl.js"></script>
     <script src="scripts/controllers/mainCtrl.js"></script>
     <script src="scripts/controllers/bookListCtrl.js"></script>
     <script src="scripts/controllers/addBookCtrl.js"></script>
     <script src="scripts/controllers/typeAheadCtrl.js"></script>
     <script src="scripts/controllers/locationCtrl.js"></script>
+
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
+		<script src="js/jquery.min.js"></script>
+		<script src="js/jquery.scrolly.min.js"></script>
+		<script src="js/skel.min.js"></script>
+		<script src="js/init.js"></script>
+		<noscript>
+			<link rel="stylesheet" href="css/skel.css" />
+			<link rel="stylesheet" href="css/style.css" />
+			<link rel="stylesheet" href="css/style-desktop.css" />
+		</noscript>
+    <link href="http://fonts.googleapis.com/css?family=Dancing+Script" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
+		<!--[if lte IE 9]><link rel="stylesheet" href="css/ie/v9.css" /><![endif]-->
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
@@ -53,11 +74,11 @@
 
 </head>
 <body layout="horizontal">
-   
+
     <div layout-fill ng-controller="pageCtrl">
-        <div layout-fill>               
+        <div layout-fill>
             <div ng-view layout-fill></div>
          </div>
-    </div>    
+    </div>
 
 </html>

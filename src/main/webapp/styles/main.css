@@ -115,7 +115,6 @@
 }
 
 .login-container {
-  background-image: url("../images/flying_high2.png");
   background-repeat: no-repeat;
   height: 100%;
   background-size: 100%;
@@ -128,13 +127,17 @@
   width: 540px;
   height:300px;
   text-align: center;
-  background-color: rgba(66, 74, 137, 0); 
+  background-color: rgba(66, 74, 137, 0);
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   -o-border-radius: 5px;
   -ms-border-radius: 5px;
   border-radius: 5px;
   padding: 40px;
+}
+
+#login-button {
+  background-color: rgba(66, 74, 137, 0);
 }
 
 
