@@ -47,7 +47,12 @@ import java.io.UnsupportedEncodingException;
 public class MailHandlerServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-    //email@textchngr.appspotmail.com
+    String noMatchMsgBody = "Hello student,\n"
+        + "Unfortunatley the match that you are replying to has been disconnected and you are no longer able to reach your match."
+        + "Fortunatley you are able to go back to the app to try and find another match for your textbook!"
+        + "Have a fantastic day and remember to always fly with flybrary.\n\n"
+        + "Regards,\n"
+        + "Kisses from Team Flybrary\n\n<MATCH_DATE>";
     try {
       Properties props = new Properties();
       Session session = Session.getDefaultInstance(props, null);
@@ -55,16 +60,16 @@ public class MailHandlerServlet extends HttpServlet {
 
       MimeMultipart content=(MimeMultipart)message.getContent();
 
-      String contentString = content.getBodyPart(0).getContent().toString();
-      String[] matchDateTokens = contentString.split("<MATCH_DATE>");
+      String emailBody = content.getBodyPart(0).getContent().toString();
+      String[] matchDateTokens = emailBody.split("<MATCH_DATE>");
       String emailMatchedDate = matchDateTokens[1];
-      String fromEmail = ((InternetAddress)message.getFrom()[0]).getAddress().toString();
+      String fromEmailAddress = ((InternetAddress)message.getFrom()[0]).getAddress().toString();
       String messageID = message.getMessageID();
 
-      System.out.println("MATCHDATE: " + emailMatchedDate);
-      System.out.println("Message content: " + contentString);
-      System.out.println("Message from: " + fromEmail);
-      System.out.println("Message id: " + messageID);
+      System.out.println("emailMatchedDate: " + emailMatchedDate);
+      System.out.println("emailBody: " + emailBody);
+      System.out.println("fromEmailAddress: " + fromEmailAddress);
+      System.out.println("messageID: " + messageID);
 
       Filter matchFilter = new FilterPredicate("matchDate", FilterOperator.EQUAL, emailMatchedDate);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -72,54 +77,50 @@ public class MailHandlerServlet extends HttpServlet {
       Entity match = datastore.prepare(q).asSingleEntity();
 
       if(match == null) {
-        System.out.println("NO MATCH");
+        sendEmail("email@textchngr.appspotmail.com", "Team Flybrary", fromEmailAddress, "Match Does not Exist", noMatchMsgBody);
       } else {
-        String email1 = match.getProperty("firsUsersEmail").toString();
-        String email2 = match.getProperty("secondUsersEmail").toString();
-        System.out.println("firsUsersEmail: " + email1);
-        System.out.println("secondUsersEmail: " + email2);
+        String firstUsersEmail = match.getProperty("firstUsersEmail").toString();
+        String secondUsersEmail = match.getProperty("secondUsersEmail").toString();
+        System.out.println("firstUsersEmail: " + firstUsersEmail);
+        System.out.println("secondUsersEmail: " + secondUsersEmail);
 
-        String toEmail = "";
-
-        if(fromEmail.equals(email2)) {
-          toEmail = email1;
+        if(fromEmailAddress.equals(secondUsersEmail)) {
+          sendEmail("email@textchngr.appspotmail.com", "Team Flybrary", firstUsersEmail, "", emailBody);
+        } else if (fromEmailAddress.equals(firstUsersEmail)) {
+          sendEmail("email@textchngr.appspotmail.com", "Team Flybrary", secondUsersEmail, "", emailBody);
         } else {
-          toEmail = email2;
-        }
-
-        System.out.println("toEmail: " + toEmail);
-
-        Properties propsEmailOut = new Properties();
-        Session sessionEmailOut = Session.getDefaultInstance(propsEmailOut, null);
-
-        //Create the mail body and send it to both of the users from team.textshare@gmail.com
-        String msgBody = contentString;
-
-        try {
-            Message msg = new MimeMessage(sessionEmailOut);
-            try {
-          msg.setFrom(new InternetAddress("email@textchngr.appspotmail.com", "Team Flybrary"));
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace(); //log these errors
-        }
-            try {
-          msg.addRecipient(Message.RecipientType.TO,
-                           new InternetAddress(toEmail, "Receiver Name"));
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace(); //log these errors
-        }
-            msg.setSubject(" got a match, don't forget to check it eh");
-            msg.setText(msgBody);
-            Transport.send(msg);
-
-        } catch (AddressException e) {
-            e.printStackTrace();
-        } catch (MessagingException e) {
-            e.printStackTrace();
+          sendEmail("email@textchngr.appspotmail.com", "Team Flybrary", fromEmailAddress, "Match Does not Exist", noMatchMsgBody);
         }
       }
-
     } catch (Exception e) {
+        sendEmail("email@textchngr.appspotmail.com", "Team Flybrary", "team.textshare@gmail.com", "Email from User", noMatchMsgBody);
+        e.printStackTrace();
+    }
+  }
+
+  public void sendEmail(String fromEmailAddress, String fromUserName, String toEmailAddress, String emailSubject, String emailBody) {
+    Properties props = new Properties();
+    Session session = Session.getDefaultInstance(props, null);
+    System.out.println("toEmailAddress: " + toEmailAddress);
+    try {
+      Message msg = new MimeMessage(session);
+      try {
+        msg.setFrom(new InternetAddress(fromEmailAddress, fromUserName));
+      } catch (UnsupportedEncodingException e) {
+        e.printStackTrace(); //log these errors
+      }
+
+      try {
+        msg.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmailAddress, "Receiver Name"));
+      } catch (UnsupportedEncodingException e) {
+        e.printStackTrace(); //log these errors
+      }
+      msg.setSubject(emailSubject);
+      msg.setText(emailBody);
+      Transport.send(msg);
+    } catch (AddressException e) {
+        e.printStackTrace();
+    } catch (MessagingException e) {
         e.printStackTrace();
     }
   }
