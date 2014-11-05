@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="styles/main.css">
 
     <script src="https://apis.google.com/js/client.js"></script>
+    <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
     <script src="../bower_components/angular/angular.js"></script>
     <script src="../bower_components/angular-aria/angular-aria.js"></script>
     <script src="../bower_components/angular-animate/angular-animate.js"></script>
@@ -23,7 +24,9 @@
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-
+	<script src="../bower_components/ngmap/build/scripts/ng-map.js"></script>
+	
+	
     <script src="scripts/services/userSvc.js"></script>
     <script src="scripts/services/loginSvc.js"></script>
 
@@ -52,7 +55,7 @@
    
     <div layout-fill ng-controller="pageCtrl">
         <div layout-fill>               
-            <div ng-view layout-fill> TEST TEXT</div>
+            <div ng-view layout-fill></div>
          </div>
     </div>    
 

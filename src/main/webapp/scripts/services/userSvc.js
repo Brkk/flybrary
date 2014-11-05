@@ -47,7 +47,8 @@ var userSvc = angular.module( 'userSvc', [])
             isbn: this.activeBookProperties.isbn,
             lat : +(this.location.lat),
             lon : +(this.location.lon),
-            radius : +(this.location.radius)
+            radius : +(this.location.radius),
+            image: this.activeBookProperties.image
         };
     };
 
@@ -107,7 +108,7 @@ var userSvc = angular.module( 'userSvc', [])
             author: book.propertyMap.author.value,
             condition: book.propertyMap.condition,
             edition: book.propertyMap.edition,
-            image: book.propertyMap.image,
+            image: book.propertyMap.image.value,
             isbn: book.propertyMap.isbn,
             matched: book.propertyMap.matched
         };
@@ -132,18 +133,8 @@ var userSvc = angular.module( 'userSvc', [])
         $http.post("resources/add", this.generateAdd(), null)
         .success(function (data, status, headers, config)
         {
-          bookList.push(parseBook(data));
-          deferred.resolve(bookList);
-
-          this.activeBookProperties = {
-            isbn: '',
-            title: '',
-            key: '',
-            author: '',
-            edition: '',
-            condition: '',
-            image: ''
-        };
+            bookList.push(parseBook(data));
+            deferred.resolve(bookList);
         })
         .error(function (data, status, headers, config)
         {

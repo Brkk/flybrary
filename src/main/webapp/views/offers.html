@@ -1,8 +1,8 @@
 <md-list>
-    <md-item ng-repeat="book in bookList  track by book.key | orderBy:orderProp | isOffer">
+    <md-item ng-repeat="book in bookList | orderBy:orderProp | isOffer track by book.key ">
         <md-item-content>
             <div class="md-tile-left">
-                <img ng-src="images/{{book.image}}" class="img">
+                <img ng-src="{{book.image}}" class="img">
             </div>
             <div class="md-tile-content">
                 <h3>{{book.title}}</h3>

@@ -24,11 +24,20 @@ app.controller('dialogCtrl', function($scope, $mdDialog, $http, $timeout, user) 
             user.addBook().then(
               function(data)
               {
-
+                $scope.bookList = data;
+                $scope.activeBookProperties = {
+                  isbn: '',
+                  title: '',
+                  key: '',
+                  author: '',
+                  edition: '',
+                  condition: '',
+                  image: ''
+                };
               },
               function(err)
               {
-                  console.log('Failed: ' + err);
+                console.log('Failed: ' + err);
               });
           }
       

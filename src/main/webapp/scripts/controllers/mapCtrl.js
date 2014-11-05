@@ -1,6 +1,11 @@
 app.controller('mainCtrl', function($scope, $rootScope, user, $location)
 {
-
+	
+	
+	
+	
+});
+/*
   // todo: add the api calls to update the location => needs more from berk
 
   $scope.location.latlng = new google.maps.LatLng(user.location.lat, user.location.lon);
@@ -39,7 +44,7 @@ app.controller('mainCtrl', function($scope, $rootScope, user, $location)
     	center: new google.maps.LatLng(-34.397, 150.644)
     	radius: 15
     })
-    map = 
+    //map = 
   }
 
   function codeAddress() {
@@ -54,4 +59,4 @@ app.controller('mainCtrl', function($scope, $rootScope, user, $location)
       }
     });
   }
-}
+}*/
