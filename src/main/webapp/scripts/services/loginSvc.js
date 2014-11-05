@@ -49,8 +49,8 @@ var login = angular.module('loginSvc', ['userSvc'])
                     user.email = resp.email;
                     user.uid = resp.id;
                     user.name = resp.name;
-
-                    user.getUser().then(function(data){
+                    deferred.resolve(data);
+                   /* user.getUser().then(function(data){
                         //add user location to location
                     	location.lat = data.lat;
                     	location.lon = data.lon;
@@ -59,7 +59,7 @@ var login = angular.module('loginSvc', ['userSvc'])
                         deferred.resolve(data);
                     }, function(err){
 
-                    });   
+                    });  */
                 });
             });
         } else {
