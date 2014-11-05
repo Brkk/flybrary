@@ -2,15 +2,12 @@
 
 <section ng-controller="locationCtrl" layout-fill flex layout='vertical'>
 	<map 
-		center="48.4284207,-123.36564440000001" 
-		zoom="8" 
+		center="{{location.lat}},{{location.lon}}" 
+		zoom="8"
+		street-view-control="false" 
 		layout-fill
 		flex
 		>
-	  	<marker
-	      position="[48.4284207,-123.36564440000001]"
-	      visible="false">
-	  	</marker>
 		<shape id="circle" name="circle" stroke-color='#FF0000'
 	      stroke-opacity="0.8"stroke-weight="2" 
 	      center="[{{location.lat}},{{location.lon}}]" radius="{{location.radius}}" editable="false" >
@@ -18,7 +15,7 @@
 	</map>
 	<div layout>
     	<div flex layout layout-align="center center">
-        	<span>Radius</span>
+        	<span>Radius:</span>
       	</div>
 		<md-slider md-theme="red" flex min="5000" max="30000" ng-model="location.radius"></md-slider>
     </div>
