@@ -4,7 +4,7 @@
 var app = angular.module( 'flybraryApp', [ 'services', 'ngAnimate', 'ngMaterial','ngRoute', 'ui.bootstrap', 'ngMap' ]);
 
 app.config( function($routeProvider) {
-    
+
     $routeProvider
       .when('/login', {
         templateUrl: 'views/login.html',
