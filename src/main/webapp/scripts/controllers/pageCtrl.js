@@ -1,12 +1,12 @@
 
 app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $timeout, googleService, user) {
 
-	/*if(googleService.loggedIn) {
+	if(googleService.loggedIn) {
 		$location.path('/main/offers').replace();
 	}
 	else {
 		$location.path('/login').replace();
-	}*/
+	}
 
 	$rootScope.login = function () {
 		googleService.login().then(
