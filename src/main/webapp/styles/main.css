@@ -190,6 +190,13 @@
   font-family:'Roboto';
 }
 
+.roboto-italic-light-style{
+  color: #000000;
+  font-family:'Roboto';
+  font-style:italic;
+  font-weight:lighter;
+}
+
 .dancing-style{
   color: #000000;
   font-family:'Dancing Script';
