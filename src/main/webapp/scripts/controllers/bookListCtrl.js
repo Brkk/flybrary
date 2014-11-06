@@ -11,22 +11,21 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
     function (err) {
       console.log('Failed: ' + err);
     });
+  
+	  user.getUser().then(function(data){
+		  $scope.location = data;
+	  }, 
+	  function (err) {
+		  console.log('Failed: ' + err);
+	  });
 
   $scope.orderProp = 'title';
-
+		  
  /* $scope.delete = function ( book ) {
       $scope.bookList.splice( $scope.bookList.indexOf(book), 1 );
   };*/
   
   });
-
-
-
-app.controller('DeleteCtrl', function($scope){ 
-
-    
-
-});
 
 /*    Filters Start    */  
 app.filter('isOffer', function () {

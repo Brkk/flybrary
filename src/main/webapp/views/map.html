@@ -1,6 +1,6 @@
 <section ng-controller="locationCtrl" layout-fill flex layout='vertical'>
 	<map 
-		center="{{lat}},{{lng}}" 
+		center="{{location.lat}},{{location.lon}}" 
 		zoom="12"
 		street-view-control="false" 
 		layout-fill
@@ -8,22 +8,18 @@
 		>
 		<shape id="circle" name="circle" stroke-color='#FF0000'
 	      stroke-opacity="0.8"stroke-weight="2" 
-	      center="[{{lat}},{{lng}}]" radius="{{location.radius}}" editable="false" >
+	      center="[{{location.lat}},{{location.lon}}]" radius="{{location.radius}}" editable="false" >
 	    </shape> 
 	</map>
 	<div layout>
     	<div flex layout-align="center center">
         	<span>Radius:</span>
       	</div>
-    	<md-slider ng-model="location.radius"  min="1" max="30" flex></md-slider>
+    	<md-slider discrete ng-model="location.radius"  step="5" min="1" max="30" flex></md-slider>
     </div>
     <div class="container main">
-        <form>
-            <div class="row">
-               Latitude: {{lat}} <br />
-               Longitude: {{lng}} <br />
-            </div>   
-      		<md-button ng-click="getLocation()" flex> Set my Location </md-button>
-        </form>
+    	Hit the update location, if you see the ocean!<br></br>
+    	Don't touch anything, things might explode!
+    	<md-button ng-click="getLocation()" flex> Update Location </md-button>
     </div>
 </section>
