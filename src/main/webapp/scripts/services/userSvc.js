@@ -123,7 +123,7 @@ var userSvc = angular.module( 'userSvc', [])
         {
             deferred.reject('error');
         });
-
+        deferred = $q.defer();
         return deferred.promise;
     };
 
@@ -138,6 +138,7 @@ var userSvc = angular.module( 'userSvc', [])
         {
             deferred.reject('error');
         });
+        deferred = $q.defer();
         return deferred.promise;
     };
 
@@ -179,7 +180,7 @@ var userSvc = angular.module( 'userSvc', [])
         {
             deferred.reject('error');
         });
-
+        deferred = $q.defer();
         return deferred.promise;
     };
 
