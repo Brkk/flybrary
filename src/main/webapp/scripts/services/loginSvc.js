@@ -19,6 +19,7 @@ var login = angular.module('loginSvc', ['userSvc'])
             cookie_policy: cookies,
             hd: domain 
         }, this.handleAuthResult);
+        deferred = $q.defer();
 
         return deferred.promise;
     };
@@ -31,6 +32,7 @@ var login = angular.module('loginSvc', ['userSvc'])
         gapi.client.setApiKey(apiKey);
         gapi.auth.init(function () { });
         this.checkAuth();
+        deferred = $q.defer();
         return deferred.promise;
     };
     
@@ -65,7 +67,7 @@ var login = angular.module('loginSvc', ['userSvc'])
                         // start loading the book list
                         deferred.resolve(data);
                     }, function(err){
-
+                        deferred.reject('error');
                     });  */
                 });
             });
