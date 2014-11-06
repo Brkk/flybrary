@@ -174,17 +174,17 @@ var userSvc = angular.module( 'userSvc', [])
         $http.post("resources/getUser", this.generateRetrieve(), null)
         .success(function (data, status, headers, config)
         {
-            if(data=={}){
-            	deferred.reject('No User');
-            }
-            else {
-            	var loc = {
+            if(data.propertyMap){
+                var loc = {
                     lat: data.propertyMap.lat.value,
                     lon: data.propertyMap.lon.value,
                     radius: data.propertyMap.radius.value
                 };
                 
                 deferred_getUser.resolve(loc);
+            }
+            else {
+            	deferred.reject('No User');
             }
         })
         .error(function (data, status, headers, config)
