@@ -22,7 +22,9 @@ var userSvc = angular.module( 'userSvc', [])
         };
     this.bookList = [];
 
-    var deferred = $q.defer();
+    var deferred_getBooks = $q.defer();
+    var deferred_getUser = $q.defer();
+    var deferred_addBook = $q.defer();
 
     this.generateRetrieve = function (){
         return {
@@ -117,14 +119,14 @@ var userSvc = angular.module( 'userSvc', [])
         .success(function (data, status, headers, config)
         {
           bookList = data.map(parseBook);
-          deferred.resolve(bookList);
+          deferred_getBooks.resolve(bookList);
         })
         .error(function (data, status, headers, config)
         {
-            deferred.reject('error');
+            deferred_getBooks.reject('error');
         });
-        deferred = $q.defer();
-        return deferred.promise;
+        deferred_getBooks = $q.defer();
+        return deferred_getBooks.promise;
     };
 
     this.addBook = function (){
@@ -132,14 +134,14 @@ var userSvc = angular.module( 'userSvc', [])
         .success(function (data, status, headers, config)
         {
             bookList.push(parseBook(data));
-            deferred.resolve(bookList);
+            deferred_addBook.resolve(bookList);
         })
         .error(function (data, status, headers, config)
         {
-            deferred.reject('error');
+            deferred_addBook.reject('error');
         });
-        deferred = $q.defer();
-        return deferred.promise;
+        deferred_addBook = $q.defer();
+        return deferred_addBook.promise;
     };
 
     this.deleteBook = function (){
@@ -173,15 +175,15 @@ var userSvc = angular.module( 'userSvc', [])
             	location.lat = data.lat,
                 location.lon = data.lon,
                 location.radius = data.radius,
-                deferred.resolve(location);
+                deferred_getUser.resolve(location);
             }
         })
         .error(function (data, status, headers, config)
         {
-            deferred.reject('error');
+            deferred_getUser.reject('error');
         });
-        deferred = $q.defer();
-        return deferred.promise;
+        deferred_getUser = $q.defer();
+        return deferred_getUser.promise;
     };
 
 
