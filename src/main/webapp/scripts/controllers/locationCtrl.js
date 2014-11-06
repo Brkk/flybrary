@@ -77,9 +77,9 @@ app.controller('locCtrl', function($rootScope ,$scope, user)
     }
 
     $rootScope.getLoc = function () {
-        if (navigator.geoloc) {
+        if (navigator.geolocation) {
         	var options = {timeout:60000};
-            navigator.geoloc.getCurrentPosition($scope.setPosition, $scope.showError, options);
+            navigator.geolocation.getCurrentPosition($scope.setPosition, $scope.showError, options);
         }
         else {
             $scope.error = "Geoloc is not supported by this browser.";
