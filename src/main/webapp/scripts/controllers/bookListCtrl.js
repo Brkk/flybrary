@@ -1,5 +1,16 @@
 app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jsonFilter, user) {
-      
+	
+	$rootScope.deleteBook = function(key){
+		user.activeBookProperties.key = key;
+		user.deleteBook();	
+	};
+	
+	$rootScope.unmatchBook = function(key){
+		user.activeBookProperties.key = key;
+		user.unmatchTextbook();	
+	};
+	
+	
   $rootScope.bookList = [];
   $scope.$watch('bookList',function(){},true);
   
