@@ -18,7 +18,9 @@ var userSvc = angular.module( 'userSvc', [])
             author: '',
             edition: '',
             condition: '',
-            image: ''
+            image: '',
+            matchDate: '',
+            matched: ''
         };
     this.bookList = [];
 
@@ -52,13 +54,13 @@ var userSvc = angular.module( 'userSvc', [])
 
     this.generateDelete = function(){
         return {
-            key: this.activeBookProperties.key
+            id: this.activeBookProperties.key
         };
     };
 
     this.generateUpdate = function(){
         return {
-            key: this.activeBookProperties.key,
+            id: this.activeBookProperties.key,
             title: this.activeBookProperties.title,
             author: this.activeBookProperties.author,
             edition: this.activeBookProperties.edition,
@@ -90,10 +92,12 @@ var userSvc = angular.module( 'userSvc', [])
 
     this.generateUnmatch = function(){
         return {
-            key: this.activeBookProperties.key,
-            uid: this.uid,
+            id: this.activeBookProperties.key,
+            type: this.activeBookProperties.actionType,
             title: this.activeBookProperties.title,
-            author: this.activeBookProperties.author
+            author: this.activeBookProperties.author,
+            matchDate: this.activeBookProperties.matchDate,
+            isbn: this.activeBookProperties.isbn
         };
     };
 
@@ -108,7 +112,8 @@ var userSvc = angular.module( 'userSvc', [])
             edition: book.propertyMap.edition,
             image: book.propertyMap.image.value,
             isbn: book.propertyMap.isbn,
-            matched: book.propertyMap.matched
+            matched: book.propertyMap.matched,
+            matchDate: book.propertyMap.matchDate
         };
     }
 

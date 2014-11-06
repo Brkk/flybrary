@@ -153,7 +153,7 @@ public class TextbookResource {
 	public void deleteTextbook(String input) throws JSONException {
 		JSONObject obj = new JSONObject(input);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Long id = Long.valueOf(obj.getString("id")).longValue();
+		Long id = (long) obj.getDouble("id");
 		Key textbookKey = KeyFactory.createKey("Textbook", id);
 		datastore.delete(textbookKey);
 		 
@@ -166,7 +166,7 @@ public class TextbookResource {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
 		JSONObject obj = new JSONObject(input);
 
-		Long id = Long.valueOf(obj.getString("id")).longValue();
+		Long id = (long) obj.getDouble("id");
 		String title = obj.getString("title");
 		String author = obj.getString("author");
 		String isbn = obj.getString("isbn");
@@ -214,7 +214,7 @@ public class TextbookResource {
 		}
 		
 	}
-//get rid of location stuff
+
 	@POST
 	@Path("/updateUserLocation")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -250,20 +250,30 @@ public class TextbookResource {
 	@Path("/unmatchTextbook")
 	@Consumes(MediaType.APPLICATION_JSON)
  	public void unmatchTextbook(String input) {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		JSONObject obj = new JSONObject(input);
-		Long id = Long.valueOf(obj.getString("id")).longValue();
+		Long id = (long) obj.getDouble("id");
 		String title = obj.getString("title");
 		String isbn = obj.getString("isbn");
 		String type = obj.getString("type");
 		String uid = obj.getString("uid");
+		String matchDate = obj.getString("matchDate");
 
+		//delete the match from the matches table
+		Filter matchFilter = new FilterPredicate("matchDate", FilterOperator.EQUAL, matchDate);
+		Query q = new Query("Match").setFilter(matchFilter);
+		Entity match = datastore.prepare(q).asSingleEntity();
+		String key = (String) match.getProperty("id");
+		Key matchKey = KeyFactory.createKey("Match",Long.valueOf(key).longValue() );
+		datastore.delete(matchKey);
+		Delay.oneSecondDelay();
+		
 		String matched = matchingFunction.checkForMatch(isbn, uid, type, title);
 
-		if(matched.equals("no")) {
-			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
+		if(matched.equals("no")) { 
 			Key textbookKey = KeyFactory.createKey("Textbook", id);
-			Query q = new Query(textbookKey);
-			Entity textbook = datastore.prepare(q).asSingleEntity();
+			Query q2 = new Query(textbookKey);
+			Entity textbook = datastore.prepare(q2).asSingleEntity();
 				textbook.setProperty("matched", "no");
 				textbook.setUnindexedProperty("matchDate", null);
 			datastore.put(textbook);
