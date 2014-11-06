@@ -14,7 +14,6 @@ app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $tim
 			$location.path('/main/offers').replace();
 		},
 		function(err) {
-			googleService.logout();
     		$location.path('/login').replace();
 		})
 	};
