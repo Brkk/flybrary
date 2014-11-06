@@ -3,6 +3,7 @@ app.controller('mainCtrl', function($scope, $rootScope, user, $location, $mdSide
      
       $rootScope.actionType = user.actionType;
 
+      
       $rootScope.tabs = {
         maxIndex: 2,
         locked: true,
@@ -54,7 +55,5 @@ app.controller('mainCtrl', function($scope, $rootScope, user, $location, $mdSide
   $scope.toggleLeft = function() {
       $mdSidenav('left').toggle();
     };
-
-
   });
 

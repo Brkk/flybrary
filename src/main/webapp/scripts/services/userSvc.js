@@ -6,10 +6,9 @@ var userSvc = angular.module( 'userSvc', [])
     this.email ='';
     this.name = '';
     this.location = {
-            lat: '',
-            lon: '',
-            radius: 15000,
-            address: ''
+            lat: 0,
+            lon: 0,
+            radius: 15000
         };
     this.actionType = '';
     this.activeBookProperties = {
@@ -19,18 +18,21 @@ var userSvc = angular.module( 'userSvc', [])
             author: '',
             edition: '',
             condition: '',
-            image: ''
+            image: '',
+            matchDate: '',
+            matched: ''
         };
     this.bookList = [];
 
-    var deferred = $q.defer();
+    var deferred_getBooks = $q.defer();
+    var deferred_getUser = $q.defer();
+    var deferred_addBook = $q.defer();
 
     this.generateRetrieve = function (){
         return {
             uid: this.uid,
             name: this.name,
             email: this.email,
-            location: this.location.address,
             lat: +(this.location.lat),
             lon: +(this.location.lon)
         };
@@ -54,13 +56,13 @@ var userSvc = angular.module( 'userSvc', [])
 
     this.generateDelete = function(){
         return {
-            key: this.activeBookProperties.key
+            id: this.activeBookProperties.key
         };
     };
 
     this.generateUpdate = function(){
         return {
-            key: this.activeBookProperties.key,
+            id: this.activeBookProperties.key,
             title: this.activeBookProperties.title,
             author: this.activeBookProperties.author,
             edition: this.activeBookProperties.edition,
@@ -92,10 +94,12 @@ var userSvc = angular.module( 'userSvc', [])
 
     this.generateUnmatch = function(){
         return {
-            key: this.activeBookProperties.key,
-            uid: this.uid,
+            id: this.activeBookProperties.key,
+            type: this.activeBookProperties.actionType,
             title: this.activeBookProperties.title,
-            author: this.activeBookProperties.author
+            author: this.activeBookProperties.author,
+            matchDate: this.activeBookProperties.matchDate,
+            isbn: this.activeBookProperties.isbn
         };
     };
 
@@ -110,7 +114,8 @@ var userSvc = angular.module( 'userSvc', [])
             edition: book.propertyMap.edition,
             image: book.propertyMap.image.value,
             isbn: book.propertyMap.isbn,
-            matched: book.propertyMap.matched
+            matched: book.propertyMap.matched,
+            matchDate: book.propertyMap.matchDate
         };
     }
 
@@ -119,14 +124,14 @@ var userSvc = angular.module( 'userSvc', [])
         .success(function (data, status, headers, config)
         {
           bookList = data.map(parseBook);
-          deferred.resolve(bookList);
+          deferred_getBooks.resolve(bookList);
         })
         .error(function (data, status, headers, config)
         {
-            deferred.reject('error');
+            deferred_getBooks.reject('error');
         });
-
-        return deferred.promise;
+        deferred_getBooks = $q.defer();
+        return deferred_getBooks.promise;
     };
 
     this.addBook = function (){
@@ -134,13 +139,14 @@ var userSvc = angular.module( 'userSvc', [])
         .success(function (data, status, headers, config)
         {
             bookList.push(parseBook(data));
-            deferred.resolve(bookList);
+            deferred_addBook.resolve(bookList);
         })
         .error(function (data, status, headers, config)
         {
-            deferred.reject('error');
+            deferred_addBook.reject('error');
         });
-        return deferred.promise;
+        deferred_addBook = $q.defer();
+        return deferred_addBook.promise;
     };
 
     this.deleteBook = function (){
@@ -150,23 +156,39 @@ var userSvc = angular.module( 'userSvc', [])
     this.updateBook = function (){
         $http.post("resources/update", this.generateUpdate(), null)
     };
+    
+    this.updateUserLocation = function (){
+        $http.post("resources/updateUserLocation", this.generateLocation(), null)
+    };
+    
+    this.updateUserRadius = function (){
+        $http.post("resources/updateUserRadius", this.generateRadius(), null)
+    };
+    
+    this.unmatchTextbook = function (){
+        $http.post("resources/unmatchTextbook", this.generateUnmatch(), null)
+    };
 
     this.getUser = function (){
         $http.post("resources/getUser", this.generateRetrieve(), null)
         .success(function (data, status, headers, config)
         {
-            location.lat = data.lat,
-            location.lon = data.lon,
-            location.radius = data.radius,
-            location.address = data.address
-            deferred.resolve(location);
+            if(data=={}){
+            	deferred.reject('No User');
+            }
+            else {
+            	location.lat = data.lat,
+                location.lon = data.lon,
+                location.radius = data.radius,
+                deferred_getUser.resolve(location);
+            }
         })
         .error(function (data, status, headers, config)
         {
-            deferred.reject('error');
+            deferred_getUser.reject('error');
         });
-
-        return deferred.promise;
+        deferred_getUser = $q.defer();
+        return deferred_getUser.promise;
     };
 
 

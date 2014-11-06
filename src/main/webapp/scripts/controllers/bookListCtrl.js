@@ -1,5 +1,5 @@
 app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jsonFilter, user) {
-      
+	
   $rootScope.bookList = [];
   $scope.$watch('bookList',function(){},true);
   
@@ -11,22 +11,27 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
     function (err) {
       console.log('Failed: ' + err);
     });
+  
+	  user.getUser().then(function(data){
+		  $scope.location = data;
+	  }, 
+	  function (err) {
+		  console.log('Failed: ' + err);
+	  });
 
   $scope.orderProp = 'title';
-
- /* $scope.delete = function ( book ) {
-      $scope.bookList.splice( $scope.bookList.indexOf(book), 1 );
-  };*/
-  
+		  
+	$rootScope.deleteBook = function(key){
+		user.activeBookProperties.key = key;
+		user.deleteBook();	
+	};
+	
+	$rootScope.unmatchBook = function(key){
+		user.activeBookProperties.key = key;
+		user.unmatchTextbook();	
+	};
+	
   });
-
-
-
-app.controller('DeleteCtrl', function($scope){ 
-
-    
-
-});
 
 /*    Filters Start    */  
 app.filter('isOffer', function () {

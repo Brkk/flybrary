@@ -8,6 +8,8 @@ var login = angular.module('loginSvc', ['userSvc'])
         cookies = 'single_host_origin',
         deferred = $q.defer();
 
+    this.loggedIn = false;
+
 
     this.login = function () {
         gapi.auth.authorize({ 
@@ -17,6 +19,7 @@ var login = angular.module('loginSvc', ['userSvc'])
             cookie_policy: cookies,
             hd: domain 
         }, this.handleAuthResult);
+        deferred = $q.defer();
 
         return deferred.promise;
     };
@@ -28,7 +31,9 @@ var login = angular.module('loginSvc', ['userSvc'])
     this.handleClientLoad = function () {
         gapi.client.setApiKey(apiKey);
         gapi.auth.init(function () { });
-        window.setTimeout(this.checkAuth, 1);
+        this.checkAuth();
+        deferred = $q.defer();
+        return deferred.promise;
     };
     
     this.checkAuth = function() {
@@ -51,7 +56,8 @@ var login = angular.module('loginSvc', ['userSvc'])
                 request.execute(function (resp) {
                     user.email = resp.email;
                     user.uid = resp.id;
-                    user.name = resp.name;               
+                    user.name = resp.name; 
+                    this.loggedIn = true;              
                     deferred.resolve(data); 
                    /* user.getUser().then(function(data){
                         //add user location to location
@@ -61,11 +67,12 @@ var login = angular.module('loginSvc', ['userSvc'])
                         // start loading the book list
                         deferred.resolve(data);
                     }, function(err){
-
+                        deferred.reject('error');
                     });  */
                 });
             });
         } else {
+            this.loggedIn = false;
             deferred.reject('error');
         }
     };
