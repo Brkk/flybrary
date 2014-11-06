@@ -17,17 +17,18 @@
     <div layout="vertical" layout-fill="" tabindex="-1" role="main" style="background:#eee">
         <md-toolbar class="md-theme-light app-toolbar" style="z-index:3">
             <div class="md-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between">
-                <div ng-click="toggleLeft()">
-                    <md-button>Flybrary</md-button>
+                <div class="dancing-style-menutab" ng-click="toggleLeft()">
+
+                    <md-button id="dancing-style-menutab"><i class="fa fa-book" id="book-logo2"></i>Flybrary</md-button>
                 </div>
             </div> 
         </md-toolbar>
         <md-toolbar class="md-theme-light md-whiteframe-z1">
             <div class="md-toolbar-tools" style="margin-bottom: 10px" style="z-index:3">
                 <md-tabs selected="tabs.selectedIndex" layout="horizontal" layout-align="start start">
-                    <md-tab label="Offers"></md-tab>
-                    <md-tab label="Requests"></md-tab>
-                    <md-tab label="Matches"></md-tab>
+                    <md-tab class="roboto-style" label="Offers"></md-tab>
+                    <md-tab class="roboto-style" label="Requests"></md-tab>
+                    <md-tab class="roboto-style" label="Matches"></md-tab>
                 </md-tabs>
             </div>
         </md-toolbar>
