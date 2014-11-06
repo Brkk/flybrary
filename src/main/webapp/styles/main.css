@@ -171,6 +171,13 @@
   margin-right: 0.25em;
 }
 
+#book-logo2 {
+  color: #000;
+  font-size: 1em;
+  margin-top: 0.25em;
+  margin-right: 0.25em;
+}
+
 #logo-headers {
   color:#000;
   font-size: 8em;
@@ -186,6 +193,21 @@
 .dancing-style{
   color: #000000;
   font-family:'Dancing Script';
+}
+
+.roboto-style-sidebar-title{
+  color: #fff;
+  font-family:'Roboto';
+  font-size: 1.5em;
+  margin-top: 0.5em;
+  margin-left: 1.2em;
+}
+
+#dancing-style-menutab{
+  color: #000000;
+  font-family:'Dancing Script';
+  font-size: 1.8em;
+  font-weight: 900;
 }
 
 h1.dancing-style{
