@@ -6,10 +6,9 @@ var userSvc = angular.module( 'userSvc', [])
     this.email ='';
     this.name = '';
     this.location = {
-            lat: '',
-            lon: '',
-            radius: 15000,
-            address: ''
+            lat: 0,
+            lon: 0,
+            radius: 15000
         };
     this.actionType = '';
     this.activeBookProperties = {
@@ -30,7 +29,6 @@ var userSvc = angular.module( 'userSvc', [])
             uid: this.uid,
             name: this.name,
             email: this.email,
-            location: this.location.address,
             lat: +(this.location.lat),
             lon: +(this.location.lon)
         };
@@ -150,16 +148,32 @@ var userSvc = angular.module( 'userSvc', [])
     this.updateBook = function (){
         $http.post("resources/update", this.generateUpdate(), null)
     };
+    
+    this.updateUserLocation = function (){
+        $http.post("resources/updateUserLocation", this.generateLocation(), null)
+    };
+    
+    this.updateUserRadius = function (){
+        $http.post("resources/updateUserRadius", this.generateRadius(), null)
+    };
+    
+    this.unmatchTextbook = function (){
+        $http.post("resources/unmatchTextbook", this.generateUnmatch(), null)
+    };
 
     this.getUser = function (){
         $http.post("resources/getUser", this.generateRetrieve(), null)
         .success(function (data, status, headers, config)
         {
-            location.lat = data.lat,
-            location.lon = data.lon,
-            location.radius = data.radius,
-            location.address = data.address
-            deferred.resolve(location);
+            if(data=={}){
+            	deferred.reject('No User');
+            }
+            else {
+            	location.lat = data.lat,
+                location.lon = data.lon,
+                location.radius = data.radius,
+                deferred.resolve(location);
+            }
         })
         .error(function (data, status, headers, config)
         {
