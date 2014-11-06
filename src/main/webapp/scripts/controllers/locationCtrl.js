@@ -3,6 +3,11 @@ app.controller('locCtrl', function($rootScope ,$scope, user)
 	
     $rootScope.loc = user.loc;
     $rootScope.loc.sliderRadius = 15;
+
+    $scope.$watch('loc.radius', function() {
+        user.loc.radius = $scope.loc.radius;
+        user.updateUserRadius();
+    });
     
     $scope.$watch('loc', function() {
         if(user.loc.set)

@@ -24,7 +24,8 @@ app.controller('dialogCtrl', function($scope, $mdDialog, $http, $timeout, user) 
             user.addBook().then(
               function(data)
               {
-                $scope.bookList = data;
+                $scope.bookList.push(data);
+                user.bookList.push(data);
                 $scope.activeBookProperties = {
                   isbn: '',
                   title: '',

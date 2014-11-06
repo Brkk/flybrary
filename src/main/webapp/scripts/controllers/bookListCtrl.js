@@ -21,17 +21,30 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
 
   $scope.orderProp = 'title';
 		  
-	$rootScope.deleteBook = function(key){
-		user.activeBookProperties.key = key;
+	$rootScope.deleteBook = function(book){
+    var index = $scope.bookList.indexOf(book);
+
+    if (index > -1) {
+        $scope.bookList.splice(index, 1);
+    }
+
+    user.activeBookProperties.key = book.key;
 		user.deleteBook();	
 	};
 	
-	$rootScope.unmatchBook = function(key, matchDate, isbn, actionType, title){
-		user.activeBookProperties.key = key;
-		user.activeBookProperties.matchDate = matchDate;
-		user.activeBookProperties.isbn = isbn;
-		user.actionType = actionType;
-		user.activeBookProperties.title = title;
+	$rootScope.unmatchBook = function(book){
+
+   var index = $scope.bookList.indexOf(book);
+
+    if (index > -1) {
+        $scope.bookList.splice(index, 1);
+    }
+
+		user.activeBookProperties.key = book.key;
+		user.activeBookProperties.matchDate = book.matchDate;
+		user.activeBookProperties.isbn = book.isbn;
+		user.actionType = book.type;
+		user.activeBookProperties.title = book.title;
 		user.unmatchTextbook();	
 	};
 	

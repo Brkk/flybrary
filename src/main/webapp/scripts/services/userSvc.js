@@ -126,8 +126,7 @@ var userSvc = angular.module( 'userSvc', [])
         $http.post("resources/retrieve", this.generateRetrieve(), null)
         .success(function (data, status, headers, config)
         {
-          bookList = data.map(parseBook);
-          deferred_getBooks.resolve(bookList);
+            deferred_getBooks.resolve(data.map(parseBook));
         })
         .error(function (data, status, headers, config)
         {
@@ -141,8 +140,7 @@ var userSvc = angular.module( 'userSvc', [])
         $http.post("resources/add", this.generateAdd(), null)
         .success(function (data, status, headers, config)
         {
-            bookList.push(parseBook(data));
-            deferred_addBook.resolve(bookList);
+            deferred_addBook.resolve(parseBook(data));
         })
         .error(function (data, status, headers, config)
         {
