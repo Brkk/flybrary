@@ -58,17 +58,21 @@ var login = angular.module('loginSvc', ['userSvc'])
                     user.uid = resp.id;
                     user.name = resp.name; 
                     this.loggedIn = true;              
-                    deferred.resolve(data); 
-                   /* user.getUser().then(function(data){
-                        //add user location to location
-                    	location.lat = data.lat;
-                    	location.lon = data.lon;
-                    	location.address = data.location;
+                    //deferred.resolve(data); 
+                    user.getUser().then(function(data){
+                        //add user loc to loc
+                    	user.loc.lat = data.lat;
+                    	user.loc.lon = data.lon;
+                        user.loc.radius = data.radius;
+                        user.loc.set = true;
+                        user.loc.inDB = true;
                         // start loading the book list
                         deferred.resolve(data);
                     }, function(err){
-                        deferred.reject('error');
-                    });  */
+                        user.loc.inDB = false;
+                        user.loc.set = true;
+                        deferred.resolve(data);
+                    });
                 });
             });
         } else {

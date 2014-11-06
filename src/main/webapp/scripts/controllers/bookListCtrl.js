@@ -37,7 +37,7 @@ app.filter('isOffer', function () {
 
       for (var i = 0; i < items.length; i++) {
         var item = items[i];
-        if (item.actionType == 'offer') {
+        if (item.actionType == 'offer' && item.matched == 'no') {
           filtered.push(item);
         }
       }
@@ -53,7 +53,7 @@ app.filter('isRequest', function () {
 
       for (var i = 0; i < items.length; i++) {
         var item = items[i];
-        if (item.actionType == 'request') {
+        if (item.actionType == 'request' && item.matched == 'no') {
           filtered.push(item);
         }
       }

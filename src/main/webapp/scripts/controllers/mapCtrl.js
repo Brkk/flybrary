@@ -6,27 +6,27 @@ app.controller('mapCtrl', function($scope, $rootScope, user, $location)
 	
 });
 /*
-  // todo: add the api calls to update the location => needs more from berk
+  // todo: add the api calls to update the loc => needs more from berk
 
-  $scope.location.latlng = new google.maps.LatLng(user.location.lat, user.location.lon);
-  $scope.$watch('location.radius', function() {
-    user.location.radius = $scope.location.radius;
-    $scope.circle.setRadius(user.location.radius);
+  $scope.loc.latlng = new google.maps.LatLng(user.loc.lat, user.loc.lon);
+  $scope.$watch('loc.radius', function() {
+    user.loc.radius = $scope.loc.radius;
+    $scope.circle.setRadius(user.loc.radius);
   });
-  $scope.$watch('location.latlng', function() {
-      user.location.lat = $scope.location.latlng.lat();
-      user.location.lon = $scope.location.latlng.lon();
+  $scope.$watch('loc.latlng', function() {
+      user.loc.lat = $scope.loc.latlng.lat();
+      user.loc.lon = $scope.loc.latlng.lon();
       
-      $scope.marker.setPosition($scope.location.latlng);
-      $scope.circle.setCenter($scope.location.latlng);
-      $scope.map.pan($scope.location.latlng); 
+      $scope.marker.setPosition($scope.loc.latlng);
+      $scope.circle.setCenter($scope.loc.latlng);
+      $scope.map.pan($scope.loc.latlng); 
   }, true);
 
   $scope.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
   $scope.geocoder = new google.maps.Geocoder();
   $scope.marker = new google.maps.Marker({
     map: $scope.map,
-    position: new google.maps.LatLng( $scope.location.latlng)
+    position: new google.maps.LatLng( $scope.loc.latlng)
     });
 
     var mapOptions = {
@@ -51,11 +51,11 @@ app.controller('mapCtrl', function($scope, $rootScope, user, $location)
     var address = document.getElementById('address').value;
     geocoder.geocode( { 'address': address}, function(results, status) {
       if (status == google.maps.GeocoderStatus.OK) {
-        map.setCenter(results[0].geometry.location);
-        marker.setPosition(results[0].geometry.location);
-        circle.setCenter(results[0].geometry.location);
+        map.setCenter(results[0].geometry.loc);
+        marker.setPosition(results[0].geometry.loc);
+        circle.setCenter(results[0].geometry.loc);
       } else {
-        alert('Geocode was not successful for the following reason: ' + status); // fill the bar with location not found/ add a toast or something about it
+        alert('Geocode was not successful for the following reason: ' + status); // fill the bar with loc not found/ add a toast or something about it
       }
     });
   }

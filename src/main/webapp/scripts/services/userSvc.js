@@ -5,10 +5,12 @@ var userSvc = angular.module( 'userSvc', [])
     this.uid = '';
     this.email ='';
     this.name = '';
-    this.location = {
+    this.loc = {
             lat: 0,
             lon: 0,
-            radius: 15000
+            zoom: 12,
+            radius: 15000,
+            slocet: false
         };
     this.actionType = '';
     this.activeBookProperties = {
@@ -31,8 +33,8 @@ var userSvc = angular.module( 'userSvc', [])
             uid: this.uid,
             name: this.name,
             email: this.email,
-            lat: +(this.location.lat),
-            lon: +(this.location.lon)
+            lat: +(this.loc.lat),
+            lon: +(this.loc.lon)
         };
     };
 
@@ -45,9 +47,9 @@ var userSvc = angular.module( 'userSvc', [])
             edition: this.activeBookProperties.edition,
             condition: this.activeBookProperties.condition,
             isbn: this.activeBookProperties.isbn,
-            lat : +(this.location.lat),
-            lon : +(this.location.lon),
-            radius : +(this.location.radius),
+            lat : +(this.loc.lat),
+            lon : +(this.loc.lon),
+            radius : +(this.loc.radius),
             image: this.activeBookProperties.image
         };
     };
@@ -72,7 +74,7 @@ var userSvc = angular.module( 'userSvc', [])
     this.generateRadius = function(){
         return {
             uid: this.uid,
-            radius: +(this.location.radius)
+            radius: +(this.loc.radius)
         };
     };
 
@@ -82,11 +84,11 @@ var userSvc = angular.module( 'userSvc', [])
         };
     };
 
-    this.generateLocation = function(){
+    this.generateloc = function(){
         return {
             uid: this.uid,
-            lon: +(this.location.lon),
-            lat: +(this.location.lat)
+            lon: +(this.loc.lon),
+            lat: +(this.loc.lat)
         };
     };
 
@@ -152,8 +154,8 @@ var userSvc = angular.module( 'userSvc', [])
         $http.post("resources/update", this.generateUpdate(), null)
     };
     
-    this.updateUserLocation = function (){
-        $http.post("resources/updateUserLocation", this.generateLocation(), null)
+    this.updateUserloc = function (){
+        $http.post("resources/updateUserloc", this.generateloc(), null)
     };
     
     this.updateUserRadius = function (){
@@ -172,10 +174,13 @@ var userSvc = angular.module( 'userSvc', [])
             	deferred.reject('No User');
             }
             else {
-            	location.lat = data.lat,
-                location.lon = data.lon,
-                location.radius = data.radius,
-                deferred_getUser.resolve(location);
+            	var loc = {
+                    lat: data.propertyMap.lat.value,
+                    lon: data.propertyMap.lon.value,
+                    radius: data.propertyMap.radius.value
+                };
+                
+                deferred_getUser.resolve(loc);
             }
         })
         .error(function (data, status, headers, config)
