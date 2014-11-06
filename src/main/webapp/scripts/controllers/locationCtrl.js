@@ -5,15 +5,17 @@ app.controller('locCtrl', function($rootScope ,$scope, user)
     $rootScope.loc.sliderRadius = 15;
 
     $scope.$watch('loc.radius', function() {
-        user.loc.radius = $scope.loc.radius;
-        user.updateUserRadius();
+        if(user.loc.set) {
+            user.loc.radius = $scope.loc.radius;
+            user.updateUserRadius();
+        }
     });
     
     $scope.$watch('loc', function() {
         if(user.loc.set)
         {
             if(!user.loc.inDB) {
-                $scope.getloc();
+                $scope.getLoc();
                 $scope.loc.set = true;
                 $scope.loc.inDB = true;
             }
@@ -50,13 +52,13 @@ app.controller('locCtrl', function($rootScope ,$scope, user)
 
     }, true); 
 
-    $scope.setPosition = function (position) {
+    $rootScope.setPosition = function (position) {
         user.loc.lat = position.coords.latitude;
         user.loc.lon = position.coords.longitude;
         user.updateUserloc();
     }
 
-    $scope.showError = function (error) {
+    $rootScope.showError = function (error) {
         switch (error.code) {
             case error.PERMISSION_DENIED:
                 $scope.error = "User denied the request for Geoloc."
@@ -74,7 +76,7 @@ app.controller('locCtrl', function($rootScope ,$scope, user)
         $scope.$apply();
     }
 
-    $scope.getloc = function () {
+    $rootScope.getLoc = function () {
         if (navigator.geoloc) {
         	var options = {timeout:60000};
             navigator.geoloc.getCurrentPosition($scope.setPosition, $scope.showError, options);
