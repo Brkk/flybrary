@@ -26,7 +26,8 @@ var login = angular.module('loginSvc', ['userSvc'])
     };
 
     this.handleClientLoad = function () {
-        gapi.client.setApiKey(apiKey);     
+        gapi.client.setApiKey(apiKey);
+        gapi.auth.init(function () { });
         window.setTimeout(this.checkAuth, 1);
     };
     
@@ -39,7 +40,6 @@ var login = angular.module('loginSvc', ['userSvc'])
             hd: domain 
         }, this.handleAuthResult);
         
-        return deferred.promise;
     };
 
     
@@ -51,9 +51,8 @@ var login = angular.module('loginSvc', ['userSvc'])
                 request.execute(function (resp) {
                     user.email = resp.email;
                     user.uid = resp.id;
-                    user.name = resp.name;
-                    deferred.resolve(data);                
-                    
+                    user.name = resp.name;               
+                    deferred.resolve(data); 
                    /* user.getUser().then(function(data){
                         //add user location to location
                     	location.lat = data.lat;
@@ -65,25 +64,10 @@ var login = angular.module('loginSvc', ['userSvc'])
 
                     });  */
                 });
-               
             });
         } else {
             deferred.reject('error');
         }
     };
-
-    this.handleAuthClick = function(event) {
-        gapi.auth.authorize({ 
-            client_id: clientId, 
-            scope: scopes, 
-            immediate: false, 
-            cookie_policy: cookies,
-            hd: domain 
-        }, this.handleAuthResult);
-        return false;
-    };
-
-    });
-
-
+  });
 
