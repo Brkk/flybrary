@@ -95,7 +95,8 @@ var userSvc = angular.module( 'userSvc', [])
     this.generateUnmatch = function(){
         return {
             id: this.activeBookProperties.key,
-            type: this.activeBookProperties.actionType,
+            uid: this.uid,
+            type: this.actionType,
             title: this.activeBookProperties.title,
             author: this.activeBookProperties.author,
             matchDate: this.activeBookProperties.matchDate,
@@ -115,7 +116,7 @@ var userSvc = angular.module( 'userSvc', [])
             image: book.propertyMap.image.value,
             isbn: book.propertyMap.isbn,
             matched: book.propertyMap.matched,
-            matchDate: book.propertyMap.matchDate
+            matchDate: book.propertyMap.matchDate.value
         };
     }
 

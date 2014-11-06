@@ -26,8 +26,12 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
 		user.deleteBook();	
 	};
 	
-	$rootScope.unmatchBook = function(key){
+	$rootScope.unmatchBook = function(key, matchDate, isbn, actionType, title){
 		user.activeBookProperties.key = key;
+		user.activeBookProperties.matchDate = matchDate;
+		user.activeBookProperties.isbn = isbn;
+		user.actionType = actionType;
+		user.activeBookProperties.title = title;
 		user.unmatchTextbook();	
 	};
 	

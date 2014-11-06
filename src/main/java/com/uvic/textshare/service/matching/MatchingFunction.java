@@ -1,6 +1,8 @@
 package com.uvic.textshare.service.matching;
 
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Properties;
 import java.util.Date;
@@ -72,23 +74,26 @@ public class MatchingFunction {
 					user = getUser(uid);
 					secondUsersName = String.valueOf(user.getProperty("name"));
 					secondUsersEmail = String.valueOf(user.getProperty("email"));
+					
+					DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+					String simpleDate = df.format(matchDate);
 
 					Delay.oneSecondDelay();
 					Entity match = new Entity("Match");
-						match.setProperty("matchDate", matchDate.toString());
+						match.setProperty("matchDate", simpleDate);
 						match.setUnindexedProperty("firstUsersEmail", firstUsersEmail);
 						match.setUnindexedProperty("secondUsersEmail", secondUsersEmail);
 					datastore.put(match);
 
-					sendEmailToUser(firstUsersName, firstUsersEmail, secondUsersName, secondUsersEmail, title, matchDate.toString());
-					sendEmailToUser(secondUsersName, secondUsersEmail, firstUsersName, firstUsersEmail, title, matchDate.toString());
+					sendEmailToUser(firstUsersName, firstUsersEmail, secondUsersName, secondUsersEmail, title, simpleDate);
+					sendEmailToUser(secondUsersName, secondUsersEmail, firstUsersName, firstUsersEmail, title, simpleDate);
 
 					Delay.oneSecondDelay();
 					matchedBook.setProperty("matched", "yes");
-					matchedBook.setUnindexedProperty("matchDate", matchDate.toString());
+					matchedBook.setUnindexedProperty("matchDate", simpleDate);
 					datastore.put(matchedBook);
 
-					return "yes-" + matchDate.toString();
+					return "yes-" + simpleDate;
 				}
 			}
 		}
@@ -184,7 +189,8 @@ public class MatchingFunction {
 	private List<Entity> getTextbooks(String searchType, String isbn) {
 		Filter typeFilter = new FilterPredicate("type", FilterOperator.EQUAL, searchType);
 		Filter isbnFilter = new FilterPredicate("isbn", FilterOperator.EQUAL, isbn);
-		Filter searchFilter = CompositeFilterOperator.and(typeFilter, isbnFilter);
+		Filter matchedFilter = new FilterPredicate("matched", FilterOperator.EQUAL, "no");
+		Filter searchFilter = CompositeFilterOperator.and(typeFilter, isbnFilter, matchedFilter);
 		Query q = new Query("Textbook").setFilter(searchFilter).addSort("date", Query.SortDirection.ASCENDING);
 		List<Entity> textbooks = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
 		return textbooks;

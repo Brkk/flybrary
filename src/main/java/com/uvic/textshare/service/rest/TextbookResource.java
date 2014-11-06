@@ -263,8 +263,8 @@ public class TextbookResource {
 		Filter matchFilter = new FilterPredicate("matchDate", FilterOperator.EQUAL, matchDate);
 		Query q = new Query("Match").setFilter(matchFilter);
 		Entity match = datastore.prepare(q).asSingleEntity();
-		String key = (String) match.getProperty("id");
-		Key matchKey = KeyFactory.createKey("Match",Long.valueOf(key).longValue() );
+		System.out.println(match);
+		Key matchKey = match.getKey();
 		datastore.delete(matchKey);
 		Delay.oneSecondDelay();
 		
