@@ -1,26 +1,26 @@
 <nav id="nav">
   <ul>
     <li><a href="#login-container">Home</a></li>
-    <li><a href="#about-containter">About</a></li>
-    <li><a href="#contact-containter">Contact Us</a></li>
+    <li><a href="#about-container">About</a></li>
+    <li><a href="#contact-container">Contact Us</a></li>
   </ul>
 </nav>
 
 <div layout-fill layout="horizontal" id="login-container">
   <div class="center-box">
-    <div layout="horizontal">
+    <div layout-sm="vertical" layout-md="horizontal" layout-lg="horizontal">
       <i class="fa fa-book" id="book-logo"></i>
       <h1 id="app-title">Flybrary</h1>
     </div>
     <h2 class="roboto-style">The textbook sharing Network, on the fly.</h2>
-    <div>
-      <a class="btn btn-block btn-social btn-google-plus" ng-click="login()">
-        <i class="fa fa-google-plus"></i> Sign in with Google
-      </a>
-    </div>
+  <div>
+     <button class="btn btn-google-plus" ng-click="login()"><i class="fa fa-google-plus"></i> | Login with Google</button>
+   </div>
+
+
   </div>
 </div>
-<div layout-fill layout="horizontal" id="about-containter">
+<div layout-fill layout="horizontal" id="about-container">
   <div class="center-box">
     <i class="fa fa-circle-o-notch" id="logo-headers"></i>
     <h1 class="dancing-style">What is the flybrary?</h1>
@@ -31,7 +31,7 @@
     </div>
   </div>
 </div>
-<div layout-fill layout="horizontal" id="contact-containter">
+<div layout-fill layout="horizontal" id="contact-container">
   <div class="center-box">
     <i class="fa fa-comments" id="logo-headers"></i>
     <h1 class="dancing-style" style="color:white">Contact Us</h1>
