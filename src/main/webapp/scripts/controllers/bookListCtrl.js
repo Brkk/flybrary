@@ -14,9 +14,9 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
 
   $scope.orderProp = 'title';
 
-  $scope.delete = function ( book ) {
+ /* $scope.delete = function ( book ) {
       $scope.bookList.splice( $scope.bookList.indexOf(book), 1 );
-  };
+  };*/
   
   });
 

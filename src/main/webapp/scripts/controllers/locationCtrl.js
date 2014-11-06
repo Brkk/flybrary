@@ -6,25 +6,14 @@ app.controller('locationCtrl', function($scope)
       user.location = $scope.location;
     }, true); */
     
-	
 	$scope.lat = "0";
     $scope.lng = "0";
-    $scope.accuracy = "0";
     $scope.error = "";
-
-    $scope.mapOptions = {
-        center: new google.maps.LatLng($scope.lat, $scope.lng),
-        zoom: 15,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
 
     $scope.showPosition = function (position) {
         $scope.lat = position.coords.latitude;
         $scope.lng = position.coords.longitude;
-        $scope.accuracy = position.coords.accuracy;
         $scope.$apply();
-
-        var latlng = new google.maps.LatLng($scope.lat, $scope.lng);
     }
 
     $scope.showError = function (error) {
@@ -47,15 +36,12 @@ app.controller('locationCtrl', function($scope)
 
     $scope.getLocation = function () {
         if (navigator.geolocation) {
-        	var options = {timeout:1200000};
-            navigator.geolocation.getCurrentPosition($scope.showPosition, $scope.showError,options);
+        	var options = {timeout:60000};
+            navigator.geolocation.getCurrentPosition($scope.showPosition, $scope.showError, options);
         }
         else {
             $scope.error = "Geolocation is not supported by this browser.";
         }
     }
-
-    $scope.getLocation();
-	
-	
+   
 });
