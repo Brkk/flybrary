@@ -5,7 +5,7 @@ app.controller('typeAheadCtrl', function($scope, $http, user) {
           $scope.updateList = function(title){
               return $http({
                 method: 'GET',
-                url: 'https://www.googleapis.com/books/v1/volumes?q='+title+'&maxResults=5&key=AIzaSyCkpwvdSnV5ROhYWamvKaBmH7NQ-0ZLk_4'
+                url: 'https://www.googleapis.com/books/v1/volumes?q='+title+'&maxResults=5&key=AIzaSyA1duUBotiNnlcHHqnH2oIWwM4JhyozhoQ'
               }).then(function ($response)
               {
                 // var result = [];

@@ -44,15 +44,15 @@ app.controller('mainCtrl', function($scope, $rootScope, user, $location, $mdSide
         };
     }, true);
 
-  $scope.next = function() {
+  $rootScope.next = function() {
       $scope.tabs.selectedIndex = Math.min( $scope.tabs.maxIndex, $scope.tabs.selectedIndex + 1) ;
   };
 
-  $scope.previous = function() {
+  $rootScope.previous = function() {
     $scope.tabs.selectedIndex = Math.max(0, ($scope.tabs.selectedIndex - 1));
   };
 
-  $scope.toggleLeft = function() {
+  $rootScope.toggleLeft = function() {
       $mdSidenav('left').toggle();
     };
   });
