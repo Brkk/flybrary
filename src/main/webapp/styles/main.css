@@ -118,6 +118,7 @@
   background-repeat: no-repeat;
   height: 100%;
   background-size: 100%;
+  background-color: #38596B;
 }
 
 
@@ -136,16 +137,34 @@
   padding: 40px;
 }
 
-#login-button {
-  background-color: rgba(66, 74, 137, 0);
+
+#app-title{
+  color: #000000;
+  font-family:'Dancing Script';
+  font-size: 10em;
+}
+
+#book-logo {
+  color: #000;
+  font-size: 10em;
+  margin-top: 0.25em;
+  margin-right: 0.25em;
+}
+
+.logo-headers {
+  color:#000;
+  font-size: 6em;
 }
 
 
-#tagline {
-  color: #222;
-  font-style: italic;
-  font-size: 24px;
-  text-align: center;
+.roboto-style{
+  color: #000000;
+  font-family:'Roboto';
+}
+
+.dancing-style{
+  color: #000000;
+  font-family:'Dancing Sript';
 }
 
 .login-options{
