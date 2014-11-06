@@ -114,17 +114,30 @@
   background-size: 100% 100%;
 }
 
-.login-container {
+#login-container {
   background-repeat: no-repeat;
   height: 100%;
   background-size: 100%;
   background-color: #38596B;
 }
 
+#about-containter {
+  background-repeat: no-repeat;
+  height: 100%;
+  background-size: 100%;
+  background-color: #FFFFFF;
+}
+
+#contact-containter {
+  background-repeat: no-repeat;
+  height: 100%;
+  background-size: 100%;
+  background-color: #303030;
+}
 
 
-#login-box {
-  margin: auto;
+.center-box {
+  margin: 2em auto;
   width: 540px;
   height:300px;
   text-align: center;
@@ -151,9 +164,9 @@
   margin-right: 0.25em;
 }
 
-.logo-headers {
+#logo-headers {
   color:#000;
-  font-size: 6em;
+  font-size: 8em;
 }
 
 
@@ -164,7 +177,7 @@
 
 .dancing-style{
   color: #000000;
-  font-family:'Dancing Sript';
+  font-family:'Dancing Script';
 }
 
 .login-options{
@@ -206,3 +219,59 @@ md-button:not([disabled]):hover, md-button:not([disabled]).focus {
   background-color: rgba(228, 228, 228, 0.3);
 
 }
+
+#top-bar {
+  margin-left: auto;
+  margin-right: auto;
+  /* width: (containers) */
+  width: 1200px;
+}
+
+#nav
+{
+  background-color: #282828;
+  text-align: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 10000;
+  cursor: default;
+}
+
+  #nav ul
+  {
+    margin-bottom: 0;
+  }
+
+  #nav li
+  {
+    display: inline-block;
+  }
+
+  #nav a
+  {
+    position: relative;
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    outline: 0;
+  }
+
+    #nav a:hover
+    {
+      color: #fff !important;
+    }
+
+    #nav a.active:before
+    {
+      content: '';
+      display: block;
+      position: absolute;
+      bottom: -0.6em;
+      left: 50%;
+      margin-left: -0.75em;
+      border-left: solid 0.75em transparent;
+      border-right: solid 0.75em transparent;
+      border-top: solid 0.6em #282828;
+    }

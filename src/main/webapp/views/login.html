@@ -1,15 +1,46 @@
-<div layout-fill layout="horizontal" class="login-container">
-  <div id="login-box">     
+<nav id="nav">
+  <ul>
+    <li><a href="#login-container">Home</a></li>
+    <li><a href="#about-containter">About</a></li>
+    <li><a href="#contact-containter">Contact Us</a></li>
+  </ul>
+</nav>
+
+<div layout-fill layout="horizontal" id="login-container">
+  <div class="center-box">
     <div layout="horizontal">
       <i class="fa fa-book" id="book-logo"></i>
       <h1 id="app-title">Flybrary</h1>
-    </div>     
+    </div>
     <h2 class="roboto-style">The textbook sharing Network, on the fly.</h2>
-    <div> 
+    <div>
       <a class="btn btn-block btn-social btn-google-plus" ng-click="login()">
         <i class="fa fa-google-plus"></i> Sign in with Google
       </a>
-    </div> 
-  </div>         
+    </div>
+  </div>
 </div>
+<div layout-fill layout="horizontal" id="about-containter">
+  <div class="center-box">
+    <i class="fa fa-circle-o-notch" id="logo-headers"></i>
+    <h1 class="dancing-style">What is the flybrary?</h1>
+    <h2 class="roboto-style">A Sharing network for students.</h2>
+    <h3 class="roboto-style">Share textbooks on the fly with the flybrary! The only rule is everything is free, post books you don't use anymore and share them with fellow students. Post want ads of books that you do want.</h3>
+    <div>
 
+    </div>
+  </div>
+</div>
+<div layout-fill layout="horizontal" id="contact-containter">
+  <div class="center-box">
+    <i class="fa fa-comments" id="logo-headers"></i>
+    <h1 class="dancing-style" style="color:white">Contact Us</h1>
+    <h2 class="roboto-style" style="color:white">The Flybrary Team</h2>
+    <h3 class="roboto-style" style="color:white">
+      <a href="mailto:team.textshare@gmail.com" target="_top">team.textshare@gmail.com</a>
+    </h3>
+    <div>
+
+    </div>
+  </div>
+</div>
