@@ -184,7 +184,7 @@ var userSvc = angular.module( 'userSvc', [])
                 deferred_getUser.resolve(loc);
             }
             else {
-            	deferred.reject('No User');
+            	deferred_getUser.reject('No User');
             }
         })
         .error(function (data, status, headers, config)
