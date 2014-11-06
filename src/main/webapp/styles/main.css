@@ -125,7 +125,7 @@
   background-repeat: no-repeat;
   height: 100%;
   background-size: 100%;
-  background-color: #FFFFFF;
+  background-color: #FAFAFA;
 }
 
 #contact-container {
@@ -150,6 +150,13 @@
   padding: 40px;
 }
 
+.about-content {
+  background: #fff;
+  box-shadow: inset 0px 0px 0px 1px rgba(0,0,0,0.15), 0px 2px 3px 0px rgba(0,0,0,0.1);
+  text-align: center;
+  padding:0.1em 2em 1em 2em;
+}
+
 
 #app-title{
   color: #000000;
@@ -167,6 +174,7 @@
 #logo-headers {
   color:#000;
   font-size: 8em;
+  margin-bottom: 0.2em;
 }
 
 
@@ -183,6 +191,15 @@
 h1.dancing-style{
   font-size: 3.5em;
 }
+
+h2.roboto-style{
+  font-size:2.2em;
+}
+
+h3.derp-style{
+    font-family: Helvetica;
+}
+
 
 .login-options{
   color: #222;
