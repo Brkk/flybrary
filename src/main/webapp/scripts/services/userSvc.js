@@ -159,7 +159,7 @@ var userSvc = angular.module( 'userSvc', [])
     };
     
     this.updateUserloc = function (){
-        $http.post("resources/updateUserloc", this.generateloc(), null)
+        $http.post("resources/updateUserLocation", this.generateloc(), null)
     };
     
     this.updateUserRadius = function (){
