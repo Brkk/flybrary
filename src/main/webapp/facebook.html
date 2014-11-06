@@ -28,10 +28,7 @@
 
 
 
-
-
-
-    <script>
+<script>
   // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {
     console.log('statusChangeCallback');
@@ -66,7 +63,7 @@
 
   window.fbAsyncInit = function() {
   FB.init({
-    appId      : '311775802353236',
+    appId      : '771914156201703',
     cookie     : true,  // enable cookies to allow the server to access 
                         // the session
     xfbml      : true,  // parse social plugins on this page
@@ -120,6 +117,7 @@
 
 <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
 </fb:login-button>
+
 
 <div id="status">
 </div>

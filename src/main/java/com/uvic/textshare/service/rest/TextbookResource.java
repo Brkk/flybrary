@@ -214,7 +214,7 @@ public class TextbookResource {
 		}
 		
 	}
-
+//get rid of location stuff
 	@POST
 	@Path("/updateUserLocation")
 	@Consumes(MediaType.APPLICATION_JSON)

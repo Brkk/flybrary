@@ -10,8 +10,10 @@ app.controller('pageCtrl', function($scope, $rootScope, $location, $timeout, goo
 
 		})
 	};
-
-    //googleService.handleClientLoad();
+    	
+	$rootScope.$watch('googleOnLoadCallback', function() {
+    	googleService.handleClientLoad()
+      });
     
     $rootScope.logout = function () {
     	googleService.logout();

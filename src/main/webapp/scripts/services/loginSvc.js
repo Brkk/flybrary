@@ -8,6 +8,7 @@ var login = angular.module('loginSvc', ['userSvc'])
         cookies = 'single_host_origin',
         deferred = $q.defer();
 
+
     this.login = function () {
         gapi.auth.authorize({ 
             client_id: clientId, 
@@ -18,18 +19,17 @@ var login = angular.module('loginSvc', ['userSvc'])
         }, this.handleAuthResult);
 
         return deferred.promise;
-    }
+    };
 
     this.logout = function () {
         gapi.auth.signOut();
-    }
-
-    this.handleClientLoad = function () {
-        gapi.client.setApiKey(apiKey);
-        gapi.auth.init(function () { });
-        window.setTimeout(checkAuth, 1);
     };
 
+    this.handleClientLoad = function () {
+        gapi.client.setApiKey(apiKey);     
+        window.setTimeout(this.checkAuth, 1);
+    };
+    
     this.checkAuth = function() {
         gapi.auth.authorize({ 
             client_id: clientId, 
@@ -38,8 +38,11 @@ var login = angular.module('loginSvc', ['userSvc'])
             cookie_policy: cookies,
             hd: domain 
         }, this.handleAuthResult);
+        
+        return deferred.promise;
     };
 
+    
     this.handleAuthResult = function(authResult) {
         if (authResult && !authResult.error) {
             var data = {};
@@ -49,7 +52,8 @@ var login = angular.module('loginSvc', ['userSvc'])
                     user.email = resp.email;
                     user.uid = resp.id;
                     user.name = resp.name;
-                    deferred.resolve(data);
+                    deferred.resolve(data);                
+                    
                    /* user.getUser().then(function(data){
                         //add user location to location
                     	location.lat = data.lat;
@@ -61,6 +65,7 @@ var login = angular.module('loginSvc', ['userSvc'])
 
                     });  */
                 });
+               
             });
         } else {
             deferred.reject('error');
@@ -79,3 +84,6 @@ var login = angular.module('loginSvc', ['userSvc'])
     };
 
     });
+
+
+
