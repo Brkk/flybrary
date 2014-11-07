@@ -1,5 +1,7 @@
 app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jsonFilter, user) {
 	
+
+  console.log("booklist ctrl loaded");
   $rootScope.bookList = [];
   $scope.$watch('bookList',function(){},true);
   

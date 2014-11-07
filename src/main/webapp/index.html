@@ -150,8 +150,30 @@
 
     <div layout-fill ng-controller="pageCtrl">
         <div layout-fill>
-            <div ng-view layout-fill></div>
-         </div>
+          <div ng-switch on="renderPath[ 0 ]" layout-fill>
+            <div ng-switch-when="login" layout-fill>
+              <div ng-include="'views/login.html'" layout-fill></div>
+              </div>
+            <div ng-switch-when="main" layout-fill>
+              <div ng-include="'views/main.html'" ng-controller="mainCtrl" layout-fill></div>
+              </div>
+            <div ng-switch-when="loading" layout-fill>
+                <div ng-include="'views/loading.html'" layout-fill> </div>
+            </div>
+            <div ng-switch-when="faq" layout-fill>
+              <div ng-include="'views/faq.html'" layout-fill></div>
+            </div>
+            <div ng-switch-when="useragreement" layout-fill>
+              <div ng-include="'views/useragreement.html'" layout-fill></div>
+            </div>
+            <div ng-switch-when="feedback" layout-fill>    
+              <div ng-include="'views/feedback.html'" layout-fill></div>
+            </div>
+
+          </div>  
+
+            <!--<div ng-view layout-fill></div>-->
+        </div>
     </div>
 
 </body>
