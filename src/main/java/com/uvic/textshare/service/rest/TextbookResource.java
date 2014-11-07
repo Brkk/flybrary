@@ -194,7 +194,7 @@ public class TextbookResource {
 		JSONObject obj = new JSONObject(input);
 		String uid = obj.getString("uid");
 		double radius = obj.getDouble("radius");
-
+		radius = radius / 1000.0;
 		Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uid);
 		Query q = new Query("User").setFilter(userFilter);
 		Entity user = datastore.prepare(q).asSingleEntity();
