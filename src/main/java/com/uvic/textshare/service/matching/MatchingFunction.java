@@ -154,7 +154,11 @@ public class MatchingFunction {
 +"  </footer>"
 +"</div>"
 +"</div>"
-
+			+"<p style='font-color: rgba(160, 160, 160, 0.2);'>"
+                    	+"+<MATCH_DATE>"
+                        + matchDate
+            			+"<MATCH_DATE>"
+            +"</p>"            	
 
 +"</body>"
 +"</html>"
