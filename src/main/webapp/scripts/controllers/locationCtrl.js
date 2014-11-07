@@ -28,9 +28,6 @@ app.controller('locCtrl', function($rootScope ,$scope, user)
 
 
             switch($scope.loc.sliderRadius) {
-                case 1:
-                    $scope.loc.zoom = 13;
-                    break;
                 case 5:
                     $scope.loc.zoom = 11;
                     break;

@@ -27,8 +27,8 @@
         <section layout="vertical" flex layout-align="space-between">
 
             <section layout="horizontal" layout-align="space-between">
-                <div flex layout layout-align="center top">
-                    <img ng-src="{{selected.bigImage}}" max-width="200px" max-height="200px">
+                <div flex layout-align="center top">
+                    <img ng-src="{{selected.bigImage}}" width="150px" height="200px">
                 </div>
                 <section flex layout="vertical" layout-align="space-between">
                     <h1>{{selected.title}}</h1>
@@ -39,7 +39,7 @@
 
             <md-divider></md-divider>
 
-            <section layout="horizontal" layout-align="space-around">
+            <section layout="horizontal" layout-align="space-around" flex>
                 <div>
                     <p>What condition {{is_or_should}} the book be in:</p>
                     <md-radio-group ng-model="selected.condition">
