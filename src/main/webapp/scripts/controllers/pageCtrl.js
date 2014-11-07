@@ -45,6 +45,8 @@ app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $tim
     $rootScope.currentTab = 'offers';
     $rootScope.addStep = '';
     $rootScope.matchKey = '';
+    $rootScope.addbooktype = "Offer a Book";
+    $rootScope.showAdd = true;
 
     render = function() {
 
@@ -62,6 +64,20 @@ app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $tim
 		}
 		if($rootScope.currentTab == '') {
 			$rootScope.currentTab = 'offers';
+		}
+
+		switch($rootScope.currentTab) {
+			case 'offers':
+				$rootScope.addbooktype = "Offer a Book";
+				$rootScope.showAdd = true;
+				break;
+			case 'requests':
+				$rootScope.addbooktype = "Request a Book";
+				$rootScope.showAdd = true;
+				break;
+			case 'matches':
+				$rootScope.showAdd = false;
+				break;
 		}
     };
 
