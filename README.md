@@ -1,4 +1,4 @@
-<img src="http://imgur.com/HtXCs8l"/>
+![Flybrary Logo](http://i.imgur.com/HtXCs8l.png?1)
 ===========
 
 Flybrary is a textbook sharing web application! 
