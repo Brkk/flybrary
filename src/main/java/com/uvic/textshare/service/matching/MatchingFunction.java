@@ -110,189 +110,18 @@ public class MatchingFunction {
 		    Session session = Session.getDefaultInstance(props, null);
 
 		    //Create the mail body and send it to both of the users from team.textshare@gmail.com
-		    			String msgBody = "<html>"
-+"<head>"
-+"<link href='//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css' rel='stylesheet'>"	
-+"<style>"
-+"@import url('http://roboto-webfont.googlecode.com/svn/trunk/roboto.all.css');"
-+"@import url('http://weloveiconfonts.com/api/?family=entypo');"
+		    String msgBody = "Hello fellow student,\n"
+		    		+ "Isn't this a lucky day for ya. Remember that time you used flybrary for " + title + ". Well, we found "
+		    		+ "you match. You can leave whatever you are doing and reach your lovely match "
+		    		+ matchedUserName + " by replying to this email . Have a fantastic day and remember to always fly with flybrary.\n\n"
+		    		+ "Regards,\n"
+		    		+ "Kisses from Team Flybrary\n\n<MATCH_DATE>"
+						+ matchDate
+						+"<MATCH_DATE>";
 
-+".progress {"
-+"  font-weight: bold;height: 35px;margin-bottom: 20px;overflow: hidden;background-color: #f5f5f5;"
-+"  border-radius: 4px;-webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);}"
-
-+".progress-bar {"
-+"  float: left;width: 0;height: 100%;font-size: 12px;line-height: 20px;color: #fff;text-align: center;background-color: #428bca;"
-+"  -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15);box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15);transition: width .6s ease;}"
-
-+".progress-bar-success {"
-+"  background-color: #5cb85c;"
-+"  text-align: center;"
-+"  color: white;"
-+"  font-size: 18px;"
-+"  font-family: Roboto;"
-+"}"
-
-
-+".progress-bar-danger {"
-+"  background-color: #d9534f;"
-+"  text-align: center;"
-+"  color: white;"
-+"  font-size: 18px;"
-+"  font-family: Roboto;"
-+"}"
-
-+".flex-container{"
-+"    height: 100%;"
-+"    padding: 0;"
-+"    margin: 0;"
-+"    display: -webkit-box;"
-+"    display: -moz-box;"
-+"    display: -ms-flexbox;"
-+"    display: -webkit-flex;"
-+"    display: flex;"
-+"    align-items: center;"
-+"    justify-content: center;"
-
-+"}"
-+".wrapper {"
-  /*isplay: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;  
-  */
-+"  -webkit-flex-flow: row wrap;"
-+"  flex-flow: row wrap;"
-
-+"  text-align: center;"
-+"  background-color: white;"
-
-+"  max-width: 800px;"
-
-+"}"
-
-+".wrapper > * {"
-+"  padding: 10px;"
-+"  flex: 1 100%;"
-+"}"
-
-+".header {"
-+"  font-size: 36px; "
-+"  line-height: 1.2; "
-+"  color: #000; "
-+"  font-weight: 200; "
-+"  margin: 20px 0 10px;"
-+"}"
-
-+".footer {"
-+"}"
-
-+".main {"
-+"  text-align: left;"
-+"  margin-left: 30px;"
-+"}"
-
-+".aside-1 {"
-+"}"
-
-+".aside-2 {"
-+"}"
-
-
-+"body {"
-+"  padding: 30px;"
-+"  font-size: 16pt;"
-+"  background-color: rgba(160, 160, 160, 0.2);"
-+"  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; "
-+"  color: #000; "
-+"  line-height: 1.2; "
-+"  font-weight: 200;"
-+"  margin: 20px 0 10px;"
-+"}"
-+".button {"
-+"  font-size: 12pt;"
-+"  display: inline-block;"
-+"  position: relative;"
-+"  overflow: hidden;"
-+"  color: black;"
-+"  border: 2px solid black;"
-+"  height: 3em;"
-+"  line-height: 3em;"
-+"  vertical-align: middle;"
-+"  padding: 0 2em;"
-+"  text-transform: uppercase;"
-+"  font-weight: bold;"
-+"  cursor: pointer;"
-
-+"  -webkit-font-smoothing: antialiased;"
-+"  -moz-osx-font-smoothing: grayscale;"
-+"}"
-
-
-+".social {"
-+"  display: inline-block;"
-+"  width: 50px;"
-+"  height: 50px;"
-+"  margin: 0 10px;"
-+"  line-height: 50px;"
-+"  font-family: Entypo;"
-+"  font-size: 28px;"
-+"  text-align: center;"
-+"  color: #555;"
-+"  border-radius: 10px;"
-+"  background: #eee;"
-+"  overflow: hidden;"
-+"  cursor: pointer;"
-+"}"
-
-+"</style>"
-
-+"</head>"
-+"<body>"
-
-+"<div class='flex-container'>"
-+"<div class='wrapper'>"
-+"  <header class='header'>"
-+"  	<p style='font-size:16pt; text-align: left;'>Hi there,</p>"
-+"  	<p>Flybrary found %d for you!</p>"
-+"  </header>"
-+"  <article class='main'>"
-
-+"  		<p>Your match has<p>"
-+"		<div class='progress'>"
-+"		  <div class='progress-bar progress-bar-success' style='width: 50%'>"
-+"		    <span>5 Books Offered</span>"
-+"		  </div>"
-
-+"		  <div class='progress-bar progress-bar-danger' style='width: 50%'>"
-+"		    <span>5 Books Requested</span>"
-+"		  </div>"
-+"		</div>"
-
-  	
-+"  		<p>For contacting your match, please answer this email. Flybrary will keep your information confidential.</p>"
-+"  		<p>If you want to try a new match,</p>"
-+"  		<div class='button'>Rematch Me!</div>"
-+"  		<p>Please let us now if the trade went well,</p>"
-+"  		<div class='button'>It Flew!</div>"
-+"  	</article>"
-+"  <footer class='footer'>"
-+"  		<p style='text-align:center; font-size:12pt; margin-top:40px;'> Stay connected with us,<p>"
-+"  		<div style='text-align: center;'>"
-+"  			<div class='social'>&#62220;</div>"
-+"	  		<div class='social'>&#62223;</div>"
-+"	  	</div>"
-+"  </footer>"
-+"</div>"
-+"</div>"
-
-
-+"</body>";
 		    try {
-		        MimeMessage msg = new MimeMessage(session);
+		        Message msg = new MimeMessage(session);
 		        try {
-
 					msg.setFrom(new InternetAddress("email@textchngr.appspotmail.com", "Team Flybrary"));
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace(); //log these errors
@@ -304,7 +133,7 @@ public class MatchingFunction {
 					e.printStackTrace(); //log these errors
 				}
 		        msg.setSubject(title + " got a match, don't forget to check it eh");
-		        msg.setText(msgBody, "utf-8", "html");
+		        msg.setText(msgBody);
 		        Transport.send(msg);
 
 		    } catch (AddressException e) {
@@ -313,7 +142,6 @@ public class MatchingFunction {
 		        // ...
 		    }
 	}
-
 
 	//Calculates the distance between two co-ordinates and compares it to the given radiuses
 	private boolean distance(LatLonRadius first, LatLonRadius second, String type) {
