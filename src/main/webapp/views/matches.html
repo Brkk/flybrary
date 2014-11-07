@@ -7,7 +7,11 @@
             <div class="md-tile-content">
                 <h3>{{book.title}}</h3>
                 <h4>{{book.author}}</h4>
-                 <md-button class="glyphicon glyphicon-trash btn-lg" style="position: absolute; right: 10px;" ng-click="unmatchBook(book)"></md-button>
+                 <md-button class="glyphicon glyphicon-trash btn-lg" style="position: absolute; right: 10px;" ng-click="unmatchBook(book)">
+                 	<md-tooltip>
+	         		Unmatch
+	        		</md-tooltip>
+                 </md-button>
             </div>
         </md-item-content>
         <md-divider ng-if="!$last"></md-divider>

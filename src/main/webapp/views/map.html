@@ -11,15 +11,14 @@
 	      center="[{{loc.lat}},{{loc.lon}}]" radius="{{loc.radius}}" editable="false" >
 	    </shape> 
 	</map>
-	<div layout>
-    	<div flex layout-align="center center">
-        	<span>Radius:</span>
-      	</div>
-    	<md-slider discrete ng-model="loc.sliderRadius"  step="5" min="1" max="30" flex></md-slider>
-    </div>
-    <div class="container main">
-    	Hit the update location, if you see the ocean!<br></br>
-    	Don't touch anything, things might explode!
-    	<md-button ng-click="getLoc()" flex> Update Location </md-button>
-    </div>
+    
+    <h2 class="dancing-style">Search Radius: {{loc.sliderRadius}}km.</h2>
+   	<md-slider discrete ng-model="loc.sliderRadius"  step="5" min="1" max="30"></md-slider>
+    <div flex layout='vertical' layout-align='center center'>
+    	<h4 class="roboto-italic-light-style" >
+    		Hit the update location, if you see the ocean!
+    		Don't touch anything, if you see where you live!
+    	</h4>
+		<md-button ng-click="getLoc()" style="background:#454FB3; color:#FFFFFF" flex> Update Location </md-button>
+  	</div>
 </section>
