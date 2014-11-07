@@ -64,14 +64,14 @@ public class MatchingFunction {
 				LatLonRadius second = new LatLonRadius((Double)matchedBook.getProperty("lat"),
 						(Double)matchedBook.getProperty("lon"),
 						(Double)matchedBook.getProperty("radius"));
-
+				
+				String uid2 = (String) matchedBook.getProperty("uid");
 				withinRadius = distance(first, second, type);
 
-				if(withinRadius) {
+				if(withinRadius && !uid.equals(uid2)) {
 					matchDate = new Date();
 
-					uid = (String) matchedBook.getProperty("uid");
-					user = getUser(uid);
+					user = getUser(uid2);
 					secondUsersName = String.valueOf(user.getProperty("name"));
 					secondUsersEmail = String.valueOf(user.getProperty("email"));
 					

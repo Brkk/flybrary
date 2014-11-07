@@ -1,6 +1,6 @@
-app.controller('mainCtrl', function($scope, $rootScope, user, $location, $mdSidenav, $routeParams)
+app.controller('mainCtrl', function($scope, $rootScope, user, $location, $mdSidenav)
   {
-     
+      console.log("main ctrl loaded");
       $rootScope.actionType = user.actionType;
 
       
@@ -10,17 +10,16 @@ app.controller('mainCtrl', function($scope, $rootScope, user, $location, $mdSide
         selectedIndex: 3
       };
 
-      $scope.currentTab = $routeParams.currentTab;
-      switch($routeParams.currentTab) 
+      switch($rootScope.currentTab) 
       {
         case "offers":
-          $rootScope.tabs.selectedIndex = 0;
+          $scope.tabs.selectedIndex = 0;
           break;
         case "requests":
-          $rootScope.tabs.selectedIndex = 1;
+          $scope.tabs.selectedIndex = 1;
           break;
         case "matches":
-          $rootScope.tabs.selectedIndex = 2;
+          $scope.tabs.selectedIndex = 2;
           break;
       }
       $scope.$watch('tabs.selectedIndex', function() {
