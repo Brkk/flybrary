@@ -25,6 +25,9 @@ app.config( function($routeProvider) {
       .when('/main/requests/add/:step', {
         action: 'main.requests.add'
       })
+      .when('/main/requests/add/:step/:selectedKey', {
+        action: 'main.requests.add'
+      })
       .when('/feedback', {
         //templateUrl: 'views/feedback.html',
         //controller: ''

@@ -1,0 +1,68 @@
+<section layout="vertical">
+    <md-toolbar class="app-toolbar" style="z-index:3">    
+        <div class="md-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between"> 
+            <h2><md-button ng-click="backToSearch()"><i class="fa fa-arrow-left"></i></md-button> {{$root.addbooktype}}</h2>
+        </div>
+    </md-toolbar>
+
+    <section layout="horizontal">
+        <md-content style="width:30%" layout="vertical">
+            <md-list>
+                <md-item ng-repeat="book in searchList track by book.key">
+                    <md-item-content ng-click="selectKey(book)" ng-mouseover="searchMouseOver(book)">
+                        <div class="md-tile-left">
+                            <img ng-src="{{book.image}}" class="img">
+                        </div>
+                        <div class="md-tile-content">
+                            <h3>{{book.title}}</h3>
+                            <h4><i>{{book.author}}</i></h4>
+                        </div>
+                        
+                    </md-item-content>
+                    <md-divider ng-if="!$last"></md-divider>
+                </md-item>
+            </md-list>
+        </md-content>
+
+        <section layout="vertical" layout-align="space-around">
+
+            <section layout="horizontal" layout-align="space-around">
+                <div flex layout layout-align="center center">
+                    <img ng-src="{{selected.bigImage}}" max-width="200px" max-height="200px">
+                </div>
+                <section flex layout="vertical" layout-align="space-around">
+                    <h1>{{selected.title}}</h1>
+                    <h2>{{selected.author}}</h2>
+                    <div>{{selected.desc}}</div>
+                </section>
+            </section>
+
+            <md-divider></md-divider>
+
+            <section layout="horizontal" layout-align="space-around">
+                <div>
+                    <p>What condition {{is_or_should}} the book be in:</p>
+                    <md-radio-group ng-model="selected.condition">
+
+                        <md-radio-button ng-if="'requests' == $root.currentTab" value="4">Any</md-radio-button>
+                        <md-radio-button value="1">Mint</md-radio-button>
+                        <md-radio-button value="2">Some wear'n'tear</md-radio-button>
+                        <md-radio-button value="3">Been "loved"</md-radio-button>
+
+                    </md-radio-group>
+                </div>
+                <div flex layout-align="center center">
+                    <md-button ng-click="addBookClicked()" class="md-button-fab md-theme-green">
+                        <md-icon icon="images/plus.svg" style="width: 24px; height: 24px; stroke:white">
+                        </md-icon>
+                        <md-tooltip>
+                            Fly
+                        </md-tooltip>
+                    </md-button>
+                </div>
+            </section>
+
+
+        </section>
+    </section>
+</section>

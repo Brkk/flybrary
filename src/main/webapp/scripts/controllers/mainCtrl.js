@@ -44,7 +44,7 @@ app.controller('mainCtrl', function($scope, $rootScope, user, $location, $mdSide
     }, true);
 
   $rootScope.next = function() {
-      $scope.tabs.selectedIndex = Math.min( $scope.tabs.maxIndex, $scope.tabs.selectedIndex + 1) ;
+    $scope.tabs.selectedIndex = Math.min( $scope.tabs.maxIndex, $scope.tabs.selectedIndex + 1) ;
   };
 
   $rootScope.previous = function() {

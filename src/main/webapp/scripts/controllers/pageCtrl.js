@@ -58,6 +58,7 @@ app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $tim
 		$rootScope.currentTab = ($routeParams.currentTab || '')
 		$rootScope.addStep = ($routeParams.step || '');
 		$rootScope.matchKey = ($routeParams.matchKey || '');
+		$rootScope.selectedKey = ($routeParams.selectedKey || '');
 
 		if($rootScope.renderPath.length > 1) {
 			$rootScope.currentTab = $rootScope.renderPath[1];

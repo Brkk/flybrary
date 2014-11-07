@@ -1,1 +1,1 @@
-var services = angular.module('services', ['userSvc', 'loginSvc']);
+var services = angular.module('services', ['userSvc', 'loginSvc', 'googleBooksSvc']);

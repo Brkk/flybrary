@@ -1,10 +1,17 @@
 <head/><md-dialog aria-label="Add a new book">
 
   <md-content class="dialog-content">
-
-
     <div ng-controller="addBookCtrl">
-    		
+    	<div ng-switch on="$root.addStep" layout-fill>
+            <div ng-switch-when="search" layout-fill>
+    			<div ng-include="'views/addBook_search.html'"></div>
+    		</div>
+    		<div ng-switch-when="select" layout-fill>
+    			<div ng-include="'views/addBook_select.html'"></div>
+    		</div>
+    	</div>
+
+<!--    		
     	<div layout="horizontal" ng-controller="typeAheadCtrl" style="display: flex; align-items: center; justify-content: center;">
 
     		
@@ -17,7 +24,7 @@
 			        <form style="padding: 25px;" flex>
 			          <div class="row" style="width: 250px;">
 
-			           
+ -->
 			         <!--    <md-input-group  ng-disabled="isDisabled"> 
 			                <label for="title">Title</label>
 			                <md-input id="inputSearch" type="text" ng-model="asyncSelected" 
@@ -30,7 +37,7 @@
 			              </md-input-group>
 
  -->
-
+<!--
 
 			              <div layout="horizontal">
 			                	
@@ -82,16 +89,13 @@
 			<div><img ng-src="{{newBookProperties.image}}" style="max-width: 50%;" /></div> 
 		</div> <!-- horizontal -->
     </div>
-
-
-
   </md-content>
-
+<!--
   <div class="dialog-actions">
     <span flex></span>
     <md-button ng-click="addBookClicked()" class="md-raised" style="background:#455EDE; color:#FFFFFF" center>
      	Fly
     </md-button>
   </div>
-
+-->
 </md-dialog>
