@@ -26,22 +26,22 @@
 
         <section layout="vertical" flex layout-align="space-between">
 
-            <section layout="horizontal" layout-align="space-between">
-                <div flex layout-align="center top">
+           
+                <div flex layout-align="center center" layout="vertical">
                     <img ng-src="{{selected.bigImage}}" width="150px" height="200px">
                 </div>
-                <section flex layout="vertical" layout-align="space-between">
-                    <h1>{{selected.title}}</h1>
-                    <h2>{{selected.author}}</h2>
-                    <div>{{selected.desc}}</div>
-                </section>
-            </section>
-
+                <section layout="horizontal" layout-align="space-between">
+	                <section flex layout="vertical" layout-align="center center">
+	                    <h1>{{selected.title}}</h1>
+	                    <h2>{{selected.author}}</h2>
+	                    <div style="padding-left:10px">{{selected.desc}}</div>
+	                </section>
+           		</section>
             <md-divider></md-divider>
 
             <section layout="horizontal" layout-align="space-around" flex>
-                <div>
-                    <p>What condition {{is_or_should}} the book be in:</p>
+                <div style="padding-left:10px">
+                    <h3>What condition {{is_or_should}} the book be in:</h3>
                     <md-radio-group ng-model="selected.condition">
 
                         <md-radio-button ng-if="'requests' == $root.currentTab" value="4">Any</md-radio-button>
