@@ -45,7 +45,7 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
 		user.activeBookProperties.key = book.key;
 		user.activeBookProperties.matchDate = book.matchDate;
 		user.activeBookProperties.isbn = book.isbn;
-		user.actionType = book.type;
+		user.actionType = book.actionType;
 		user.activeBookProperties.title = book.title;
 		user.unmatchTextbook();	
 	};
