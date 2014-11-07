@@ -215,6 +215,9 @@
   color: #000000;
   font-family:'Dancing Script';
 }
+.indie-flower-style {
+  font-family:'Indie Flower';
+}
 
 .roboto-style-sidebar-title{
   color: #fff;
@@ -222,6 +225,7 @@
   font-size: 1.5em;
   margin-top: 0.5em;
   margin-left: 1.2em;
+  width:5em;
 }
 
 #dancing-style-menutab{
@@ -239,11 +243,6 @@ h1.dancing-style{
 h2.roboto-style{
   font-size:2.2em;
 }
-
-h3.derp-style{
-    font-family: Helvetica;
-}
-
 
 .login-options{
   color: #222;
