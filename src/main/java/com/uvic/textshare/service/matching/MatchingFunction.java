@@ -116,18 +116,18 @@ public class MatchingFunction {
 
 +"<div class='flex-container' style='height: 100%; display: flex; align-items: center; justify-content: center; margin: 0; padding: 0;'>"
 +"<div class='wrapper' style='-webkit-flex-flow: row wrap; flex-flow: row wrap; text-align: center; background-color: white; max-width: 800px;' align='center'>"
-+ " <header class='header' style='flex: 1 100%; font-size: 36px; line-height: 1.2; color: #000; font-weight: 200; margin: 20px 0 10px; padding: 10px;'><p style='font-size: 16pt; text-align: left;' align='left'>Hi there,</p>"
-+      "<p>Flybrary found %d for you!</p>"
++ " <header class='header' style='flex: 1 100%; font-size: 36px; line-height: 1.2; color: #000; font-weight: 200; margin: 20px 0 10px; padding: 10px;'><p style='font-size: 16pt; text-align: left;' align='left'>Hi "+receiverName"</p>"
++      "<p>Flybrary found "+title+" for you!</p>"
 +  "</header><article class='main' style='flex: 1 100%; text-align: left; margin-left: 30px; padding: 10px;'><!-- <aside class='aside aside-1'> --><p>Your match has</p>"
 +  "<p>"
 +        "</p>"
 +"<div class='progress' style='font-weight: bold; height: 35px; margin-bottom: 20px; overflow: hidden; background-color: #f5f5f5; border-radius: 4px; -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);'>"
-+          "<div class='progress-bar progress-bar-success' style='width: 50%; float: left; height: 100%; font-size: 18px; line-height: 20px; color: white; text-align: center; -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15); box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15);" 
++          "<div class='progress-bar progress-bar-success' style='width: 50%; float: left; height: 35px; font-size: 18px; line-height: 20px; color: white; text-align: center; -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15); box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15);" 
 +      "-webkit-transition: width .6s ease; transition: width .6s ease; font-family: Roboto; background-color: #5cb85c;' align='center'>"
 +"        <span>5 Books Offered</span>"
 +"      </div>"
 
-+          "<div class='progress-bar progress-bar-danger' style='width: 50%; float: left; height: 100%; font-size: 18px; line-height: 20px; color: white; text-align: center; -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15); box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15); "
++          "<div class='progress-bar progress-bar-danger' style='width: 50%; float: left; height: 35px; font-size: 18px; line-height: 20px; color: white; text-align: center; -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15); box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15); "
 +      "-webkit-transition: width .6s ease; transition: width .6s ease; font-family: Roboto; background-color: #d9534f;' align='center'>"
 +"        <span>5 Books Requested</span>"
 +"      </div>"
@@ -155,6 +155,9 @@ public class MatchingFunction {
 +"</div>"
 +"</div>"
 
+                    	+ "<MATCH_DATE>"
+                        + matchDate
+                        +"<MATCH_DATE>";
 
 +"</body>"
 +"</html>";
@@ -173,7 +176,7 @@ public class MatchingFunction {
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace(); //log these errors
 				}
-		        msg.setSubject(title + " got a match, don't forget to check it eh");
+		        msg.setSubject("We found "+title+" for you");
 		        msg.setContent(msgBody, "text/html; charset=utf-8");
 
 		        Transport.send(msg);
