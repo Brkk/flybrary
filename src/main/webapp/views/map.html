@@ -12,13 +12,16 @@
 	    </shape> 
 	</map>
     
-    <h2 class="dancing-style" style="padding-left:10px; font-size:25px">Search Radius: {{loc.sliderRadius}}km.</h2>
-   	<md-slider discrete ng-model="loc.sliderRadius"  step="5" min="1" max="30"></md-slider>
+    <h2 class="roboto-style" style="padding-left:65px; font-size:20px">Flight Controls</h2>
+   <md-divider></md-divider>
+   <p class="roboto-style" style="padding-left:10px;"> Fly Zone Calibration:</p>
+    <md-slider discrete ng-model="loc.sliderRadius"  step="5" min="1" max="30"></md-slider>
     <div flex layout='vertical' layout-align='center center'>
-    	<h4 class="indie-flower-style" style="padding-left:10px" >
-    		Yo, if the map doesn't show where you live,
-    		hit update location!
-    	</h4>
-		<md-button ng-click="getLoc()" style="background:#454FB3; color:#FFFFFF" flex> Update Location </md-button>
+    	<md-button ng-click="getLoc()" style="background:#454FB3; color:#FFFFFF" flex> Update Location </md-button>
+    	<md-button ng-click="logout()"  style="background: #FF0000; color:#FFFFFF">Eject!</md-button>
   	</div>
+  	<md-divider></md-divider>
+  	<h4 class="indie-flower-style" style="padding-left:10px" >
+    	Tip: Don't forget to update location, if the map doesn't show where you are flying!
+   	</h4>
 </section>
