@@ -110,7 +110,7 @@ public class MatchingFunction {
 		    Session session = Session.getDefaultInstance(props, null);
 
 		    //Create the mail body and send it to both of the users from team.textshare@gmail.com
-		    String msgBody = +"<html>"
+		    String msgBody = "<html>"
 +"<head></head>"
 +"<body style='font-size: 16pt; background-color: rgba(160, 160, 160, 0.2); font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; color: #000; line-height: 1.2; font-weight: 200; margin: 20px 0 10px; padding: 30px;' bgcolor='rgba(160, 160, 160, 0.2)'>"
 
@@ -157,7 +157,7 @@ public class MatchingFunction {
 
 
 +"</body>"
-+"</html>"
++"</html>";
 
 
 
