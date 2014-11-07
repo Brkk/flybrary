@@ -110,14 +110,61 @@ public class MatchingFunction {
 		    Session session = Session.getDefaultInstance(props, null);
 
 		    //Create the mail body and send it to both of the users from team.textshare@gmail.com
-		    String msgBody = "Hello fellow student,\n"
-		    		+ "Isn't this a lucky day for ya. Remember that time you used flybrary for " + title + ". Well, we found "
-		    		+ "you match. You can leave whatever you are doing and reach your lovely match "
-		    		+ matchedUserName + " by replying to this email . Have a fantastic day and remember to always fly with flybrary.\n\n"
-		    		+ "Regards,\n"
-		    		+ "Kisses from Team Flybrary\n\n<MATCH_DATE>"
-						+ matchDate
-						+"<MATCH_DATE>";
+		    String msgBody = +"<html>"
++"<head></head>"
++"<body style='font-size: 16pt; background-color: rgba(160, 160, 160, 0.2); font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; color: #000; line-height: 1.2; font-weight: 200; margin: 20px 0 10px; padding: 30px;' bgcolor='rgba(160, 160, 160, 0.2)'>"
+
++"<div class='flex-container' style='height: 100%; display: flex; align-items: center; justify-content: center; margin: 0; padding: 0;'>"
++"<div class='wrapper' style='-webkit-flex-flow: row wrap; flex-flow: row wrap; text-align: center; background-color: white; max-width: 800px;' align='center'>"
++ " <header class='header' style='flex: 1 100%; font-size: 36px; line-height: 1.2; color: #000; font-weight: 200; margin: 20px 0 10px; padding: 10px;'><p style='font-size: 16pt; text-align: left;' align='left'>Hi there,</p>"
++  	"<p>Flybrary found %d for you!</p>"
++  "</header><article class='main' style='flex: 1 100%; text-align: left; margin-left: 30px; padding: 10px;'><!-- <aside class='aside aside-1'> --><p>Your match has</p>"
++  "<p>"
++		"</p>"
++"<div class='progress' style='font-weight: bold; height: 35px; margin-bottom: 20px; overflow: hidden; background-color: #f5f5f5; border-radius: 4px; -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);'>"
++		  "<div class='progress-bar progress-bar-success' style='width: 50%; float: left; height: 100%; font-size: 18px; line-height: 20px; color: white; text-align: center; -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15); box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15);" 
++      "-webkit-transition: width .6s ease; transition: width .6s ease; font-family: Roboto; background-color: #5cb85c;' align='center'>"
++"        <span>5 Books Offered</span>"
++"      </div>"
+
++		  "<div class='progress-bar progress-bar-danger' style='width: 50%; float: left; height: 100%; font-size: 18px; line-height: 20px; color: white; text-align: center; -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15); box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15); "
++      "-webkit-transition: width .6s ease; transition: width .6s ease; font-family: Roboto; background-color: #d9534f;' align='center'>"
++"        <span>5 Books Requested</span>"
++"      </div>"
++"    </div>"
+  	
++  		"<p>For contacting your match, please answer this email. Flybrary will keep your information confidential.</p>"
++  		"<p>If you want to try a new match,</p>"
++  		"<div class='button' style='font-size: 12pt; display: inline-block; position: relative; overflow: hidden; color: black; height: 3em; line-height: 3em; vertical-align: middle; text-transform: uppercase; font-weight: bold; cursor: pointer; -webkit-font-smoothing: antialiased; "
++      "-moz-osx-font-smoothing: grayscale; padding: 0 2em; border: 2px solid black;'>Rematch Me!</div>"
++  	"<p>Please let us now if the trade went well,</p>"
++  		"<div class='button' "
++      "style='font-size: 12pt; display: inline-block; position: relative; overflow: hidden; color: black; height: 3em; line-height: 3em; vertical-align: middle; text-transform: uppercase; font-weight: bold; cursor: pointer; -webkit-font-smoothing: antialiased; "
++      "-moz-osx-font-smoothing: grayscale; padding: 0 2em; border: 2px solid black;'>"
++      "It Flew!</div>"
++  	"</article><footer class='footer' style='flex: 1 100%; padding: 10px;'><p style='text-align: center; font-size: 12pt; margin-top: 40px;' align='center'>Stay connected with us,</p>"
++"<p>"
++"</p>"
++"<div style='text-align: center;' align='center'>"
++  			"<div class='social' style='display: inline-block; width: 50px; height: 50px; line-height: 50px; font-family: Entypo; font-size: 28px; text-align: center; color: #555; border-radius: 10px; background-color: #eee; overflow: hidden; cursor: pointer; margin: 0 10px;"
++"        align='center'>&#62220;</div>"
+	  		+"<div class='social' style='display: inline-block; width: 50px; height: 50px; line-height: 50px; font-family: Entypo; font-size: 28px; text-align: center; color: #555; border-radius: 10px; background-color: #eee; overflow: hidden; cursor: pointer; margin: 0 10px;"
+        +"align='center'>&#62223;</div>"
++"      </div>"
++"  </footer>"
++"</div>"
++"</div>"
+
+
++"</body>"
++"</html>"
+
+
+
+
+
+
+
 
 		    try {
 		        Message msg = new MimeMessage(session);
@@ -133,7 +180,7 @@ public class MatchingFunction {
 					e.printStackTrace(); //log these errors
 				}
 		        msg.setSubject(title + " got a match, don't forget to check it eh");
-		        msg.setText(msgBody);
+		        msg.setContent(msgBody, "text/html; charset=utf-8");
 		        Transport.send(msg);
 
 		    } catch (AddressException e) {
