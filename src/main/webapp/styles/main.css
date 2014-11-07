@@ -259,6 +259,13 @@ h2.roboto-style{
 
 /* from james */
 
+md-button.glyphicon {
+  width: auto;
+  padding: 10px;
+  padding-bottom: 0;
+}
+
+
 material-dialog {
   min-width: 50%;
 }

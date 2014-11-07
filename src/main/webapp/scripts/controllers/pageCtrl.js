@@ -46,7 +46,7 @@ app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $tim
     $rootScope.addStep = '';
     $rootScope.matchKey = '';
     $rootScope.addbooktype = "Offer a Book";
-    $rootScope.showAdd = true;
+    $rootScope.showAdd =false;
 
     render = function() {
 
