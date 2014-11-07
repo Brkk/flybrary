@@ -31,10 +31,10 @@ app.controller('addBookCtrl', function ($scope, $rootScope, $mdDialog, user, gBo
     
     user.activeBookProperties.title = $rootScope.selected.title;
     user.activeBookProperties.author = $rootScope.selected.author;
-    user.activeBookProperties.ISBN = $rootScope.selected.ISBN;
+    user.activeBookProperties.isbn = $rootScope.selected.ISBN;
     user.activeBookProperties.image = $rootScope.selected.image;
     user.activeBookProperties.condition = $rootScope.selected.condition;
-    user.activeBookProperties.edition = $rootScope.selected.edition;
+    user.activeBookProperties.edition = '1';
 
     $mdDialog.hide(true);
 

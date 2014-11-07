@@ -6,7 +6,7 @@
     </md-toolbar>
 
     <section layout="horizontal">
-        <md-content style="width:30%" layout="vertical">
+        <md-content flex layout="vertical">
             <md-list>
                 <md-item ng-repeat="book in searchList track by book.key">
                     <md-item-content ng-click="selectKey(book)" ng-mouseover="searchMouseOver(book)">
@@ -24,13 +24,13 @@
             </md-list>
         </md-content>
 
-        <section layout="vertical" layout-align="space-around">
+        <section layout="vertical" flex layout-align="space-between">
 
-            <section layout="horizontal" layout-align="space-around">
-                <div flex layout layout-align="center center">
+            <section layout="horizontal" layout-align="space-between">
+                <div flex layout layout-align="center top">
                     <img ng-src="{{selected.bigImage}}" max-width="200px" max-height="200px">
                 </div>
-                <section flex layout="vertical" layout-align="space-around">
+                <section flex layout="vertical" layout-align="space-between">
                     <h1>{{selected.title}}</h1>
                     <h2>{{selected.author}}</h2>
                     <div>{{selected.desc}}</div>
