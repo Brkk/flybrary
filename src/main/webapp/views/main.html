@@ -17,11 +17,11 @@
     <div layout="vertical" layout-fill="" tabindex="-1" role="main" style="background:#eee">
         <md-toolbar class="md-theme-light app-toolbar" style="z-index:3">
             <div class="md-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between">
-                <div class="dancing-style-menutab" ng-click="toggleLeft()">
-
-                    <md-button id="dancing-style-menutab"><i class="fa fa-book" id="book-logo2"></i>Flybrary</md-button>
-                </div>
-            </div> 
+              <i class="fa fa-navicon" id="nav-icon" ng-click="toggleLeft()"></i>
+              <div id="dancing-style-menutab" flex>
+                <i class="fa fa-book" id="book-logo2"></i>Flybrary
+              </div>
+            </div>
         </md-toolbar>
         <md-toolbar class="md-theme-light md-whiteframe-z1">
             <div class="md-toolbar-tools" style="margin-bottom: 10px" style="z-index:3">
@@ -41,7 +41,7 @@
             </md-button>
         </div>
         <md-content ng-controller="BookListCtrl">
-            <md-whiteframe class="md-whiteframe-z1" layout layout-fill style="background: #f9f9f9; z-index:2;">    
+            <md-whiteframe class="md-whiteframe-z1" layout layout-fill style="background: #f9f9f9; z-index:2;">
                 <div class="animate-switch-container" ng-switch on="tabs.selectedIndex" >
                     <div class="animate-switch"
                         ng-switch-when="0"
@@ -60,10 +60,10 @@
                     <div class="animate-switch"
                         ng-switch-when="2"
                         md-swipe-left="next()"
-                        md-swipe-right="previous()"  
+                        md-swipe-right="previous()"
                     >
                         <div ng-include="'views/matches.html'"></div>
-                    </div>    
+                    </div>
                 </div>
             </md-whiteframe>
             <div layout-padding>

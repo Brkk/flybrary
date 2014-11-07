@@ -178,6 +178,20 @@
   margin-right: 0.25em;
 }
 
+#nav-icon {
+  color: #000;
+  font-size: 2em;
+  margin-top: 0.25em;
+  margin-right: 0.25em;
+  padding-bottom: 12px;
+}
+
+#nav-icon:hover
+{
+  color: #CCFFCC !important;
+  cursor: default;
+}
+
 #logo-headers {
   color:#000;
   font-size: 8em;
@@ -213,8 +227,9 @@
 #dancing-style-menutab{
   color: #000000;
   font-family:'Dancing Script';
-  font-size: 1.8em;
+  font-size: 2.5em;
   font-weight: 900;
+  width:220px;
 }
 
 h1.dancing-style{
