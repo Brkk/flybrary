@@ -1,4 +1,4 @@
-[](http://imgur.com/HtXCs8l)
+<img src="http://imgur.com/HtXCs8l"/>
 ===========
 
 Flybrary is a textbook sharing web application! 
