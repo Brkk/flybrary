@@ -10,7 +10,7 @@ If a match is made within the user-specified distance, an email is sent to both 
 Flybrary is available at http://flybrary.ca for use. We encourage anyone to login using their Google account and start making  textbooks fly!
 
 ##Contact Us!
-We may be contacted at team.textshare@gmail.com, feel free to provide us feedback or any issues you encounter.
+We may be contacted at team.flybrary@gmail.com, feel free to provide us feedback or any issues you encounter.
 
 ##License
 Flybrary uses the GNU General Public License.
