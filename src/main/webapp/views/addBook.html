@@ -17,17 +17,41 @@
 			        <form style="padding: 25px;" flex>
 			          <div class="row" style="width: 250px;">
 
-			            <!-- <div ng-controller="typeAheadCtrl"> -->
-			            <md-input-group  ng-disabled="isDisabled"> 
+			           
+			         <!--    <md-input-group  ng-disabled="isDisabled"> 
 			                <label for="title">Title</label>
 			                <md-input id="inputSearch" type="text" ng-model="asyncSelected" 
 			                typeahead-editable="false" 
-			                typeahead="option as option['volumeInfo']['title'] | limitTo:25 for option in updateList($viewValue)" 
-			                typeagead
+			                typeahead="option as option['volumeInfo']['title'] | limitTo:25 for option in updateList($viewValue)"
 			                typeahead-min-length='5'  
 			                typeahead-on-select='onSelect(asyncSelected)'
-			                style="width: 210px;">
+			                style="width: 180px;">
+			                
 			              </md-input-group>
+
+ -->
+
+
+			              <div layout="horizontal">
+			                	
+			                		<md-input-group  ng-disabled="isDisabled"> 
+				                		<label for="title">Title</label>
+						                <md-input id="inputSearch" type="text" ng-model="asyncSelected" 
+						                typeahead-editable="false" 
+						                typeahead="option as option['volumeInfo']['title'] | limitTo:25 for option in updateList($viewValue)"
+						                typeahead-min-length='5'  
+						                typeahead-on-select='onSelect(asyncSelected)'
+						                style="width: 180px;">
+						                </md-input>
+						            </md-input-group>
+					            
+			                <md-button class='glyphicon glyphicon-search' style='width: 30px; height:30px; margin-top:30px;'></md-button>
+			                </div>
+
+
+
+
+
 			              <md-input-group ng-disabled="isDisabled"> 
 			                <label for="author">Author</label>
 			                <md-input id="author" ng-model="newBookProperties.author" style="width: 210px;">
@@ -51,8 +75,7 @@
 			          </div>
 			        </form>
 			      </md-content>
-			</div><!-- vertical -->
-
+			</div>
 
 
 
