@@ -122,11 +122,18 @@
 }
 
 #about-container {
-  background-repeat: no-repeat;
+  background-repeat: repeat;
+  background-image: url('../images/swirl_pattern.png');
   height: 100%;
-  background-size: 100%;
   background-color: #FAFAFA;
 }
+.tab-bar-styling {
+  background-repeat: repeat;
+  background-image: url('../images/swirl_pattern.png');
+  height: 100%;
+  background-color: #FAFAFA;
+}
+
 
 #contact-container {
   background-repeat: no-repeat;
@@ -147,7 +154,7 @@
   -o-border-radius: 5px;
   -ms-border-radius: 5px;
   border-radius: 5px;
-  padding: 40px;
+  padding-top: 140px;
 }
 
 .about-content {
@@ -215,6 +222,9 @@
   color: #000000;
   font-family:'Dancing Script';
 }
+.indie-flower-style {
+  font-family:'Indie Flower';
+}
 
 .roboto-style-sidebar-title{
   color: #fff;
@@ -222,6 +232,7 @@
   font-size: 1.5em;
   margin-top: 0.5em;
   margin-left: 1.2em;
+  width:5em;
 }
 
 #dancing-style-menutab{
@@ -239,11 +250,6 @@ h1.dancing-style{
 h2.roboto-style{
   font-size:2.2em;
 }
-
-h3.derp-style{
-    font-family: Helvetica;
-}
-
 
 .login-options{
   color: #222;
@@ -268,13 +274,6 @@ material-dialog {
 md-button:not(.md-button-fab) {
   width: 10em;
 }
-
-md-button.glyphicon {
-  width: auto;
-  padding: 10px;
-  padding-bottom: 0;
-}
-
 section md-button {
   display: block;
   margin: 1em;
