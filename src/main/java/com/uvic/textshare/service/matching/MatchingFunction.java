@@ -31,7 +31,7 @@ public class MatchingFunction {
 
 	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-	public String checkForMatch(String isbn, String uid, String type, String title) {
+	public String checkForMatch(String isbn, String uid, String type, String title, double condition) {
 		String searchType;
 		String firstUsersName;
 		String secondUsersName;
@@ -46,7 +46,7 @@ public class MatchingFunction {
 			searchType = "offer";
 		}
 
-		List<Entity> textbooks = getTextbooks(searchType, isbn);
+		List<Entity> textbooks = getTextbooks(searchType, isbn, condition);
 
 		if(!textbooks.isEmpty())
 		{
@@ -186,11 +186,17 @@ public class MatchingFunction {
 		return user;
 	}
 
-	private List<Entity> getTextbooks(String searchType, String isbn) {
+	private List<Entity> getTextbooks(String searchType, String isbn, double condition) {
 		Filter typeFilter = new FilterPredicate("type", FilterOperator.EQUAL, searchType);
 		Filter isbnFilter = new FilterPredicate("isbn", FilterOperator.EQUAL, isbn);
 		Filter matchedFilter = new FilterPredicate("matched", FilterOperator.EQUAL, "no");
-		Filter searchFilter = CompositeFilterOperator.and(typeFilter, isbnFilter, matchedFilter);
+		Filter conditionFilter = new FilterPredicate("condition", FilterOperator.EQUAL, condition);
+		Filter searchFilter = CompositeFilterOperator.and(typeFilter, isbnFilter, matchedFilter, conditionFilter);
+		//any condition
+		if(condition == 4.0 ) {
+			searchFilter = CompositeFilterOperator.and(typeFilter, isbnFilter, matchedFilter);
+		}
+		
 		Query q = new Query("Textbook").setFilter(searchFilter).addSort("date", Query.SortDirection.ASCENDING);
 		List<Entity> textbooks = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
 		return textbooks;

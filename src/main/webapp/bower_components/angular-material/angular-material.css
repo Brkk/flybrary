@@ -169,7 +169,7 @@ input[type="search"] {
   color: #f1f1f1 !important; }
 
 .md-theme-light {
-  background-color: #38596B !important;
+  background-color: #216973 !important;
   color: #f1f1f1 !important; }
 
 .md-theme-light-blue {
@@ -3022,7 +3022,7 @@ md-tab {
   min-width: 96px;
   border: 1px dotted transparent;
   color: #9FC1FB;
-  background-color: #38596B;
+  background-color: #216973;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
