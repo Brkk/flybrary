@@ -122,11 +122,18 @@
 }
 
 #about-container {
-  background-repeat: no-repeat;
+  background-repeat: repeat;
+  background-image: url('../images/swirl_pattern.png');
   height: 100%;
-  background-size: 100%;
   background-color: #FAFAFA;
 }
+.tab-bar-styling {
+  background-repeat: repeat;
+  background-image: url('../images/swirl_pattern.png');
+  height: 100%;
+  background-color: #FAFAFA;
+}
+
 
 #contact-container {
   background-repeat: no-repeat;
@@ -267,13 +274,6 @@ material-dialog {
 md-button:not(.md-button-fab) {
   width: 10em;
 }
-
-md-button.glyphicon {
-  width: auto;
-  padding: 10px;
-  padding-bottom: 0;
-}
-
 section md-button {
   display: block;
   margin: 1em;

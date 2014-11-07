@@ -1,20 +1,20 @@
 <section layout="horizontal" layout-fill ng-controller="mainCtrl" flex>
     <md-sidenav  class="md-sidenav-left md-whiteframe-z1" style="z-index:8" component-id="left"
      layout="vertical" class="md-sidenav-left">
-        <div ng-switch on="$root.currentTab" >
-            <div ng-switch-when="offers">
+        <div ng-switch on="tabs.selectedIndex" >
+            <div ng-switch-when="0">
                 <div ng-include="'views/offers_side.html'"></div>
             </div>
-            <div ng-switch-when="requests">
+            <div ng-switch-when="1">
                 <div ng-include="'views/requests_side.html'"></div>
             </div>
-            <div ng-switch-when="matches">
+            <div ng-switch-when="2">
                 <div ng-include="'views/matches_side.html'"></div>
             </div>
         </div>
     </md-sidenav>
 
-    <div layout="vertical" layout-fill="" tabindex="-1" role="main" style="background:#eee">
+    <div layout="vertical" layout-fill="" tabindex="-1" role="main" class="tab-bar-styling">
         <md-toolbar class="md-theme-light app-toolbar" style="z-index:3">
             <div class="md-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between">
               <i class="fa fa-navicon" id="nav-icon" ng-click="toggleLeft()"></i>
@@ -32,26 +32,33 @@
                 </md-tabs>
             </div>
         </md-toolbar>
-
+        <div layout="horizontal" layout-align="end start" ng-controller="dialogCtrl" style="position:relative">
+            <md-button class="md-button-fab md-theme-green" ng-click="dialog($event)" style="position: absolute; right:5%; top: -44px">
+                <md-icon icon="images/plus.svg" style="width: 24px; height: 24px; color:white"></md-icon>
+                <md-tooltip>
+         		 	Add
+        		</md-tooltip>
+            </md-button>
+        </div>
         <md-content ng-controller="BookListCtrl">
-            <md-whiteframe class="md-whiteframe-z1" layout layout-fill style="background: #f9f9f9; z-index:2;">    
-                <div class="animate-switch-container" ng-switch on="$root.currentTab" >
+            <md-whiteframe class="md-whiteframe-z1" layout layout-fill style="background: #f9f9f9; z-index:2;">
+                <div class="animate-switch-container" ng-switch on="tabs.selectedIndex" >
                     <div class="animate-switch"
-                        ng-switch-when="offers"
+                        ng-switch-when="0"
                         md-swipe-left="next()"
                         md-swipe-right="previous()"
                     >
                     <div ng-include="'views/offers.html'"></div>
                     </div>
                     <div class="animate-switch"
-                        ng-switch-when="requests"
+                        ng-switch-when="1"
                         md-swipe-left="next()"
                         md-swipe-right="previous()"
                     >
                         <div ng-include="'views/requests.html'"></div>
                     </div>
                     <div class="animate-switch"
-                        ng-switch-when="matches"
+                        ng-switch-when="2"
                         md-swipe-left="next()"
                         md-swipe-right="previous()"
                     >
@@ -62,15 +69,6 @@
             <div layout-padding>
             </div>
         </md-content>
-        <div ngif="$root.showAdd" layout="horizontal" layout-align="end start" ng-controller="dialogCtrl" style="position:relative">
-            <md-button class="md-button-fab md-theme-green" ng-click="dialog($event)" style="position: relative; right:5px;">
-                <md-icon icon="images/plus.svg" style="width: 24px; height: 24px; color:white">
-                </md-icon>
-                <md-tooltip>
-                    {{$root.addbooktype}}
-                </md-tooltip>
-            </md-button>
-        </div>
 
     </div>
 </section>
