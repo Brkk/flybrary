@@ -102,7 +102,8 @@ public class TextbookResource {
 					text.getString("isbn"), 
 					text.getString("uid"),
 					text.getString("type"),
-					text.getString("title"));
+					text.getString("title"),
+					text.getDouble("condition"));
 			 
 			
 			String[] parts = response.split("-");
@@ -120,7 +121,7 @@ public class TextbookResource {
 			    textbook.setUnindexedProperty("author", text.getString("author"));
 			    textbook.setProperty("isbn", text.getString("isbn"));
 			    textbook.setProperty("edition", text.getString("edition"));
-			    textbook.setProperty("condition", text.getString("condition"));
+			    textbook.setProperty("condition", text.getDouble("condition"));
 			    textbook.setProperty("date", addDate);	 
 			    textbook.setUnindexedProperty("matchDate", matchDate);
 			    textbook.setProperty("matched", matched);
@@ -171,7 +172,7 @@ public class TextbookResource {
 		String author = obj.getString("author");
 		String isbn = obj.getString("isbn");
 		String edition = obj.getString("edition");
-		String condition = obj.getString("condition");
+		double condition = obj.getDouble("condition");
 		String image = obj.getString("image");
 	
 		Key textbookKey = KeyFactory.createKey("Textbook", id);
@@ -258,6 +259,7 @@ public class TextbookResource {
 		String type = obj.getString("type");
 		String uid = obj.getString("uid");
 		String matchDate = obj.getString("matchDate");
+		double condition = obj.getDouble("condition");
 
 		//delete the match from the matches table
 		Filter matchFilter = new FilterPredicate("matchDate", FilterOperator.EQUAL, matchDate);
@@ -268,7 +270,7 @@ public class TextbookResource {
 		datastore.delete(matchKey);
 		Delay.oneSecondDelay();
 		
-		String matched = matchingFunction.checkForMatch(isbn, uid, type, title);
+		String matched = matchingFunction.checkForMatch(isbn, uid, type, title, condition);
 
 		if(matched.equals("no")) { 
 			Key textbookKey = KeyFactory.createKey("Textbook", id);

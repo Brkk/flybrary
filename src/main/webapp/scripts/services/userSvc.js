@@ -47,7 +47,7 @@ var userSvc = angular.module( 'userSvc', [])
             title: this.activeBookProperties.title,
             author: this.activeBookProperties.author,
             edition: this.activeBookProperties.edition,
-            condition: this.activeBookProperties.condition,
+            condition: +(this.activeBookProperties.condition),
             isbn: this.activeBookProperties.isbn,
             lat : +(this.loc.lat),
             lon : +(this.loc.lon),
@@ -68,7 +68,7 @@ var userSvc = angular.module( 'userSvc', [])
             title: this.activeBookProperties.title,
             author: this.activeBookProperties.author,
             edition: this.activeBookProperties.edition,
-            condition: this.activeBookProperties.condition,
+            condition: +(this.activeBookProperties.condition),
             isbn: this.activeBookProperties.isbn
         };
     };
@@ -102,7 +102,8 @@ var userSvc = angular.module( 'userSvc', [])
             title: this.activeBookProperties.title,
             author: this.activeBookProperties.author,
             matchDate: this.activeBookProperties.matchDate,
-            isbn: this.activeBookProperties.isbn
+            isbn: this.activeBookProperties.isbn,
+            condition: +(this.activeBookProperties.condition)
         };
     };
 
