@@ -267,6 +267,13 @@ material-dialog {
 md-button:not(.md-button-fab) {
   width: 10em;
 }
+
+md-button.glyphicon {
+  width: auto;
+  padding: 10px;
+  padding-bottom: 0;
+}
+
 section md-button {
   display: block;
   margin: 1em;
