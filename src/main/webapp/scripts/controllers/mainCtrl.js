@@ -55,4 +55,3 @@ app.controller('mainCtrl', function($scope, $rootScope, user, $location, $mdSide
       $mdSidenav('left').toggle();
     };
   });
-
