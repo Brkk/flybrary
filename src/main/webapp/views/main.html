@@ -1,15 +1,15 @@
 <section layout="horizontal" layout-fill ng-controller="mainCtrl" flex>
     <md-sidenav  class="md-sidenav-left md-whiteframe-z1" style="z-index:8" component-id="left"
      layout="vertical" class="md-sidenav-left">
-        <div ng-switch on="$root.currentTab" >
-            <div ng-switch-when="offers">
-                <div ng-include="'views/offers_side.html'"></div>
+        <div ng-switch on="$root.currentTab" layout flex>
+            <div ng-switch-when="offers" layout flex>
+                <div ng-include="'views/offers_side.html'" layout="vertical" flex></div>
             </div>
             <div ng-switch-when="requests">
-                <div ng-include="'views/requests_side.html'"></div>
+                <div ng-include="'views/requests_side.html'" layout="vertical" flex></div>
             </div>
             <div ng-switch-when="matches">
-                <div ng-include="'views/matches_side.html'"></div>
+                <div ng-include="'views/matches_side.html'" layout="vertical" flex></div>
             </div>
         </div>
     </md-sidenav>

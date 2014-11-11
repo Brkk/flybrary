@@ -3,6 +3,33 @@ app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $tim
 
 	console.log("page ctrl loaded");
 
+
+	$window.addEventListener('resize', function() {
+
+		$rootScope.size = 'xs';
+
+		if($window.innerWidth >= 768) {
+			$rootScope.size = 'sm';
+		}
+		if($window.innerWidth >= 992) {
+			$rootScope.size = 'md';
+		}
+		if($window.innerWidth >= 1200) {
+			$rootScope.size = 'lg';
+		}
+
+		$rootScope.$apply();
+
+	});
+
+	$rootScope.$watch('size', function(newVal,oldVal){
+		if(newVal != oldVal) {
+			console.log("size changed");
+			console.log($rootScope.size);
+			render();
+		}
+	});
+
 	if(googleService.loggedIn) {
 		$location.path('/main/offers').replace();
 	}

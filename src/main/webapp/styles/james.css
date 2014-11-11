@@ -12,7 +12,7 @@ material-dialog {
 }
 
 md-button:not(.md-button-fab) {
-  width: 10em;
+  width: 90%;
 }
 
 md-button.glyphicon {
@@ -48,4 +48,10 @@ md-button:not([disabled]):hover, md-button:not([disabled]).focus {
 md-input-group, .md-input-group {
 	
 	margin-right:15px
+}
+
+md-sidenav {
+
+  min-width: 304px;
+  width:auto;
 }
