@@ -18,3 +18,7 @@
         <md-divider ng-if="!$last"></md-divider>
     </md-item>
 </md-list>
+
+<div ng-if="num_offers == 0" class="more-books">
+    You don't seem to have any books up for offer. <a ng-click="dialog($event, 'offers')">Offer more books</a> to get more matches!
+</div>

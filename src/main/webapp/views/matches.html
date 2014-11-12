@@ -9,7 +9,7 @@
                 <h4><i>{{book.author}}</i></h4>
                  <md-button class="glyphicon glyphicon-trash btn-lg" style="position: absolute; right: 10px;" ng-click="unmatchBook(book)">
                  	<md-tooltip>
-	         		Unmatch
+	         		    Unmatch
 	        		</md-tooltip>
                  </md-button>
             </div>
@@ -17,3 +17,6 @@
         <md-divider ng-if="!$last"></md-divider>
     </md-item>
 </md-list>
+<div ng-if="num_matches == 0" class="more-books">
+    You don't have any matches yet. Get some more by <a ng-click="dialog($event, 'offers')">offering up</a> some books, or <a ng-click="dialog($event,'requests')">requesting</a> some for yourself!
+</div>
