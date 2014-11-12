@@ -17,8 +17,6 @@ app.controller('addBookCtrl', function ($scope, $rootScope, $mdDialog, user, gBo
     condition: "1"
   };
 
-  $rootScope.is_or_should = "should";
-
   $rootScope.searchList = [];
 
   $rootScope.hoveredKey = "";
@@ -118,32 +116,3 @@ $rootScope.searchMouseOver = function(theBook) {
 
 
 });
-
-
-app.controller('dialogCtrl', function($scope, $rootScope, $mdDialog, $http, $timeout, user, $location) {
-    $scope.dialog = function(ev) {
-
-      $location.path('/main/' + $rootScope.currentTab + '/add/search').replace();
-
-      $mdDialog.show({
-        templateUrl: 'views/addBook.html',
-        targetEvent: ev,
-        controller: 'addBookCtrl'
-      }).then(function(addBookConfirmed) {
-          if (addBookConfirmed){
-            user.addBook().then(
-              function(data)
-              {
-                $scope.bookList.push(data);
-                user.bookList.push(data);
-              },
-              function(err)
-              {
-                console.log('Failed: ' + err);
-              });
-          }
-      
-      });
-    };
-  });
-

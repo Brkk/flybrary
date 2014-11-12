@@ -17,3 +17,6 @@
         <md-divider ng-if="!$last"></md-divider>
     </md-item>
 </md-list>
+<div ng-if="num_requests == 0" class="more-books">
+    We can't find you any books if you don't want any! <a ng-click="dialog($event, 'requests')">Request more books</a> so we can find you some
+</div>

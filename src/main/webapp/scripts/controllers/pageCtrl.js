@@ -3,8 +3,35 @@ app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $tim
 
 	console.log("page ctrl loaded");
 
+
+	$window.addEventListener('resize', function() {
+
+		$rootScope.size = 'xs';
+
+		if($window.innerWidth >= 768) {
+			$rootScope.size = 'sm';
+		}
+		if($window.innerWidth >= 992) {
+			$rootScope.size = 'md';
+		}
+		if($window.innerWidth >= 1200) {
+			$rootScope.size = 'lg';
+		}
+
+		$rootScope.$apply();
+
+	});
+
+	$rootScope.$watch('size', function(newVal,oldVal){
+		if(newVal != oldVal) {
+			console.log("size changed");
+			console.log($rootScope.size);
+			render();
+		}
+	});
+
 	if(googleService.loggedIn) {
-		$location.path('/main/offers').replace();
+		$location.path('/main/matches').replace();
 	}
 	else {
 		$location.path('/login').replace();
@@ -13,7 +40,7 @@ app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $tim
 	$rootScope.login = function () {
 		googleService.login().then(
 		function(data) {
-			$location.path('/main/offers').replace();
+			$location.path('/main/matches').replace();
 		},
 		function(err) {
     		$location.path('/login').replace();
@@ -26,7 +53,7 @@ app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $tim
 		if(newVal) {
 	    	googleService.handleClientLoad().then(
 			function(data) {
-				$location.path('/main/offers').replace();
+				$location.path('/main/matches').replace();
 			},
 			function(err) {
 				googleService.logout();
@@ -46,6 +73,7 @@ app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $tim
     $rootScope.addStep = '';
     $rootScope.matchKey = '';
     $rootScope.addbooktype = "Offer a Book";
+    $rootScope.is_or_should = "is";
     $rootScope.showAdd =false;
 
     render = function() {
@@ -68,16 +96,24 @@ app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $tim
 		}
 
 		switch($rootScope.currentTab) {
+			case 'matches':
+				$rootScope.showAdd = false;
+				if($rootScope.tabs)
+					$rootScope.tabs.selectedIndex = 0;
+				break;
 			case 'offers':
 				$rootScope.addbooktype = "Offer a Book";
+				$rootScope.is_or_should = "is";
 				$rootScope.showAdd = true;
+				if($rootScope.tabs)
+					$rootScope.tabs.selectedIndex = 1;
 				break;
 			case 'requests':
 				$rootScope.addbooktype = "Request a Book";
+				$rootScope.is_or_should = "should";
 				$rootScope.showAdd = true;
-				break;
-			case 'matches':
-				$rootScope.showAdd = false;
+				if($rootScope.tabs)
+					$rootScope.tabs.selectedIndex = 2;
 				break;
 		}
     };

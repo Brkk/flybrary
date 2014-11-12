@@ -2,6 +2,12 @@
   <div class="md-toolbar-tools roboto-style-sidebar-title">Preferences</div>
 </md-toolbar>
 <md-content layout="vertical" flex layout-align="space-between">
-     <section ng-include="'views/map.html'">
-     </section>
+	<section ng-include="'views/map.html'">
+	</section>
+	<footer>
+		<md-divider></md-divider>
+		<div flex layout='vertical' layout-align='center center'>
+			<md-button ng-click="logout()"  style="background: #FF0000; color:#FFFFFF">Logout</md-button>
+		</div>
+	</footer>
 </md-content>

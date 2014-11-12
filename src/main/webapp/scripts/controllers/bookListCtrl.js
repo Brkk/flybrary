@@ -1,9 +1,34 @@
-app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jsonFilter, user) {
+app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jsonFilter, user, $mdDialog, $location) {
 	
 
   console.log("booklist ctrl loaded");
   $rootScope.bookList = [];
-  $scope.$watch('bookList',function(){},true);
+  $rootScope.num_matches = 0;
+  $rootScope.num_offers = 0;
+  $rootScope.num_requests = 0;
+
+  $scope.$watch('bookList',function(){
+      
+      var num_matches = 0,
+          num_offers = 0,
+          num_requests = 0;
+
+      for(var i = 0; i < $scope.bookList.length; i++) {
+          if($scope.bookList[i].matched == 'yes') {
+            num_matches++;
+          }
+          else if($scope.bookList[i].actionType == "offer")
+          {
+            num_offers++;
+          }
+          else {
+            num_requests++;
+          }
+      }
+      $scope.num_matches = num_matches;
+      $scope.num_offers = num_offers;
+      $scope.num_requests = num_requests;
+  }, true);
   
   user.getBooks().then(
     function(data){
@@ -49,6 +74,35 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
 		user.activeBookProperties.title = book.title;
 		user.unmatchTextbook();	
 	};
+
+  $scope.dialog = function(ev, actionType) {
+
+    if($rootScope.currentTab == 'matches') {
+      $rootScope.currentTab = actionType;
+    }
+
+    $location.path('/main/' + $rootScope.currentTab + '/add/search').replace();
+
+    $mdDialog.show({
+      templateUrl: 'views/addBook.html',
+      targetEvent: ev,
+      controller: 'addBookCtrl'
+    }).then(function(addBookConfirmed) {
+        if (addBookConfirmed){
+          user.addBook().then(
+            function(data)
+            {
+              $scope.bookList.push(data);
+              user.bookList.push(data);
+            },
+            function(err)
+            {
+              console.log('Failed: ' + err);
+            });
+        }
+    
+    });
+  };
 	
   });
 
