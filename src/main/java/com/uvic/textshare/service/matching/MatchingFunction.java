@@ -81,6 +81,8 @@ public class MatchingFunction {
 					Delay.oneSecondDelay();
 					Entity match = new Entity("Match");
 						match.setProperty("matchDate", simpleDate);
+						match.setUnindexedProperty("userOneId", uid);
+						match.setUnindexedProperty("userTwoId", uid2);
 						match.setUnindexedProperty("firstUsersEmail", firstUsersEmail);
 						match.setUnindexedProperty("secondUsersEmail", secondUsersEmail);
 					datastore.put(match);

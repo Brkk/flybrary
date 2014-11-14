@@ -159,33 +159,6 @@ public class TextbookResource {
 		datastore.delete(textbookKey);
 		 
 	 }
-	// too costly to use, goona get rid of it
-	@POST
-	@Path("/updateTextbook")
-	@Consumes(MediaType.APPLICATION_JSON)
- 	public void updateTextbook(String input) {
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
-		JSONObject obj = new JSONObject(input);
-
-		Long id = (long) obj.getDouble("id");
-		String title = obj.getString("title");
-		String author = obj.getString("author");
-		String isbn = obj.getString("isbn");
-		String edition = obj.getString("edition");
-		double condition = obj.getDouble("condition");
-		String image = obj.getString("image");
-	
-		Key textbookKey = KeyFactory.createKey("Textbook", id);
-		Query q = new Query(textbookKey);
-		Entity textbook = datastore.prepare(q).asSingleEntity();
-		    textbook.setUnindexedProperty("title", title);
-		    textbook.setUnindexedProperty("author", author);
-		    textbook.setUnindexedProperty("image", image);
-		    textbook.setProperty("isbn", isbn);
-		    textbook.setProperty("edition", edition);
-		    textbook.setProperty("condition", condition);    
-		datastore.put(textbook);
-	}
 	
 	@POST
 	@Path("/updateUserRadius")
@@ -196,6 +169,9 @@ public class TextbookResource {
 		String uid = obj.getString("uid");
 		double radius = obj.getDouble("radius");
 		radius = radius / 1000.0;
+		if(radius > 30 || radius < 5) {
+			radius = 15.0;
+		}
 		Filter userFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uid);
 		Query q = new Query("User").setFilter(userFilter);
 		Entity user = datastore.prepare(q).asSingleEntity();
@@ -260,25 +236,53 @@ public class TextbookResource {
 		String uid = obj.getString("uid");
 		String matchDate = obj.getString("matchDate");
 		double condition = obj.getDouble("condition");
-
-		//delete the match from the matches table
+		String uidTwo;
+		String typeTwo;
+		
+		if(type.equals("offer"))
+			typeTwo = "request";
+		else
+			typeTwo = "offer";
+		
+		//Delete the match entry and retrieve other user's UID.
 		Filter matchFilter = new FilterPredicate("matchDate", FilterOperator.EQUAL, matchDate);
 		Query q = new Query("Match").setFilter(matchFilter);
 		Entity match = datastore.prepare(q).asSingleEntity();
-		System.out.println(match);
+		
+		if(!uid.equals((String) match.getProperty("userOneId")))
+			uidTwo = (String) match.getProperty("userOneId");
+		else
+			uidTwo = (String) match.getProperty("userTwoId");
+		
 		Key matchKey = match.getKey();
 		datastore.delete(matchKey);
 		Delay.oneSecondDelay();
 		
-		String matched = matchingFunction.checkForMatch(isbn, uid, type, title, condition);
-
-		if(matched.equals("no")) { 
+		//Check for a new match. Omit matching each other again.
+		String matchedOne = matchingFunction.checkForMatch(isbn, uid, type, title, condition);
+		String matchedTwo = matchingFunction.checkForMatch(isbn, uidTwo, typeTwo, title, condition);
+		
+		//Update database based on the result of new searches for matches.
+		if(matchedOne.equals("no")) { 
 			Key textbookKey = KeyFactory.createKey("Textbook", id);
 			Query q2 = new Query(textbookKey);
 			Entity textbook = datastore.prepare(q2).asSingleEntity();
 				textbook.setProperty("matched", "no");
 				textbook.setUnindexedProperty("matchDate", null);
 			datastore.put(textbook);
+		}
+		
+		Delay.oneSecondDelay();
+		if(matchedTwo.equals("no")) {
+			Filter isbnFilter = new FilterPredicate("isbn", FilterOperator.EQUAL,isbn);
+			Filter uidFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uidTwo);
+			Filter searchFilter = CompositeFilterOperator.and(isbnFilter, uidFilter);
+			
+			q = new Query("Textbook").setFilter(searchFilter);
+			Entity textbookTwo = datastore.prepare(q).asSingleEntity();
+				textbookTwo.setProperty("matched", "no");
+				textbookTwo.setUnindexedProperty("matchDate", null);
+			datastore.put(textbookTwo);
 		}
 	}
 	
