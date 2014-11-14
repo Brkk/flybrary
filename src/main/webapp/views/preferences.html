@@ -1,13 +1,13 @@
-<md-toolbar class="md-theme-dark md-medium-tall preferences-toolbar">
+<md-toolbar class="md-primary md-medium-tall preferences-toolbar md-whiteframe-z1">
   <div class="md-toolbar-tools roboto-style-sidebar-title">Preferences</div>
 </md-toolbar>
-<md-content layout="vertical" flex layout-align="space-between">
+<section layout="vertical" flex layout-align="space-between">
 	<section ng-include="'views/map.html'">
 	</section>
 	<footer>
 		<md-divider></md-divider>
 		<div flex layout='vertical' layout-align='center center'>
-			<md-button ng-click="logout()"  style="background: #FF0000; color:#FFFFFF">Logout</md-button>
+			<md-button ng-click="logout()">Logout</md-button>
 		</div>
 	</footer>
-</md-content>
+</section>

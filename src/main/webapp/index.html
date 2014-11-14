@@ -152,31 +152,31 @@
 </head>
 <body layout="horizontal">
 
-    <div layout-fill ng-controller="pageCtrl">
-        <div layout-fill>
-          <div ng-switch on="renderPath[ 0 ]" layout-fill>
-            <div ng-switch-when="login" layout-fill>
-              <div ng-include="'views/login.html'" layout-fill></div>
+    <div layout flex ng-controller="pageCtrl">
+        <div layout flex>
+          <div ng-switch on="renderPath[ 0 ]" layout flex>
+            <div ng-switch-when="login" layout flex>
+              <div ng-include="'views/login.html'" layout flex></div>
               </div>
-            <div ng-switch-when="main" layout-fill>
-              <div ng-include="'views/main.html'" ng-controller="mainCtrl" layout-fill></div>
+            <div ng-switch-when="main" layout flex>
+              <div ng-include="'views/main.html'" ng-controller="mainCtrl" layout flex></div>
               </div>
-            <div ng-switch-when="loading" layout-fill>
-                <div ng-include="'views/loading.html'" layout-fill> </div>
+            <div ng-switch-when="loading" layout flex>
+                <div ng-include="'views/loading.html'" layout="vertical" flex> </div>
             </div>
-            <div ng-switch-when="faq" layout-fill>
-              <div ng-include="'views/faq.html'" layout-fill></div>
+            <div ng-switch-when="faq" layout flex>
+              <div ng-include="'views/faq.html'" layout flex></div>
             </div>
-            <div ng-switch-when="useragreement" layout-fill>
-              <div ng-include="'views/useragreement.html'" layout-fill></div>
+            <div ng-switch-when="useragreement" layout flex>
+              <div ng-include="'views/useragreement.html'" layout flex></div>
             </div>
-            <div ng-switch-when="feedback" layout-fill>    
-              <div ng-include="'views/feedback.html'" layout-fill></div>
+            <div ng-switch-when="feedback" layout flex>    
+              <div ng-include="'views/feedback.html'" layout flex></div>
             </div>
 
           </div>  
 
-            <!--<div ng-view layout-fill></div>-->
+            <!--<div ng-view layout flex></div>-->
         </div>
     </div>
 

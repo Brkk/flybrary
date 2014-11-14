@@ -1,21 +1,16 @@
 <section layout="horizontal" layout-fill ng-controller="mainCtrl" flex>
-    <md-sidenav  class="md-sidenav-left md-whiteframe-z1" style="z-index:2" component-id="left"
+    <md-sidenav  class="md-sidenav-left md-whiteframe-z1" is-locked-open="$media('md')" component-id="left"
      layout="vertical" class="md-sidenav-left">
-        <div ng-switch on="$root.currentTab" layout flex>
-            <div ng-switch-when="offers" layout flex>
-                <div ng-include="'views/offers_side.html'" layout="vertical" flex></div>
-            </div>
-            <div ng-switch-when="requests" layout flex>
-                <div ng-include="'views/requests_side.html'" layout="vertical" flex></div>
-            </div>
-            <div ng-switch-when="matches" layout flex>
-                <div ng-include="'views/matches_side.html'" layout="vertical" flex></div>
-            </div>
+        <div ng-if="$root.currentTab != 'matches'" layout flex>
+            <div ng-include="'views/preferences.html'" layout="vertical" flex></div>
+        </div>
+        <div ng-if="$root.currentTab == 'matches'" layout flex>
+            <div ng-include="'views/match_list.html'" layout="vertical" flex></div>
         </div>
     </md-sidenav>
 
     <div layout="vertical" layout-fill="" tabindex="-1" role="main" class ="tab-bar-styling">
-        <md-toolbar class="md-theme-light app-toolbar" style="z-index:3">
+        <md-toolbar class="md-primary app-toolbar" style="z-index:3">
             <div class="md-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between">
               <i class="fa fa-navicon" id="nav-icon" ng-click="toggleLeft()"></i>
               <div id="dancing-style-menutab" flex>
@@ -23,7 +18,7 @@
               </div>
             </div>
         </md-toolbar>
-        <md-toolbar class="md-theme-light md-whiteframe-z1">
+        <md-toolbar class="md-primary md-whiteframe-z1">
             <div class="md-toolbar-tools" style="margin-bottom: 10px" style="z-index:3">
                 <md-tabs selected="tabs.selectedIndex" layout="horizontal" layout-align="start start">
                     <md-tab class="roboto-style" label="Matches"></md-tab>
@@ -33,29 +28,29 @@
             </div>
         </md-toolbar>
 
-        <md-content ng-controller="BookListCtrl">
+        <md-content ng-controller="BookListCtrl" class="tab-bar-styling">
             <md-whiteframe class="md-whiteframe-z1" layout layout-fill style="background: #f9f9f9; z-index:2;">    
-                <div class="animate-switch-container" ng-switch on="$root.currentTab" >
-                    <div class="animate-switch"
+                <div layout flex class="animate-switch-container" ng-switch on="$root.currentTab" >
+                    <div layout flex class="animate-switch"
                         ng-switch-when="offers"
                         md-swipe-left="next()"
                         md-swipe-right="previous()"
                     >
-                    <div ng-include="'views/offers.html'"></div>
+                    <div layout="vertical" flex ng-include="'views/offers.html'"></div>
                     </div>
-                    <div class="animate-switch"
+                    <div layout flex class="animate-switch"
                         ng-switch-when="requests"
                         md-swipe-left="next()"
                         md-swipe-right="previous()"
                     >
-                        <div ng-include="'views/requests.html'"></div>
+                        <div layout="vertical" flex ng-include="'views/requests.html'"></div>
                     </div>
-                    <div class="animate-switch"
+                    <div layout flex class="animate-switch"
                         ng-switch-when="matches"
                         md-swipe-left="next()"
                         md-swipe-right="previous()"
                     >
-                        <div ng-include="'views/matches.html'"></div>
+                        <div layout="vertical" flex ng-include="'views/matches.html'"></div>
                     </div>
                 </div>
             </md-whiteframe>
@@ -63,7 +58,7 @@
             </div>
             
             <div ng-if="'matches' != $root.currentTab" layout="horizontal" layout-align="end start" style="position:relative">
-                <md-button class="md-button-fab md-theme-green" ng-click="dialog($event, 'any')" style="position: relative; right:5px;">
+                <md-button class="md-fab md-primary" ng-click="dialog($event, 'any')" style="position: relative; right:5px;">
                     <md-icon icon="images/plus.svg" style="width: 24px; height: 24px; color:white">
                     </md-icon>
                     <md-tooltip>

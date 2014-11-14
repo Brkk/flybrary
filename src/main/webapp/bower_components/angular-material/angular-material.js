@@ -2,10 +2,10 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v0.4.1
+ * v0.5.0
  */
 (function() {
-angular.module('ngMaterial', ["ng","ngAnimate","ngAria","material.core","material.decorators","material.animations","material.components.bottomSheet","material.components.button","material.components.card","material.components.checkbox","material.components.content","material.components.dialog","material.components.divider","material.components.icon","material.components.list","material.components.progressCircular","material.components.progressLinear","material.components.radioButton","material.components.sidenav","material.components.slider","material.components.sticky","material.components.subheader","material.components.swipe","material.components.switch","material.components.tabs","material.components.textField","material.components.toast","material.components.toolbar","material.components.tooltip","material.components.whiteframe","material.services.aria","material.services.attrBind","material.services.compiler","material.services.interimElement","material.services.registry"]);})();
+angular.module('ngMaterial', ["ng","ngAnimate","ngAria","material.core","material.decorators","material.animations","material.components.backdrop","material.components.bottomSheet","material.components.button","material.components.card","material.components.checkbox","material.components.content","material.components.dialog","material.components.divider","material.components.icon","material.components.list","material.components.progressCircular","material.components.progressLinear","material.components.radioButton","material.components.sidenav","material.components.slider","material.components.sticky","material.components.subheader","material.components.swipe","material.components.switch","material.components.tabs","material.components.textField","material.components.toast","material.components.toolbar","material.components.tooltip","material.components.whiteframe","material.services.aria","material.services.attrBind","material.services.compiler","material.services.interimElement","material.services.media","material.services.registry","material.services.theming"]);})();
 
 (function() {
   /**
@@ -45,7 +45,7 @@ angular.module('material.core')
 
 (function() {
 angular.module('material.core')
-.factory('$mdUtil', function() {
+.factory('$mdUtil', ['$cacheFactory', function($cacheFactory) {
   var SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
   /* for nextUid() function below */
   var uid = ['0','0','0'];
@@ -119,6 +119,11 @@ angular.module('material.core')
      * @see iterator below
      */
     iterator: iterator,
+
+    /**
+     * @see cacheFactory below
+     */
+    cacheFactory: cacheFactory,
 
     // Returns a function, that, as long as it continues to be invoked, will not
     // be triggered. The function will be called after it stops being called for
@@ -461,7 +466,33 @@ angular.module('material.core')
       return _items.length ? _items[_items.length - 1] : null;
     }
   }
-});
+
+  /*
+   * Angular's $cacheFactory doesn't have a keys() method,
+   * so we add one ourself.
+   */
+  function cacheFactory(id, options) {
+    var cache = $cacheFactory(id, options);
+
+    var keys = {};
+    cache._put = cache.put;
+    cache.put = function(k,v) {
+      keys[k] = true;
+      return cache._put(k, v);
+    };
+    cache._remove = cache.remove;
+    cache.remove = function(k) {
+      delete keys[k];
+      return cache._remove(k);
+    };
+
+    cache.keys = function() {
+      return Object.keys(keys);
+    };
+
+    return cache;
+  }
+}]);
 
 /* 
  * Since removing jQuery from the demos, some code that uses `element.focus()` is broken.
@@ -612,7 +643,7 @@ function MdEffects($rootElement, $$rAF, $sniffer, $q) {
     $$rAF(function() {
       $$rAF(function() {
         element
-          .addClass('active')
+          .addClass('md-active')
           .css(self.TRANSFORM, '')
           .css('opacity', '')
           .on(self.TRANSITIONEND_EVENT, finished);
@@ -860,6 +891,38 @@ function attrNoDirective() {
 })();
 
 (function() {
+/*
+ * @ngdoc module
+ * @name material.components.backdrop
+ * @description Backdrop
+ */
+
+/**
+ * @ngdoc directive
+ * @name mdBackdrop
+ * @module material.components.backdrop
+ *
+ * @restrict E
+ *
+ * @description
+ * `<md-backdrop>` is a backdrop element used by other coponents, such as dialog and bottom sheet.
+ * Apply class `opaque` to make the backdrop use the theme backdrop color.
+ *
+ */
+angular.module('material.components.backdrop', [
+  'material.services.theming'
+])
+.directive('mdBackdrop', [
+  '$mdTheming',
+  BackdropDirective
+]);
+
+function BackdropDirective($mdTheming) {
+  return $mdTheming;
+}
+})();
+
+(function() {
 /**
  * @ngdoc module
  * @name material.components.bottomSheet
@@ -867,7 +930,9 @@ function attrNoDirective() {
  * BottomSheet
  */
 angular.module('material.components.bottomSheet', [
-  'material.services.interimElement'
+  'material.components.backdrop',
+  'material.services.interimElement',
+  'material.services.theming'
 ])
 .directive('mdBottomSheet', [
   MdBottomSheetDirective
@@ -878,6 +943,8 @@ angular.module('material.components.bottomSheet', [
   '$mdEffects',
   '$timeout',
   '$$rAF',
+  '$compile',
+  '$mdTheming',
   MdBottomSheet
 ]);
 
@@ -898,6 +965,8 @@ function MdBottomSheetDirective() {
  * ### Restrictions
  * 
  * - The bottom sheet's template must have an outer `<md-bottom-sheet>` element.
+ * - Add the `md-grid` class to the bottom sheet for a grid layout.
+ * - Add the `md-list` class to the bottom sheet for a list layout.
  *
  * @usage
  * <hljs lang="html">
@@ -973,11 +1042,12 @@ function MdBottomSheetDirective() {
  *
  */
 
-function MdBottomSheet($$interimElement, $animate, $mdEffects, $timeout, $$rAF) {
+function MdBottomSheet($$interimElement, $animate, $mdEffects, $timeout, $$rAF, $compile, $mdTheming) {
   var backdrop;
 
   var $mdBottomSheet;
   return $mdBottomSheet = $$interimElement({
+    themable: true,
     targetEvent: null,
     onShow: onShow,
     onRemove: onRemove,
@@ -985,10 +1055,11 @@ function MdBottomSheet($$interimElement, $animate, $mdEffects, $timeout, $$rAF) 
 
   function onShow(scope, element, options) {
     // Add a backdrop that will close on click
-    backdrop = angular.element('<md-backdrop class="opaque ng-enter">');
+    backdrop = $compile('<md-backdrop class="md-opaque ng-enter">')(scope);
     backdrop.on('click touchstart', function() {
       $timeout($mdBottomSheet.cancel);
     });
+    $mdTheming.inherit(backdrop, options.parent);
 
     $animate.enter(backdrop, options.parent, null);
 
@@ -997,6 +1068,7 @@ function MdBottomSheet($$interimElement, $animate, $mdEffects, $timeout, $$rAF) 
 
     // Give up focus on calling item
     options.targetEvent && angular.element(options.targetEvent.target).blur();
+    $mdTheming.inherit(bottomSheet.element, options.parent);
 
     return $animate.enter(bottomSheet.element, options.parent);
 
@@ -1126,13 +1198,15 @@ function MdBottomSheet($$interimElement, $animate, $mdEffects, $timeout, $$rAF) 
 angular.module('material.components.button', [
   'material.core',
   'material.animations',
-  'material.services.aria'
+  'material.services.aria',
+  'material.services.theming'
 ])
   .directive('mdButton', [
     'ngHrefDirective',
     '$mdInkRipple',
     '$mdAria',
     '$mdUtil',
+    '$mdTheming',
     MdButtonDirective
   ]);
 
@@ -1166,7 +1240,7 @@ angular.module('material.components.button', [
  *  </md-button>
  * </hljs>
  */
-function MdButtonDirective(ngHrefDirectives, $mdInkRipple, $mdAria, $mdUtil ) {
+function MdButtonDirective(ngHrefDirectives, $mdInkRipple, $mdAria, $mdUtil, $mdTheming ) {
   var ngHrefDirective = ngHrefDirectives[0];
 
   return {
@@ -1174,6 +1248,7 @@ function MdButtonDirective(ngHrefDirectives, $mdInkRipple, $mdAria, $mdUtil ) {
     compile: function(element, attr) {
       var innerElement;
       var attributesToCopy;
+
 
       // Add an inner anchor if the element has a `href` or `ngHref` attribute,
       // so this element can be clicked like a normal `<a>`.
@@ -1215,6 +1290,7 @@ function MdButtonDirective(ngHrefDirectives, $mdInkRipple, $mdAria, $mdUtil ) {
         });
 
       return function postLink(scope, element, attr) {
+        $mdTheming(element);
         $mdAria.expect(element, 'aria-label', element.text());
         $mdInkRipple.attachButtonBehavior(element);
       };
@@ -1283,6 +1359,7 @@ function mdCardDirective() {
 angular.module('material.components.checkbox', [
   'material.core',
   'material.animations',
+  'material.services.theming',
   'material.services.aria'
 ])
   .directive('mdCheckbox', [ 
@@ -1290,6 +1367,7 @@ angular.module('material.components.checkbox', [
     '$mdInkRipple',
     '$mdAria',
     '$mdConstant',
+    '$mdTheming',
     MdCheckboxDirective
   ]);
 
@@ -1328,7 +1406,7 @@ angular.module('material.components.checkbox', [
  * </hljs>
  *
  */
-function MdCheckboxDirective(inputDirectives, $mdInkRipple, $mdAria, $mdConstant) {
+function MdCheckboxDirective(inputDirectives, $mdInkRipple, $mdAria, $mdConstant, $mdTheming) {
   var inputDirective = inputDirectives[0];
 
   var CHECKED_CSS = 'md-checked';
@@ -1355,10 +1433,9 @@ function MdCheckboxDirective(inputDirectives, $mdInkRipple, $mdAria, $mdConstant
     tAttrs.tabIndex = 0;
     tElement.attr('role', tAttrs.type);
 
-    $mdAria.expect(tElement, 'aria-label', tElement.text());
-
     return function postLink(scope, element, attr, ngModelCtrl) {
       var checked = false;
+      $mdTheming(element);
 
       // Create a mock ngModel if the user doesn't provide one
       ngModelCtrl = ngModelCtrl || {
@@ -1368,6 +1445,8 @@ function MdCheckboxDirective(inputDirectives, $mdInkRipple, $mdAria, $mdConstant
         $parsers: [],
         $formatters: []
       };
+
+      $mdAria.expect(tElement, 'aria-label', true);
 
       // Reuse the original input[type=checkbox] directive from Angular core.
       // This is a bit hacky as we need our own event listener and own render
@@ -1399,7 +1478,6 @@ function MdCheckboxDirective(inputDirectives, $mdInkRipple, $mdAria, $mdConstant
 
       function render() {
         checked = ngModelCtrl.$viewValue;
-        // element.attr('aria-checked', checked);
         if(checked) {
           element.addClass(CHECKED_CSS);
         } else {
@@ -1422,9 +1500,11 @@ function MdCheckboxDirective(inputDirectives, $mdInkRipple, $mdAria, $mdConstant
  * Scrollable content
  */
 angular.module('material.components.content', [
+  'material.services.theming',
   'material.services.registry'
 ])
   .directive('mdContent', [
+    '$mdTheming',
     mdContentDirective
   ]);
 
@@ -1438,19 +1518,24 @@ angular.module('material.components.content', [
  * @description
  * The `<md-content>` directive is a container element useful for scrollable content
  *
+ * ### Restrictions
+ *
+ * - Add the `md-padding` class to make the content padded.
+ *
  * @usage
  * <hljs lang="html">
- *  <md-content class="md-content-padding">
+ *  <md-content class="md-padding">
  *      Lorem ipsum dolor sit amet, ne quod novum mei.
  *  </md-content>
  * </hljs>
  *
  */
-function mdContentDirective() {
+function mdContentDirective($mdTheming) {
   return {
     restrict: 'E',
     controller: ['$scope', '$element', ContentController],
     link: function($scope, $element, $attr) {
+      $mdTheming($element);
       $scope.$broadcast('$mdContentLoaded', $element);
     }
   };
@@ -1470,34 +1555,40 @@ function mdContentDirective() {
 angular.module('material.components.dialog', [
   'material.core',
   'material.animations',
+  'material.components.backdrop',
   'material.services.compiler',
   'material.services.aria',
   'material.services.interimElement',
+  'material.services.theming',
 ])
   .directive('mdDialog', [
     '$$rAF',
+    '$mdTheming',
     MdDialogDirective
   ])
   .factory('$mdDialog', [
     '$timeout',
     '$rootElement',
+    '$compile',
     '$mdEffects',
     '$animate',
     '$mdAria',
     '$$interimElement',
     '$mdUtil',
     '$mdConstant',
+    '$mdTheming',
     MdDialogService
   ]);
 
-function MdDialogDirective($$rAF) {
+function MdDialogDirective($$rAF, $mdTheming) {
   return {
     restrict: 'E',
     link: function(scope, element, attr) {
+      $mdTheming(element);
       $$rAF(function() {
-        var content = element[0].querySelector('.dialog-content');
+        var content = element[0].querySelector('md-content');
         if (content && content.scrollHeight > content.clientHeight) {
-          element.addClass('dialog-content-overflow');
+          element.addClass('md-content-overflow');
         }
       });
     }
@@ -1516,8 +1607,8 @@ function MdDialogDirective($$rAF) {
  *
  * - The dialog is always given an isolate scope.
  * - The dialog's template must have an outer `<md-dialog>` element.
- *   Inside, use an element with class `dialog-content` for the dialog's content, and use
- *   an element with class `dialog-actions` for the dialog's actions.  
+ *   Inside, use an `<md-content>` element for the dialog's content, and use
+ *   an element with class `md-actions` for the dialog's actions.  
  *
  * @usage
  * <hljs lang="html">
@@ -1536,9 +1627,9 @@ function MdDialogDirective($$rAF) {
  *       targetEvent: $event,
  *       controller: 'DialogController',
  *       template: 
- *         '<md-dialog>
- *         '  <div class="dialog-content">Hello!</div>' +
- *         '  <div class="dialog-actions">
+ *         '<md-dialog>' +
+ *         '  <md-content>Hello!</md-content>' +
+ *         '  <div class="md-actions">' +
  *         '    <md-button ng-click="closeDialog()">' +
  *         '      Close' +
  *         '    </md-button>' +
@@ -1614,7 +1705,7 @@ function MdDialogDirective($$rAF) {
  *
  */
 
-function MdDialogService($timeout, $rootElement, $mdEffects, $animate, $mdAria, $$interimElement, $mdUtil, $mdConstant) {
+function MdDialogService($timeout, $rootElement, $compile, $mdEffects, $animate, $mdAria, $$interimElement, $mdUtil, $mdConstant, $mdTheming) {
 
   var $dialogService;
   return $dialogService = $$interimElement({
@@ -1640,9 +1731,9 @@ function MdDialogService($timeout, $rootElement, $mdEffects, $animate, $mdAria, 
     configureAria(element.find('md-dialog'));
 
     if (options.hasBackdrop) {
-      var backdrop = angular.element('<md-backdrop class="opaque ng-enter">');
-      $animate.enter(backdrop, options.parent, null);
-      options.backdrop = backdrop;
+      options.backdrop = $compile('<md-backdrop class="md-opaque ng-enter">')(scope);
+      $mdTheming.inherit(options.backdrop, options.parent);
+      $animate.enter(options.backdrop, options.parent, null);
     }
 
     return $mdEffects.popIn(
@@ -1677,10 +1768,10 @@ function MdDialogService($timeout, $rootElement, $mdEffects, $animate, $mdAria, 
 
     function findCloseButton() {
       //If no element with class dialog-close, try to find the last
-      //button child in dialog-actions and assume it is a close button
+      //button child in md-actions and assume it is a close button
       var closeButton = element[0].querySelector('.dialog-close');
       if (!closeButton) {
-        var actionButtons = element[0].querySelectorAll('.dialog-actions button');
+        var actionButtons = element[0].querySelectorAll('.md-actions button');
         closeButton = actionButtons[ actionButtons.length - 1 ];
       }
       return angular.element(closeButton);
@@ -1715,12 +1806,12 @@ function MdDialogService($timeout, $rootElement, $mdEffects, $animate, $mdAria, 
       'role': 'dialog'
     });
 
-    var dialogContent = element.find('.dialog-content');
+    var dialogContent = element.find('md-content');
     if (dialogContent.length === 0){
       dialogContent = element;
     }
     var defaultText = $mdUtil.stringFromTextBody(dialogContent.text(), 3);
-    $mdAria.expect(element, 'aria-label', defaultText);
+    $mdAria.expect(element, 'aria-label', true, defaultText);
   }
 }
 })();
@@ -1733,9 +1824,13 @@ function MdDialogService($timeout, $rootElement, $mdEffects, $animate, $mdAria, 
  */
 angular.module('material.components.divider', [
   'material.animations',
-  'material.services.aria'
+  'material.services.aria',
+  'material.services.theming'
 ])
-  .directive('mdDivider', MdDividerDirective);
+.directive('mdDivider', [
+  '$mdTheming',
+  MdDividerDirective
+]);
 
 function MdDividerController(){}
 
@@ -1757,9 +1852,10 @@ function MdDividerController(){}
  * </hljs>
  *
  */
-function MdDividerDirective() {
+function MdDividerDirective($mdTheming) {
   return {
     restrict: 'E',
+    link: $mdTheming,
     controller: [MdDividerController]
   };
 }
@@ -1905,11 +2001,13 @@ function mdItemDirective() {
  */
 angular.module('material.components.progressCircular', [
   'material.animations',
-  'material.services.aria'
+  'material.services.aria',
+  'material.services.theming',
 ])
   .directive('mdProgressCircular', [
     '$$rAF',
     '$mdEffects',
+    '$mdTheming',
     MdProgressCircularDirective
   ]);
 
@@ -1941,7 +2039,7 @@ angular.module('material.components.progressCircular', [
  * <md-progress-circular mode="indeterminate"></md-progress-circular>
  * </hljs>
  */
-function MdProgressCircularDirective($$rAF, $mdEffects) {
+function MdProgressCircularDirective($$rAF, $mdEffects, $mdTheming) {
   var fillRotations = new Array(101),
     fixRotations = new Array(101);
 
@@ -1956,17 +2054,17 @@ function MdProgressCircularDirective($$rAF, $mdEffects) {
   return {
     restrict: 'E',
     template: 
-      '<div class="wrapper1"><div class="wrapper2"><div class="circle">' +
-        '<div class="mask full">' +
-          '<div class="fill"></div>' +
+      '<div class="md-wrapper1"><div class="md-wrapper2"><div class="md-circle">' +
+        '<div class="md-mask md-full">' +
+          '<div class="md-fill"></div>' +
         '</div>' +
-        '<div class="mask half">' +
-          '<div class="fill"></div>' +
-          '<div class="fill fix"></div>' +
+        '<div class="md-mask md-half">' +
+          '<div class="md-fill"></div>' +
+          '<div class="md-fill md-fix"></div>' +
         '</div>' +
-        '<div class="shadow"></div>' +
+        '<div class="md-shadow"></div>' +
       '</div>' +
-      '<div class="inset"></div></div></div>',
+      '<div class="md-inset"></div></div></div>',
     compile: compile
   };
 
@@ -1979,9 +2077,10 @@ function MdProgressCircularDirective($$rAF, $mdEffects) {
   }
 
   function postLink(scope, element, attr) {
+    $mdTheming(element);
     var circle = element[0],
-      fill = circle.querySelectorAll('.fill, .mask.full'),
-      fix = circle.querySelectorAll('.fill.fix'),
+      fill = circle.querySelectorAll('.md-fill, .md-mask.md-full'),
+      fix = circle.querySelectorAll('.md-fill.md-fix'),
       i, clamped, fillRotation, fixRotation;
 
     var diameter = attr.diameter || 48;
@@ -2028,11 +2127,13 @@ function MdProgressCircularDirective($$rAF, $mdEffects) {
  */
 angular.module('material.components.progressLinear', [
   'material.animations',
+  'material.services.theming',
   'material.services.aria'
 ])
 .directive('mdProgressLinear', [
   '$$rAF', 
   '$mdEffects',
+  '$mdTheming',
   MdProgressLinearDirective
 ]);
 
@@ -2066,14 +2167,14 @@ angular.module('material.components.progressLinear', [
  * <md-progress-linear mode="query"></md-progress-linear>
  * </hljs>
  */
-function MdProgressLinearDirective($$rAF, $mdEffects) {
+function MdProgressLinearDirective($$rAF, $mdEffects, $mdTheming) {
 
   return {
     restrict: 'E',
-    template: '<div class="container">' +
-      '<div class="dashed"></div>' +
-      '<div class="bar bar1"></div>' +
-      '<div class="bar bar2"></div>' +
+    template: '<div class="md-container">' +
+      '<div class="md-dashed"></div>' +
+      '<div class="md-bar md-bar1"></div>' +
+      '<div class="md-bar md-bar2"></div>' +
       '</div>',
     compile: compile
   };
@@ -2086,9 +2187,10 @@ function MdProgressLinearDirective($$rAF, $mdEffects) {
     return postLink;
   }
   function postLink(scope, element, attr) {
-    var bar1Style = element[0].querySelector('.bar1').style,
-      bar2Style = element[0].querySelector('.bar2').style,
-      container = angular.element(element[0].querySelector('.container'));
+    $mdTheming(element);
+    var bar1Style = element[0].querySelector('.md-bar1').style,
+      bar2Style = element[0].querySelector('.md-bar2').style,
+      container = angular.element(element[0].querySelector('.md-container'));
 
     attr.$observe('value', function(value) {
       if (attr.mode == 'query') {
@@ -2105,7 +2207,7 @@ function MdProgressLinearDirective($$rAF, $mdEffects) {
     });
 
     $$rAF(function() {
-      container.addClass('ready');
+      container.addClass('md-ready');
     });
   }
 
@@ -2152,16 +2254,19 @@ var progressLinearTransforms = (function() {
 angular.module('material.components.radioButton', [
   'material.core',
   'material.animations',
-  'material.services.aria'
+  'material.services.aria',
+  'material.services.theming'
 ])
   .directive('mdRadioGroup', [
     '$mdUtil',
     '$mdConstant',
+    '$mdTheming',
     mdRadioGroupDirective
   ])
   .directive('mdRadioButton', [
     '$mdAria',
     '$mdUtil',
+    '$mdTheming',
     mdRadioButtonDirective
   ]);
 
@@ -2196,7 +2301,7 @@ angular.module('material.components.radioButton', [
  * </hljs>
  *
  */
-function mdRadioGroupDirective($mdUtil, $mdConstant) {
+function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming) {
   RadioGroupController.prototype = createRadioGroupControllerProto();
 
   return {
@@ -2207,6 +2312,7 @@ function mdRadioGroupDirective($mdUtil, $mdConstant) {
   };
 
   function link(scope, element, attr, ctrls) {
+    $mdTheming(element);
     var rgCtrl = ctrls[0],
       ngModelCtrl = ctrls[1] || {
         $setViewValue: angular.noop
@@ -2334,7 +2440,7 @@ function mdRadioGroupDirective($mdUtil, $mdConstant) {
  * </hljs>
  *
  */
-function mdRadioButtonDirective($mdAria, $mdUtil) {
+function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
 
   var CHECKED_CSS = 'md-checked';
 
@@ -2353,6 +2459,7 @@ function mdRadioButtonDirective($mdAria, $mdUtil) {
   function link(scope, element, attr, rgCtrl) {
     var lastChecked;
 
+    $mdTheming(element);
     configureAria(element, scope);
 
     rgCtrl.add(render);
@@ -2398,7 +2505,7 @@ function mdRadioButtonDirective($mdAria, $mdUtil) {
         'aria-checked' : 'false'
       });
 
-      $mdAria.expect(element, 'aria-label', element.text());
+      $mdAria.expect(element, 'aria-label', true);
 
       /**
        * Build a unique ID for each radio button that will be used with aria-activedescendant.
@@ -2426,6 +2533,9 @@ function mdRadioButtonDirective($mdAria, $mdUtil) {
 angular.module('material.components.sidenav', [
   'material.core',
   'material.services.registry',
+  'material.services.media',
+  'material.components.backdrop',
+  'material.services.theming',
   'material.animations'
 ])
   .factory('$mdSidenav', [
@@ -2434,9 +2544,12 @@ angular.module('material.components.sidenav', [
   ])
   .directive('mdSidenav', [
     '$timeout',
-    '$mdEffects',
-    '$$rAF',
+    '$animate',
+    '$parse',
+    '$mdMedia',
     '$mdConstant',
+    '$compile',
+    '$mdTheming',
     mdSidenavDirective 
   ])
   .controller('$mdSidenavController', [
@@ -2467,24 +2580,12 @@ function mdSidenavController($scope, $element, $attrs, $timeout, $mdSidenav, $md
   this.isOpen = function() {
     return !!$scope.isOpen;
   };
-
-  /**
-   * Toggle the side menu to open or close depending on its current state.
-   */
   this.toggle = function() {
     $scope.isOpen = !$scope.isOpen;
   };
-
-  /**
-   * Open the side menu
-   */
   this.open = function() {
     $scope.isOpen = true;
   };
-
-  /**
-   * Close the side menu
-   */
   this.close = function() {
     $scope.isOpen = false;
   };
@@ -2522,32 +2623,16 @@ function mdSidenavService($mdComponentRegistry) {
 
     return {
       isOpen: function() {
-        if (!instance) { return; }
-        return instance.isOpen();
+        return instance && instance.isOpen();
       },
-      /**
-       * Toggle the given sidenav
-       * @param handle the specific sidenav to toggle
-       */
       toggle: function() {
-        if(!instance) { return; }
-        instance.toggle();
+        instance && instance.toggle();
       },
-      /**
-       * Open the given sidenav
-       * @param handle the specific sidenav to open
-       */
-      open: function(handle) {
-        if(!instance) { return; }
-        instance.open();
+      open: function() {
+        instance && instance.open();
       },
-      /**
-       * Close the given sidenav
-       * @param handle the specific sidenav to close
-       */
-      close: function(handle) {
-        if(!instance) { return; }
-        instance.close();
+      close: function() {
+        instance && instance.close();
       }
     };
   };
@@ -2563,8 +2648,7 @@ function mdSidenavService($mdComponentRegistry) {
  *
  * A Sidenav component that can be opened and closed programatically.
  *
- * When used properly with a layout, it will seamleslly stay open on medium
- * and larger screens, while being hidden by default on mobile devices.
+ * By default, upon opening it will slide out on top of the main content area.
  *
  * @usage
  * <hljs lang="html">
@@ -2580,7 +2664,9 @@ function mdSidenavService($mdComponentRegistry) {
  *     </md-button>
  *   </md-content>
  *
- *   <md-sidenav component-id="right" class="md-sidenav-right">
+ *   <md-sidenav component-id="right" 
+ *     is-locked-open="$media('min-width: 333px')"
+ *     class="md-sidenav-right">
  *     Right Nav!
  *   </md-sidenav>
  * </div>
@@ -2594,69 +2680,81 @@ function mdSidenavService($mdComponentRegistry) {
  *   };
  * });
  * </hljs>
+ *
+ * @param {expression=} is-open A model bound to whether the sidenav is opened.
+ * @param {string=} component-id componentId to use with $mdSidenav service.
+ * @param {expression=} is-locked-open When this expression evalutes to true,
+ * the sidenav 'locks open': it falls into the content's flow instead
+ * of appearing over it. This overrides the `is-open` attribute.
+ *
+ * A $media() function is exposed to the is-locked-open attribute, which
+ * can be given a media query or one of the `sm`, `md` or `lg` presets.
+ * Examples:
+ *
+ *   - `<md-sidenav is-locked-open="shouldLockOpen"></md-sidenav>`
+ *   - `<md-sidenav is-locked-open="$media('min-width: 1000px')"></md-sidenav>`
+ *   - `<md-sidenav is-locked-open="$media('sm')"></md-sidenav>` <!-- locks open on small screens !-->
  */
-function mdSidenavDirective($timeout, $mdEffects, $$rAF, $mdConstant) {
+function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $compile, $mdTheming) {
   return {
     restrict: 'E',
-    scope: {},
+    scope: {
+      isOpen: '=?'
+    },
     controller: '$mdSidenavController',
-    compile: compile
+    compile: function(element) {
+      element.addClass('md-closed');
+      element.attr('tabIndex', '-1');
+      return postLink;
+    }
   };
 
-  function compile(element, attr) {
-    element.addClass('closed');
-
-    return postLink;
-  }
   function postLink(scope, element, attr, sidenavCtrl) {
-    var backdrop = angular.element('<md-backdrop class="md-sidenav-backdrop">');
+    var isLockedOpenParsed = $parse(attr.isLockedOpen);
+    var backdrop = $compile(
+      '<md-backdrop class="md-sidenav-backdrop md-opaque">'
+    )(scope);
 
-    scope.$watch('isOpen', onShowHideSide);
-    element.on($mdEffects.TRANSITIONEND_EVENT, onTransitionEnd);
+    $mdTheming.inherit(backdrop, element);
+
+    scope.$watch('isOpen', setOpen);
+    scope.$watch(function() {
+      return isLockedOpenParsed(scope.$parent, {
+        $media: $mdMedia
+      });
+    }, function(isLocked) {
+      element.toggleClass('md-locked-open', !!isLocked);
+      backdrop.toggleClass('md-locked-open', !!isLocked);
+    });
 
     /**
      * Toggle the SideNav view and attach/detach listeners
      * @param isOpen
      */
-    function onShowHideSide(isOpen) {
+    function setOpen(isOpen) {
       var parent = element.parent();
 
-      if (isOpen) {
-        element.removeClass('closed');
+      parent[isOpen ? 'on' : 'off']('keydown', onKeyDown);
+      $animate[isOpen ? 'enter' : 'leave'](backdrop, parent);
+      backdrop[isOpen ? 'on' : 'off']('click', close);
 
-        parent.append(backdrop);
-        backdrop.on('click', close);
-        parent.on('keydown', onKeyDown);
-
-      } else {
-        backdrop.remove();
-        backdrop.off('click', close);
-        parent.off('keydown', onKeyDown);
-      }
-
-      // Wait until the next frame, so that if the `closed` class was just removed the 
-      // element has a chance to 're-initialize' from being display: none.
-      $$rAF(function() {
-        element.toggleClass('open', !!scope.isOpen);
+      $animate[isOpen ? 'removeClass' : 'addClass'](element, 'md-closed').then(function() {
+        // If we opened, and haven't closed again before the animation finished
+        if (scope.isOpen) {
+          element.focus();
+        }
       });
-    }
-
-    function onTransitionEnd(ev) {
-      if (ev.target === element[0] && !scope.isOpen) {
-        element.addClass('closed');
-      }
     }
 
     /**
      * Auto-close sideNav when the `escape` key is pressed.
      * @param evt
      */
-    function onKeyDown(evt) {
-      if(evt.which === $mdConstant.KEY_CODE.ESCAPE){
+    function onKeyDown(ev) {
+      if (ev.which === $mdConstant.KEY_CODE.ESCAPE) {
         close();
-
-        evt.preventDefault();
-        evt.stopPropagation();
+        ev.preventDefault();
+        ev.stopPropagation();
       }
     }
 
@@ -2666,9 +2764,6 @@ function mdSidenavDirective($timeout, $mdEffects, $$rAF, $mdConstant) {
      * to close() and perform its own actions.
      */
     function close() {
-
-      onShowHideSide( false );
-
       $timeout(function(){
         sidenavCtrl.close();
       });
@@ -2687,9 +2782,11 @@ function mdSidenavDirective($timeout, $mdEffects, $$rAF, $mdConstant) {
 angular.module('material.components.slider', [
   'material.core',
   'material.animations',
-  'material.services.aria'
+  'material.services.aria',
+  'material.services.theming'
 ])
 .directive('mdSlider', [
+  '$mdTheming',
   SliderDirective
 ]);
 
@@ -2727,7 +2824,7 @@ angular.module('material.components.slider', [
  * @param {number=} min The minimum value the user is allowed to pick. Default 0.
  * @param {number=} max The maximum value the user is allowed to pick. Default 100.
  */
-function SliderDirective() {
+function SliderDirective($mdTheming) {
   return {
     scope: {},
     require: ['?ngModel', 'mdSlider'],
@@ -2744,24 +2841,25 @@ function SliderDirective() {
       SliderController
     ],
     template:
-      '<div class="slider-track-container">' +
-        '<div class="slider-track"></div>' +
-        '<div class="slider-track slider-track-fill"></div>' +
-        '<div class="slider-track-ticks"></div>' +
+      '<div class="md-track-container">' +
+        '<div class="md-track"></div>' +
+        '<div class="md-track md-track-fill"></div>' +
+        '<div class="md-track-ticks"></div>' +
       '</div>' +
-      '<div class="slider-thumb-container">' +
-        '<div class="slider-thumb"></div>' +
-        '<div class="slider-focus-thumb"></div>' +
-        '<div class="slider-focus-ring"></div>' +
-        '<div class="slider-sign">' +
-          '<span class="slider-thumb-text" ng-bind="modelValue"></span>' +
+      '<div class="md-thumb-container">' +
+        '<div class="md-thumb"></div>' +
+        '<div class="md-focus-thumb"></div>' +
+        '<div class="md-focus-ring"></div>' +
+        '<div class="md-sign">' +
+          '<span class="md-thumb-text" ng-bind="modelValue"></span>' +
         '</div>' +
-        '<div class="slider-disabled-thumb"></div>' +
+        '<div class="md-disabled-thumb"></div>' +
       '</div>',
     link: postLink
   };
 
   function postLink(scope, element, attr, ctrls) {
+    $mdTheming(element);
     var ngModelCtrl = ctrls[0] || {
       // Mock ngModelController if it doesn't exist to give us
       // the minimum functionality needed
@@ -2786,11 +2884,12 @@ function SliderDirective() {
 function SliderController(scope, element, attr, $$rAF, $window, $mdEffects, $mdAria, $mdUtil, $mdConstant) {
 
   this.init = function init(ngModelCtrl) {
-    var thumb = angular.element(element[0].querySelector('.slider-thumb'));
+    var thumb = angular.element(element[0].querySelector('.md-thumb'));
     var thumbContainer = thumb.parent();
-    var trackContainer = angular.element(element[0].querySelector('.slider-track-container'));
-    var activeTrack = angular.element(element[0].querySelector('.slider-track-fill'));
-    var tickContainer = angular.element(element[0].querySelector('.slider-track-ticks'));
+    var trackContainer = angular.element(element[0].querySelector('.md-track-container'));
+    var activeTrack = angular.element(element[0].querySelector('.md-track-fill'));
+    var tickContainer = angular.element(element[0].querySelector('.md-track-ticks'));
+    var throttledRefreshDimensions = $mdUtil.throttle(refreshSliderDimensions, 5000);
 
     // Default values, overridable by attrs
     attr.min ? attr.$observe('min', updateMin) : updateMin(0);
@@ -2807,7 +2906,8 @@ function SliderController(scope, element, attr, $$rAF, $window, $mdEffects, $mdA
       updateAriaDisabled(!!attr.disabled);
     }
 
-    $mdAria.expect(element, 'aria-label');
+    $mdAria.expect(element, 'aria-label', false);
+
     element.attr('tabIndex', 0);
     element.attr('role', 'slider');
     element.on('keydown', keydownListener);
@@ -2896,7 +2996,6 @@ function SliderController(scope, element, attr, $$rAF, $window, $mdEffects, $mdA
      * Refreshing Dimensions
      */
     var sliderDimensions = {};
-    var throttledRefreshDimensions = $mdUtil.throttle(refreshSliderDimensions, 5000);
     refreshSliderDimensions();
     function refreshSliderDimensions() {
       sliderDimensions = trackContainer[0].getBoundingClientRect();
@@ -2939,6 +3038,11 @@ function SliderController(scope, element, attr, $$rAF, $window, $mdEffects, $mdA
       ngModelCtrl.$setViewValue( minMaxValidator(stepValidator(value)) );
     }
     function ngModelRender() {
+
+      if (isNaN(ngModelCtrl.$viewValue)) {
+        ngModelCtrl.$viewValue = ngModelCtrl.$modelValue;
+      }
+
       var percent = (ngModelCtrl.$viewValue - min) / (max - min);
       scope.modelValue = ngModelCtrl.$viewValue;
       element.attr('aria-valuenow', ngModelCtrl.$viewValue);
@@ -2965,7 +3069,7 @@ function SliderController(scope, element, attr, $$rAF, $window, $mdEffects, $mdA
         $mdEffects.TRANSFORM,
         'translate3d(' + getSliderDimensions().width * percent + 'px,0,0)'
       );
-      element.toggleClass('slider-min', percent === 0);
+      element.toggleClass('md-min', percent === 0);
     }
 
 
@@ -3247,6 +3351,7 @@ function MdSticky($document, $mdEffects, $compile, $$rAF, $mdUtil) {
         current = current.offsetParent;
       }
       item.height = item.element.prop('offsetHeight');
+      item.clone.css('margin-left', item.left + 'px');
     }
 
 
@@ -3403,11 +3508,13 @@ function MdSticky($document, $mdEffects, $compile, $$rAF, $mdUtil) {
  * SubHeader module
  */
 angular.module('material.components.subheader', [
-  'material.components.sticky'
+  'material.components.sticky',
+  'material.services.theming'
 ])
 .directive('mdSubheader', [
   '$mdSticky',
   '$compile',
+  '$mdTheming',
   MdSubheaderDirective
 ]);
 
@@ -3427,7 +3534,7 @@ angular.module('material.components.subheader', [
  * </hljs>
  */
 
-function MdSubheaderDirective($mdSticky, $compile) {
+function MdSubheaderDirective($mdSticky, $compile, $mdTheming) {
   return {
     restrict: 'E',
     replace: true,
@@ -3439,6 +3546,7 @@ function MdSubheaderDirective($mdSticky, $compile) {
     compile: function(element, attr, transclude) {
       var outerHTML = element[0].outerHTML;
       return function postLink(scope, element, attr) {
+        $mdTheming(element);
         function getContent(el) {
           return angular.element(el[0].querySelector('.md-subheader-content'));
         }
@@ -3453,6 +3561,7 @@ function MdSubheaderDirective($mdSticky, $compile) {
         // of the element, that will be 'stickied' as the user scrolls.
         transclude(scope, function(clone) {
           var stickyClone = $compile(angular.element(outerHTML))(scope);
+          $mdTheming(stickyClone);
           getContent(stickyClone).append(clone);
           $mdSticky(scope, element, stickyClone);
         });
@@ -3574,9 +3683,9 @@ function MdSubheaderDirective($mdSticky, $compile) {
      * @restrict A
      *
      * @description
-     * The `<div  md-swipe-left="<expression" >` directive identifies an element on which
+     * The `<div  md-swipe-left="expression">` directive identifies an element on which
      * HammerJS horizontal swipe left and pan left support will be active. The swipe/pan action
-     * can result in custom activity trigger by evaluating `<expression>`.
+     * can result in custom activity trigger by evaluating `expression`.
      *
      * @param {boolean=} noPan Use of attribute indicates flag to disable detection of `panleft` activity
      *
@@ -3608,9 +3717,9 @@ function MdSubheaderDirective($mdSticky, $compile) {
      * @restrict A
      *
      * @description
-     * The `<div  md-swipe-right="<expression" >` directive identifies functionality
+     * The `<div  md-swipe-right="expression">` directive identifies functionality
      * that attaches HammerJS horizontal swipe right and pan right support to an element. The swipe/pan action
-     * can result in activity trigger by evaluating `<expression>`
+     * can result in activity trigger by evaluating `expression`
      *
      * @param {boolean=} noPan Use of attribute indicates flag to disable detection of `panright` activity
      *
@@ -3680,12 +3789,14 @@ function MdSubheaderDirective($mdSticky, $compile) {
 
 angular.module('material.components.switch', [
   'material.components.checkbox',
-  'material.components.radioButton'
+  'material.components.radioButton',
+  'material.services.theming'
 ])
 
 .directive('mdSwitch', [
   'mdCheckboxDirective',
   'mdRadioButtonDirective',
+  '$mdTheming',
   MdSwitch
 ]);
 
@@ -3723,7 +3834,7 @@ angular.module('material.components.switch', [
  *
  * </hljs>
  */
-function MdSwitch(checkboxDirectives, radioButtonDirectives) {
+function MdSwitch(checkboxDirectives, radioButtonDirectives, $mdTheming) {
   var checkboxDirective = checkboxDirectives[0];
   var radioButtonDirective = radioButtonDirectives[0];
 
@@ -3749,8 +3860,9 @@ function MdSwitch(checkboxDirectives, radioButtonDirectives) {
     var link = checkboxDirective.compile(thumb, attr);
 
     return function (scope, element, attr, ngModelCtrl) {
+      $mdTheming(element);
       var thumb = angular.element(element[0].querySelector('.md-switch-thumb'));
-      return link(scope, thumb, attr, ngModelCtrl)
+      return link(scope, thumb, attr, ngModelCtrl);
     };
   }
 }
@@ -3767,9 +3879,9 @@ function MdSwitch(checkboxDirectives, radioButtonDirectives) {
 angular.module('material.components.tabs', [
   'material.core',
   'material.animations',
-  'material.components.swipe'
+  'material.components.swipe',
+  'material.services.theming'
 ]);
-
 })();
 
 (function() {
@@ -3779,10 +3891,10 @@ angular.module('material.components.tabs', [
  * @description
  * Form
  */
-angular.module('material.components.textField', ['material.core'])
+angular.module('material.components.textField', ['material.core', 'material.services.theming'])
        .directive('mdInputGroup', [ mdInputGroupDirective ])
        .directive('mdInput', ['$mdUtil', mdInputDirective ])
-       .directive('mdTextFloat', [ mdTextFloatDirective ]);
+       .directive('mdTextFloat', [ '$mdTheming', '$mdUtil', mdTextFloatDirective ]);
 
 
 
@@ -3796,9 +3908,10 @@ angular.module('material.components.textField', ['material.core'])
  * @description
  * Use the `<md-text-float>` directive to quickly construct `Floating Label` text fields
  *
+ * @param {string} fid Attribute used for accessibility link pairing between the Label and Input elements
+ * @param {string=} type Optional value to define the type of input field. Defaults to string.
  * @param {string} label Attribute to specify the input text field hint.
  * @param {string=} ng-model Optional value to assign as existing input text string
- * @param {string=} type Optional value to define the type of input field. Defaults to string.
  *
  * @usage
  * <hljs lang="html">
@@ -3811,15 +3924,21 @@ angular.module('material.components.textField', ['material.core'])
  * <md-text-float label="eMail"    ng-model="user.email" type="email" ></md-text-float>
  * </hljs>
  */
-function mdTextFloatDirective() {
+function mdTextFloatDirective($mdTheming, $mdUtil) {
   return {
     restrict: 'E',
     replace: true,
     scope : {
       fid : '@?',
+      label : '@?',
       value : '=ngModel'
     },
-    compile : function() {
+    compile : function(element, attr) {
+
+      if ( angular.isUndefined(attr.fid) ) {
+        attr.fid = $mdUtil.nextUid();
+      }
+
       return {
         pre : function(scope, element, attrs) {
           // transpose `disabled` flag
@@ -3828,20 +3947,20 @@ function mdTextFloatDirective() {
             scope.isDisabled = true;
           }
 
-          // transpose the `label` value
-          scope.label = attrs.label || "";
-          scope.fid = scope.fid || scope.label;
+          scope.inputType = attrs.type || "text";
+          element.removeAttr('type');
 
-          // transpose optional `type` and `class` settings
-          element.attr('type', attrs.type || "text");
+          // transpose optional `class` settings
           element.attr('class', attrs.class );
-        }
+
+        },
+        post: $mdTheming
       };
     },
     template:
-    '<md-input-group ng-disabled="isDisabled">' +
-    ' <label for="{{fid}}">{{label}}</label>' +
-    ' <md-input id="{{fid}}" ng-model="value">' +
+    '<md-input-group ng-disabled="isDisabled" tabindex="-1">' +
+    ' <label for="{{fid}}" >{{label}}</label>' +
+    ' <md-input id="{{fid}}" ng-model="value" type="{{inputType}}"></md-input>' +
     '</md-input-group>'
   };
 }
@@ -3872,10 +3991,11 @@ function mdInputGroupDirective() {
         $element.toggleClass('md-input-focused', !!isFocused);
       };
       this.setHasValue = function(hasValue) {
-        $element.toggleClass('md-input-has-value', !!hasValue);
+        $element.toggleClass('md-input-has-value', hasValue );
       };
     }]
   };
+
 }
 
 /*
@@ -3915,6 +4035,7 @@ function mdInputDirective($mdUtil) {
       var isDisabled = $mdUtil.isParentDisabled(element);
 
       element.attr('tabindex', isDisabled ? -1 : 0 );
+      element.attr('aria-disabled', isDisabled ? 'true' : 'false');
       element.attr('type', attr.type || element.parent().attr('type') || "text" );
 
       // When the input value changes, check if it "has" a value, and
@@ -3922,15 +4043,13 @@ function mdInputDirective($mdUtil) {
       if (ngModelCtrl) {
         //Add a $formatter so we don't use up the render function
         ngModelCtrl.$formatters.push(function(value) {
-          inputGroupCtrl.setHasValue(angular.isDefined(value) && value!==null );
+          inputGroupCtrl.setHasValue( isNotEmpty(value) );
           return value;
         });
       }
 
       element.on('input', function() {
-        var value = element.val();
-
-        inputGroupCtrl.setHasValue(angular.isDefined(value) && value!==null);
+        inputGroupCtrl.setHasValue( isNotEmpty() );
       });
 
       // When the input focuses, add the focused class to the group
@@ -3940,12 +4059,20 @@ function mdInputDirective($mdUtil) {
       // When the input blurs, remove the focused class from the group
       element.on('blur', function(e) {
         inputGroupCtrl.setFocused(false);
+        inputGroupCtrl.setHasValue( isNotEmpty() );
       });
 
       scope.$on('$destroy', function() {
         inputGroupCtrl.setFocused(false);
         inputGroupCtrl.setHasValue(false);
       });
+
+
+      function isNotEmpty(value) {
+        value = angular.isUndefined(value) ? element.val() : value;
+        return (angular.isDefined(value) && (value!==null) &&
+               (value.toString().trim() != ""));
+      }
     }
   };
 }
@@ -3992,8 +4119,11 @@ function MdToastDirective() {
  * `$mdToast` opens a toast nofication on any position on the screen with an optional
  * duration, and provides a simple promise API.
  *
+ *
  * ### Restrictions
  * - The toast's template must have an outer `<md-toast>` element.
+ * - For a toast action, use element with class `md-action`.
+ * - Add the class `md-capsule` for curved corners.
  *
  * @usage
  * <hljs lang="html">
@@ -4074,12 +4204,13 @@ function MdToastDirective() {
  *
  */
 
-function MdToastService($timeout, $$interimElement, $animate, $mdSwipe) {
+function MdToastService($timeout, $$interimElement, $animate, $mdSwipe, $mdTheming) {
 
   var factoryDef = {
     onShow: onShow,
     onRemove: onRemove,
     position: 'bottom left',
+    themable: true,
     hideDelay: 3000,
   };
 
@@ -4087,13 +4218,16 @@ function MdToastService($timeout, $$interimElement, $animate, $mdSwipe) {
   return $mdToast;
 
   function onShow(scope, element, options) {
-    element.addClass(options.position);
+    // 'top left' -> 'md-top md-left'
+    element.addClass(options.position.split(' ').map(function(pos) {
+      return 'md-' + pos;
+    }).join(' '));
     options.parent.addClass(toastOpenClass(options.position));
 
     var configureSwipe = $mdSwipe(scope, 'swipeleft swiperight');
     options.detachSwipe = configureSwipe(element, function(ev) {
       //Add swipeleft/swiperight class to element so it can animate correctly
-      element.addClass(ev.type);
+      element.addClass('md-' + ev.type);
       $timeout($mdToast.hide);
     });
 
@@ -4121,12 +4255,14 @@ function MdToastService($timeout, $$interimElement, $animate, $mdSwipe) {
 angular.module('material.components.toolbar', [
   'material.core',
   'material.components.content',
+  'material.services.theming',
   'material.animations'
 ])
   .directive('mdToolbar', [
     '$$rAF',
     '$mdEffects',
     '$mdUtil',
+    '$mdTheming',
     mdToolbarDirective
   ]);
 
@@ -4177,12 +4313,13 @@ angular.module('material.components.toolbar', [
  * shrinking by. For example, if 0.25 is given then the toolbar will shrink
  * at one fourth the rate at which the user scrolls down. Default 0.5.
  */ 
-function mdToolbarDirective($$rAF, $mdEffects, $mdUtil) {
+function mdToolbarDirective($$rAF, $mdEffects, $mdUtil, $mdTheming) {
 
   return {
     restrict: 'E',
     controller: angular.noop,
     link: function(scope, element, attr) {
+      $mdTheming(element);
 
       if (angular.isDefined(attr.scrollShrink)) {
         setupScrollShrink();
@@ -4272,7 +4409,10 @@ function mdToolbarDirective($$rAF, $mdEffects, $mdUtil) {
  * @ngdoc module
  * @name material.components.tooltip
  */
-angular.module('material.components.tooltip', ['material.core'])
+angular.module('material.components.tooltip', [
+  'material.core',
+  'material.services.theming'
+])
 
 .directive('mdTooltip', [
   '$timeout',
@@ -4280,6 +4420,7 @@ angular.module('material.components.tooltip', ['material.core'])
   '$$rAF',
   '$document',
   '$mdUtil',
+  '$mdTheming',
   MdTooltipDirective
 ]);
 
@@ -4306,13 +4447,12 @@ angular.module('material.components.tooltip', ['material.core'])
  * @param {expression=} visible Boolean bound to whether the tooltip is 
  * currently visible.
  */
-function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil) {
+function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdTheming) {
 
   var TOOLTIP_SHOW_DELAY = 400;
   var TOOLTIP_WINDOW_EDGE_SPACE = 8;
   // We have to append tooltips to the body, because we use
-  // getBoundingClientRect().
-  // to find where to append the tooltip.
+  // getBoundingClientRect() to find where to append the tooltip.
   var tooltipParent = angular.element(document.body);
 
   return {
@@ -4320,8 +4460,8 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil) {
     transclude: true,
     require: '^?mdContent',
     template: 
-      '<div class="tooltip-background"></div>' +
-      '<div class="tooltip-content" ng-transclude></div>',
+      '<div class="md-background"></div>' +
+      '<div class="md-content" ng-transclude></div>',
     scope: {
       visible: '=?'
     },
@@ -4329,6 +4469,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil) {
   };
 
   function postLink(scope, element, attr, contentCtrl) {
+    $mdTheming(element);
     var parent = element.parent();
 
     // We will re-attach tooltip when visible
@@ -4341,7 +4482,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil) {
     });
     parent.on('blur mouseleave touchend touchcancel', function() {
       // Don't hide the tooltip if the parent is still focused.
-      if (document.activeElement === parent[0]) return;
+      if ($document.activeElement === parent[0]) return;
       setVisible(false);
     });
 
@@ -4390,7 +4531,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil) {
     function showTooltip() {
       // Insert the element before positioning it, so we can get position
       // (tooltip is hidden by default)
-      element.removeClass('tooltip-hide');
+      element.removeClass('md-hide');
       parent.attr('aria-describedby', element.attr('id'));
       tooltipParent.append(element);
 
@@ -4403,14 +4544,14 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil) {
         $$rAF(function() {
           positionTooltip();
           if (!scope.visible) return;
-          element.addClass('tooltip-show');
+          element.addClass('md-show');
         });
 
       });
     }
 
     function hideTooltip() {
-      element.removeClass('tooltip-show').addClass('tooltip-hide');
+      element.removeClass('md-show').addClass('md-hide');
       parent.removeAttr('aria-describedby');
       $timeout(function() {
         if (scope.visible) return;
@@ -4450,7 +4591,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil) {
       element.css({top: newPosition.top + 'px', left: newPosition.left + 'px'});
       // Tell the CSS the size of this tooltip, as a multiple of 32.
       element.attr('width-32', Math.ceil(tipRect.width / 32));
-      element.attr('tooltip-direction', tipDirection);
+      element.attr('md-direction', tipDirection);
     }
 
   }
@@ -4470,12 +4611,13 @@ angular.module('material.components.whiteframe', []);
 angular.module('material.services.aria', [])
 
 .service('$mdAria', [
+  '$$rAF',
   '$log',
   AriaService
 ]);
 
-function AriaService($log) {
-  var messageTemplate = 'ARIA: Attribute "%s", required for accessibility, is missing on "%s"!';
+function AriaService($$rAF, $log) {
+  var messageTemplate = 'ARIA: Attribute "%s", required for accessibility, is missing on "%s"';
   var defaultValueTemplate = 'Default value was set: %s="%s".';
 
   return {
@@ -4486,23 +4628,31 @@ function AriaService($log) {
    * Check if expected ARIA has been specified on the target element
    * @param element
    * @param attrName
-   * @param defaultValue
+   * @param copyElementText
+   * @param {optional} defaultValue
    */
-  function expectAttribute(element, attrName, defaultValue) {
+  function expectAttribute(element, attrName, copyElementText, defaultValue) {
 
-    var node = element[0];
-    if (!node.hasAttribute(attrName)) {
-      var hasDefault = angular.isDefined(defaultValue);
+    $$rAF(function(){
 
-      if (hasDefault) {
-        defaultValue = String(defaultValue).trim();
-        // $log.warn(messageTemplate + ' ' + defaultValueTemplate,
-        //           attrName, getTagString(node), attrName, defaultValue);
-        element.attr(attrName, defaultValue);
-      } else {
-        // $log.warn(messageTemplate, attrName, getTagString(node));
+      var node = element[0];
+      if (!node.hasAttribute(attrName)) {
+
+        var hasDefault;
+        if(copyElementText === true){
+          if(!defaultValue) defaultValue = element.text().trim();
+          hasDefault = angular.isDefined(defaultValue) && defaultValue.length;
+        }
+
+        if (hasDefault) {
+          defaultValue = String(defaultValue).trim();
+          element.attr(attrName, defaultValue);
+        } else {
+          $log.warn(messageTemplate, attrName, node);
+          $log.warn(node);
+        }
       }
-    }
+    });
   }
 
 
@@ -4767,7 +4917,8 @@ function mdCompilerService($q, $http, $injector, $compile, $controller, $templat
  */
 
 angular.module('material.services.interimElement', [
-  'material.services.compiler'
+  'material.services.compiler',
+  'material.services.theming'
 ])
 .factory('$$interimElement', [
   '$q',
@@ -4776,6 +4927,7 @@ angular.module('material.services.interimElement', [
   '$rootElement',
   '$animate',
   '$mdCompiler',
+  '$mdTheming',
   InterimElementFactory
 ]);
 
@@ -4802,7 +4954,7 @@ angular.module('material.services.interimElement', [
  *
  */
 
-function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate, $mdCompiler) {
+function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate, $mdCompiler, $mdTheming) {
 
   return function createInterimElementService(defaults) {
 
@@ -4926,6 +5078,7 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
               if (!options.parent.length) options.parent = $rootElement;
             }
             element = compiledData.link(options.scope);
+            if (options.themable) $mdTheming(element);
             var ret = options.onShow(options.scope, element, options);
             return $q.when(ret)
               .then(startHideTimeout);
@@ -4955,6 +5108,63 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
   };
 }
 
+})();
+
+(function() {
+angular.module('material.services.media', [
+  'material.core'
+])
+
+.factory('$mdMedia', [
+  '$window',
+  '$mdUtil',
+  '$timeout',
+  mdMediaFactory
+]);
+
+function mdMediaFactory($window, $mdUtil, $timeout) {
+  var cache = $mdUtil.cacheFactory('$mdMedia', { capacity: 15 });
+  var presets = {
+    sm: '(min-width: 600px)',
+    md: '(min-width: 960px)',
+    lg: '(min-width: 1200px)'
+  };
+
+  angular.element($window).on('resize', updateAll);
+
+  return $mdMedia;
+
+  function $mdMedia(query) {
+    query = validate(query);
+    var result;
+    if ( !angular.isDefined(result = cache.get(query)) ) {
+      return add(query);
+    }
+    return result;
+  }
+
+  function validate(query) {
+    return presets[query] || (
+      query.charAt(0) != '(' ?  ('(' + query + ')') : query
+    );
+  }
+
+  function add(query) {
+    return cache.put(query, !!$window.matchMedia(query).matches);
+  }
+  
+  function updateAll() {
+    var keys = cache.keys();
+    if (keys.length) {
+      for (var i = 0, ii = keys.length; i < ii; i++) {
+        cache.put(keys[i], !!$window.matchMedia(keys[i]).matches);
+      }
+      // trigger an $digest()
+      $timeout(angular.noop);
+    }
+  }
+
+}
 })();
 
 (function() {
@@ -5032,6 +5242,121 @@ function mdComponentRegistry($log) {
   }
 }
 
+})();
+
+(function() {
+/*
+ * @ngdoc module
+ * @name material.services.theming
+ * @description InterimElement
+ */
+
+angular.module('material.services.theming', [
+])
+.directive('mdTheme', [
+  '$interpolate',
+  ThemingDirective
+])
+.directive('mdThemable', [
+  '$mdTheming',
+  ThemableDirective
+])
+.provider('$mdTheming', [
+  Theming
+]);
+
+/*
+ * @ngdoc provider
+ * @name $mdTheming
+ *
+ * @description
+ *
+ * Provider that makes an element apply theming related classes to itself.
+ *
+ * ```js
+ * app.directive('myFancyDirective', function($mdTheming) {
+ *   return {
+ *     restrict: 'e',
+ *     link: function(scope, el, attrs) {
+ *       $mdTheming(el);
+ *     }
+ *   };
+ * });
+ * ```
+ * @param {el=} element to apply theming to
+ *
+ * @returns {$$interimElement.$service}
+ *
+ */
+
+function Theming($injector) {
+  var defaultTheme = 'default';
+  return {
+    setDefaultTheme: function(theme) {
+      defaultTheme = theme;
+    },
+    $get: ['$rootElement', '$rootScope', ThemingService]
+  };
+
+  function ThemingService($rootElement, $rootScope) {
+    applyTheme.inherit = function(el, parent) {
+      var ctrl = parent.controller('mdTheme');
+
+      if (angular.isDefined(el.attr('md-theme-watch'))) { 
+        var deregisterWatch = $rootScope.$watch(function() { 
+          return ctrl && ctrl.$mdTheme || defaultTheme; 
+        }, changeTheme);
+        el.on('$destroy', deregisterWatch);
+      } else {
+        var theme = ctrl && ctrl.$mdTheme || defaultTheme;
+        changeTheme(theme);
+      }
+
+      function changeTheme(theme) {
+        var oldTheme = el.data('$mdThemeName');
+        if (oldTheme) el.removeClass('md-' + oldTheme +'-theme');
+        el.addClass('md-' + theme + '-theme');
+        el.data('$mdThemeName', theme);
+      }
+    };
+
+    return applyTheme;
+
+    function applyTheme(scope, el) {
+      // Allow us to be invoked via a linking function signature.
+      if (el === undefined) { 
+        el = scope;
+        scope = undefined;
+      }
+      if (scope === undefined) {
+        scope = $rootScope;
+      }
+      applyTheme.inherit(el, el);
+    }
+  }
+}
+
+function ThemingDirective($interpolate) {
+  return {
+    priority: 100,
+    link: {
+      pre: function(scope, el, attrs) {
+        var ctrl = {
+          $setTheme: function(theme) {
+            ctrl.$mdTheme = theme;
+          }
+        };
+        el.data('$mdThemeController', ctrl);
+        ctrl.$setTheme($interpolate(attrs.mdTheme)(scope));
+        attrs.$observe('mdTheme', ctrl.$setTheme);
+      }
+    }
+  };
+}
+
+function ThemableDirective($mdTheming) {
+  return $mdTheming;
+}
 })();
 
 (function() {
@@ -5324,7 +5649,7 @@ function TabItemController(scope, element, $compile, $animate, $mdSwipe, $mdUtil
   self.$$onSwipe = angular.noop;
 
   // Properties
-  self.contentContainer = angular.element('<div class="tab-content ng-hide">');
+  self.contentContainer = angular.element('<div class="md-tab-content ng-hide">');
   self.element = element;
 
   // Methods
@@ -5433,7 +5758,7 @@ angular.module('material.components.tabs')
  * markup of the `<md-tab>` is used as the tab header markup.
  *
  * If a tab **label** has been identified, then any **non-**`<md-tab-label>` markup
- * will be considered tab content and will be transcluded to the internal `<div class="tabs-content">` container.
+ * will be considered tab content and will be transcluded to the internal `<div class="md-tabs-content">` container.
  *
  * This container is used by the TabsController to show/hide the active tab's content view. This synchronization is
  * automatically managed by the internal TabsController whenever the tab selection changes. Selection changes can
@@ -5615,7 +5940,7 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
           'aria-labelledby': tabId
         });
 
-        $mdAria.expect(element, 'aria-label', element.text());
+        $mdAria.expect(element, 'aria-label', true);
       }
 
     };
@@ -5644,7 +5969,7 @@ function MdTabsController(scope, element, $mdUtil) {
   // Properties
   self.element = element;
   // The section containing the tab content elements
-  self.contentArea = angular.element(element[0].querySelector('.tabs-content'));
+  self.contentArea = angular.element(element[0].querySelector('.md-tabs-content'));
 
   // Methods from iterator
   self.inRange = tabsList.inRange;
@@ -5863,10 +6188,11 @@ angular.module('material.components.tabs')
  */
 .directive('mdTabs', [
   '$parse',
+  '$mdTheming',
   TabsDirective
 ]);
 
-function TabsDirective($parse) {
+function TabsDirective($parse, $mdTheming) {
   return {
     restrict: 'E',
     controller: '$mdTabs',
@@ -5875,34 +6201,34 @@ function TabsDirective($parse) {
     scope: {
       selectedIndex: '=?selected'
     },
-    template: 
-      '<section class="tabs-header" ' +
-        'ng-class="{\'tab-paginating\': pagination.active}">' +
+    template:
+      '<section class="md-header" ' +
+        'ng-class="{\'md-paginating\': pagination.active}">' +
 
-        '<div class="tab-paginator prev" ' +
+        '<div class="md-paginator md-prev" ' +
           'ng-if="pagination.active && pagination.hasPrev" ' +
           'ng-click="pagination.clickPrevious()">' +
         '</div>' +
 
         // overflow: hidden container when paginating
-        '<div class="tabs-header-items-container" md-tabs-pagination>' +
+        '<div class="md-header-items-container" md-tabs-pagination>' +
           // flex container for <md-tab> elements
-          '<div class="tabs-header-items" ng-transclude></div>' +
+          '<div class="md-header-items" ng-transclude></div>' +
           '<md-tabs-ink-bar></md-tabs-ink-bar>' +
         '</div>' +
 
-        '<div class="tab-paginator next" ' +
+        '<div class="md-paginator md-next" ' +
           'ng-if="pagination.active && pagination.hasNext" ' +
           'ng-click="pagination.clickNext()">' +
         '</div>' +
 
       '</section>' +
-      '<section class="tabs-content"></section>',
+      '<section class="md-tabs-content"></section>',
     link: postLink
   };
 
   function postLink(scope, element, attr, tabsCtrl) {
-
+    $mdTheming(element);
     configureAria();
     watchSelected();
 

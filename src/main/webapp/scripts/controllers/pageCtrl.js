@@ -34,7 +34,7 @@ app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $tim
 		$location.path('/main/matches').replace();
 	}
 	else {
-		$location.path('/login').replace();
+		$location.path('/loading').replace();
 	}
 
 	$rootScope.login = function () {

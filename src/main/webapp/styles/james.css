@@ -11,7 +11,7 @@ material-dialog {
     margin: 16px;
 }
 
-md-button:not(.md-button-fab) {
+md-button:not(.md-fab) {
   width: 90%;
 }
 
@@ -45,7 +45,7 @@ md-button:not([disabled]):hover, md-button:not([disabled]).focus {
 
 }
 
-md-input-group, .md-input-group {
+md-text-float, .md-text-float {
 	
 	margin-right:15px
 }
@@ -56,9 +56,16 @@ md-sidenav {
 
 .more-books {
   margin-left: 5%;
-  margin-top: 15px;
   margin-bottom: 15px;
   display: inline-block;
   text-align: center;
   font-size: 16px;
+}
+.more-books>a {
+  cursor: pointer;
+}
+
+svg {
+  stroke: white;
+  fill: white;
 }
