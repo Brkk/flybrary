@@ -6,25 +6,26 @@
     <li><a href="#contact-container" scroll-on-click>Contact Us</a></li>
   </ul>
 </nav>
-
-
-<div flex layout="horizontal" id="login-container">
+<div id="login-container">
   <div class="center-box">
-    <div layout="vertical" layout-md="horizontal" layout-lg="horizontal">
+    <div flex layout="horizontal" class="title-container">
       <i class="fa fa-book" id="book-logo"></i>
-      <h1 id="app-title">Flybrary</h1>
+      <h1 class="app-title">Flybrary</h1>
     </div>
-    <h2 class="roboto-style" style="color:#000000">Share textbooks, on the fly.</h2>
-  <div>
-     <button class="btn btn-google-plus" ng-click="login()"><i class="fa fa-google-plus"></i> | Login with Google</button>
-     <!--<fb:login-button scope="public_profile,email" onlogin="checkLoginState();"></fb:login-button>-->
-   </div>
+    <div flex layout="vertical">
+      <div class="sub-header-container">
+        <h2 class="roboto-style" style="color:#000000">Share textbooks, on the fly.</h2>
+      </div>
+      <div class="login-button-container">
+        <button class="btn btn-google-plus" ng-click="login()"><i class="fa fa-google-plus"></i> | Login with Google</button>
+      </div>
+    </div>
   </div>
 </div>
-<div flex layout="horizontal" id="about-container">
-  <div class="center-box" style="padding-top: 30px">
-    <i class="fa fa-lightbulb-o" style="font-size:10em" id="logo-headers"></i>
-    <div class="about-content" style="width: 780px; margin-left: -20%">
+<div id="about-container">
+  <div class="about-center-box">
+    <div class="about-content">
+      <i class="fa fa-lightbulb-o" id="lightbulb-header"></i>
       <h1 class="dancing-style">What is the Flybrary?</h1>
       <h2 class="roboto-style">A Sharing network for students.</h2>
       <h3 class="roboto-style" style="font-size:1.3em">The flybrary connects students to share textbooks. Add a book and we do the searching for you to match you up.
@@ -36,16 +37,12 @@
     </div>
   </div>
 </div>
-<div flex layout="horizontal" id="contact-container">
+<div id="contact-container">
   <div class="center-box">
-    <i class="fa fa-comments" id="logo-headers" style="color:white"></i>
-    <h1 class="dancing-style" style="color:white">Contact Us</h1>
-    <h2 class="roboto-style" style="color:white">The Flybrary Team</h2>
-    <h3 class="roboto-style" style="color:white">
+    <i class="fa fa-comments" id="comment-header" style="color:white"></i>
+    <h1 class="dancing-style" style="width:200px; color:white; margin:auto;">Contact Us</h1>
+    <h3 class="roboto-style" style="width:200px; color:white; margin:auto;">
       <a href="mailto:team.flybrary@gmail.com" target="_top">team.flybrary@gmail.com</a>
     </h3>
-    <div>
-
-    </div>
   </div>
 </div>

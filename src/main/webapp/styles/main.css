@@ -114,9 +114,26 @@
   background-size: 100% 100%;
 }
 
+.center-box {
+  margin-top: 7em;
+  margin-left: auto;
+  margin-right: auto;
+  width: 540px;
+  height: 300px;
+}
+
+.about-center-box {
+  margin-top: 7em;
+  margin-left: auto;
+  margin-right: auto;
+  width: 650px;
+  height: 300px;
+}
+
 #login-container {
   background-repeat: no-repeat;
-  height: 100%;
+  height: 500px;
+  width: 100%;
   background-size: 100%;
   background-color: #216973;
 }
@@ -124,37 +141,9 @@
 #about-container {
   background-repeat: repeat;
   background-image: url('../images/swirl_pattern.png');
-  height: 100%;
+  height: 800px;
+  width: 100%;
   background-color: #FAFAFA;
-}
-.tab-bar-styling {
-  background-repeat: repeat;
-  background-image: url('../images/swirl_pattern.png');
-  min-height: 100%;
-  background-color: #FAFAFA;
-}
-
-
-#contact-container {
-  background-repeat: no-repeat;
-  height: 100%;
-  background-size: 100%;
-  background-color: #303030;
-}
-
-
-.center-box {
-  margin: 2em auto;
-  width: 540px;
-  height:300px;
-  text-align: center;
-  background-color: rgba(66, 74, 137, 0);
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -o-border-radius: 5px;
-  -ms-border-radius: 5px;
-  border-radius: 5px;
-  padding-top: 140px;
 }
 
 .about-content {
@@ -164,8 +153,16 @@
   padding:0.1em 2em 1em 2em;
 }
 
+#contact-container {
+  background-repeat: no-repeat;
+  height: 500px;
+  width: 100%;
+  background-size: 100%;
+  background-color: #303030;
+}
 
-#app-title{
+
+.app-title{
   color: #000000;
   font-family:'Dancing Script';
   font-size: 10em;
@@ -177,6 +174,70 @@
   margin-top: 0.25em;
   margin-right: 0.25em;
 }
+
+.login-button-container {
+  margin-left: 160px;
+  margin-top: 10px;
+}
+
+.sub-header-container {
+  margin: auto 0;
+  margin-left: 80px;
+}
+
+#lightbulb-header {
+  color:#000;
+  font-size: 8em;
+  margin-bottom: 0.2em;
+  margin-top: 20px;
+}
+
+#comment-header {
+  color:#000;
+  font-size: 8em;
+  margin-bottom: 0.2em;
+  margin-left:200px;
+}
+
+@media (max-width: 800px) {
+  .app-title{
+    color: #000000;
+    font-family:'Dancing Script';
+    font-size: 6em;
+    margin-left:5px;
+  }
+
+  #book-logo {
+    color: #000;
+    font-size: 6em;
+    margin-top: 0.25em;
+    margin-right: -6px;
+  }
+  .title-container {
+    margin-left: 90px;
+  }
+  .sub-header-container {
+    margin: auto 0;
+    margin-left: 80px;
+  }
+
+.about-center-box {
+  margin-top: 7em;
+  margin-left: auto;
+  margin-right: auto;
+  width: 500px;
+  height: 300px;
+  }
+}
+
+.tab-bar-styling {
+  background-repeat: repeat;
+  background-image: url('../images/swirl_pattern.png');
+  min-height: 100%;
+  background-color: #FAFAFA;
+}
+
+
 
 #book-logo2 {
   color: #000;
@@ -197,12 +258,6 @@
 {
   color: #CCFFCC !important;
   cursor: default;
-}
-
-#logo-headers {
-  color:#000;
-  font-size: 8em;
-  margin-bottom: 0.2em;
 }
 
 

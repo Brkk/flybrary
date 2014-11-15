@@ -155,8 +155,8 @@
     <div layout flex ng-controller="pageCtrl">
         <div layout flex>
           <div ng-switch on="renderPath[ 0 ]" layout flex>
-            <div ng-switch-when="login" layout flex>
-              <div ng-include="'views/login.html'" layout flex></div>
+            <div ng-switch-when="login" flex>
+              <div ng-include="'views/login.html'" layout="vertical" flex></div>
               </div>
             <div ng-switch-when="main" layout flex>
               <div ng-include="'views/main.html'" ng-controller="mainCtrl" layout flex></div>
