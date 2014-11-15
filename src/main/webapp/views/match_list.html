@@ -1,16 +1,14 @@
 <md-toolbar class="md-primary md-medium-tall preferences-toolbar md-whiteframe-z1">
-  <div class="md-toolbar-tools roboto-style-sidebar-title">Preferences</div>
+  <div class="md-toolbar-tools helvetica-neue-style-sidebar-title">Preferences</div>
 </md-toolbar>
-<md-content layout="vertical" flex layout-align="space-between">
-     <md-content>
-     <section></section>
-     </md-content>
-    <footer>
-        <md-divider></md-divider>
-        <section layout="vertical" flex layout-align="center center">
-            <md-button ng-click="logout()" >
-               	Logout
-            </md-button>
-        </section>
+<md-content layout="vertical" flex layout-align="space-between" class="subtle-gray-bacground">
+    <footer class="subtle-gray-background">
+        <md-card class="white-background-coloring">
+	        <section layout="vertical" flex layout-align="center center">
+	            <md-button class="md-raised" ng-click="logout()" > Logout
+	            	<i class="fa fa-power-off"></i>
+	            </md-button>
+	        </section>
+        </md-card>
     </footer>
 </md-content>
