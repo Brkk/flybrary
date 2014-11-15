@@ -135,7 +135,7 @@
   height: 500px;
   width: 100%;
   background-size: 100%;
-  background-color: #216973;
+  background-color: #3f51b5;
 }
 
 #about-container {
@@ -147,7 +147,7 @@
 }
 
 .about-content {
-  background: #fff;
+  background: #F9F9F9;
   box-shadow: inset 0px 0px 0px 1px rgba(0,0,0,0.15), 0px 2px 3px 0px rgba(0,0,0,0.1);
   text-align: center;
   padding:0.1em 2em 1em 2em;
@@ -163,13 +163,13 @@
 
 
 .app-title{
-  color: #000000;
+  color: white;
   font-family:'Dancing Script';
   font-size: 10em;
 }
 
 #book-logo {
-  color: #000;
+  color: white;
   font-size: 10em;
   margin-top: 0.25em;
   margin-right: 0.25em;
@@ -188,7 +188,6 @@
 #lightbulb-header {
   color:#000;
   font-size: 8em;
-  margin-bottom: 0.2em;
   margin-top: 20px;
 }
 
@@ -201,14 +200,14 @@
 
 @media (max-width: 800px) {
   .app-title{
-    color: #000000;
+    color: white;
     font-family:'Dancing Script';
     font-size: 6em;
     margin-left:5px;
   }
 
   #book-logo {
-    color: #000;
+    color: white;
     font-size: 6em;
     margin-top: 0.25em;
     margin-right: -6px;
@@ -225,7 +224,7 @@
   margin-top: 7em;
   margin-left: auto;
   margin-right: auto;
-  width: 500px;
+  width: 450px;
   height: 300px;
   }
 }
@@ -236,8 +235,6 @@
   min-height: 100%;
   background-color: #FAFAFA;
 }
-
-
 
 #book-logo2 {
   color: #000;
@@ -260,38 +257,13 @@
   cursor: default;
 }
 
-
-.roboto-style{
-  color: #000000;
-  font-family:'Roboto';
-}
-
-.roboto-italic-light-style{
-  color: #000000;
-  font-family:'Roboto';
-  font-style:italic;
-  font-weight:lighter;
-}
-
 .dancing-style{
   color: #000000;
   font-family:'Dancing Script';
 }
-.indie-flower-style {
-  font-family:'Indie Flower';
-}
 
 .helvetica-neue-style{
 	font-family:Helvetica Neue;
-}
-
-.roboto-style-sidebar-title{
-  color: #fff;
-  font-family:'Roboto';
-  font-size: 1.5em;
-  margin-top: 0.5em;
-  margin-left: 1.2em;
-  width:5em;
 }
 
 .helvetica-neue-style-sidebar-title{
@@ -322,11 +294,6 @@
 h1.dancing-style{
   font-size: 3.5em;
 }
-
-h2.roboto-style{
-  font-size:2.2em;
-}
-
 
 #top-bar {
   margin-left: auto;
