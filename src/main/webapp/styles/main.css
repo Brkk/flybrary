@@ -226,6 +226,10 @@
   font-family:'Indie Flower';
 }
 
+.helvetica-neue-style{
+	font-family:Helvetica Neue;
+}
+
 .roboto-style-sidebar-title{
   color: #fff;
   font-family:'Roboto';
@@ -233,6 +237,23 @@
   margin-top: 0.5em;
   margin-left: 1.2em;
   width:5em;
+}
+
+.helvetica-neue-style-sidebar-title{
+  color: #fff;
+  font-family:Helvetica Neue;
+  font-size: 1.5em;
+  margin-top: 0.5em;
+  margin-left: 1.2em;
+  width:5em;
+}
+
+.subtle-gray-background{
+	background-color:#F9F9F9;
+}
+
+.white-background-coloring{
+	background-color:white;
 }
 
 #dancing-style-menutab{
