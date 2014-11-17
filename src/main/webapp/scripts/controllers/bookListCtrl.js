@@ -8,7 +8,6 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
   $rootScope.num_requests = 0;
 
   $scope.$watch('bookList',function(){
-      
       var num_matches = 0,
           num_offers = 0,
           num_requests = 0;
@@ -25,6 +24,11 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
             num_requests++;
           }
       }
+
+      if(num_matches == ($scope.num_matches+1)){
+        $scope.dialogMatched();
+      }
+
       $scope.num_matches = num_matches;
       $scope.num_offers = num_offers;
       $scope.num_requests = num_requests;
@@ -103,6 +107,14 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
     
     });
   };
+
+  $scope.dialogMatched = function() {
+    $mdDialog.show({
+        templateUrl: '../views/dialogMatched.html',
+        controller: DialogController
+    });
+  };
+
 	
   });
 
@@ -157,3 +169,18 @@ app.filter('isMatch', function () {
   });
   
 /*    Filters End    */
+
+
+function DialogController($scope, $mdDialog, $rootScope, $location) {
+   $scope.cancel = function() {
+    $mdDialog.hide();
+  };
+
+
+  $scope.see = function() {
+
+    $rootScope.currentTab = 'matches';
+    $location.path('/main/' + $rootScope.currentTab).replace();
+    $mdDialog.hide();
+  };
+}
