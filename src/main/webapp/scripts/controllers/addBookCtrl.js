@@ -114,5 +114,25 @@ $rootScope.searchMouseOver = function(theBook) {
 };
 
 
+    $scope.dialogBasic = function(ev) {
+      $mdDialog.show({
+        templateUrl: '../views/dialogMatched.html',
+        targetEvent: ev,
+        controller: DialogController
+      });
+    };
+
+  $scope.cancel = function() {
+    $mdDialog.hide();
+  };
+
+
+    $scope.see = function() {
+
+    $rootScope.currentTab = 'matches';
+    $location.path('/main/' + $rootScope.currentTab).replace();
+
+  };
 
 });
+

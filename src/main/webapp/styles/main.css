@@ -360,3 +360,12 @@ h1.dancing-style{
       border-right: solid 0.75em transparent;
       border-top: solid 0.6em #282828;
     }
+
+.textFieldLong > section,
+.textFieldLong > p {
+  padding-left: 10px;
+
+}
+
+.textFieldLong md-input-group.long > input {
+    width: 264px; }

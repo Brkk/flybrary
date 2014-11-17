@@ -1,4 +1,4 @@
-<section layout="vertical" layout-fill class="small-btns">
+<section layout="vertical" layout-fill class="small-btns textFieldLong">
 	
 	<md-toolbar class="app-toolbar" style="z-index:3">    
         <div class="md-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between"> 
@@ -7,14 +7,18 @@
     </md-toolbar>
 
 	<section layout="horizontal" layout-align="space-around" flex>
-		<md-text-float label="Title" ng-model="search.title"></md-text-float>
-		<md-text-float label="Author" ng-model="search.author"></md-text-float>
-		<md-button ng-click="searchTitleAuthor()"><i class="fa fa-chevron-right"></i></md-button>
+		<section layout="vertical" layout-align="space-around" flex>
+			<md-text-float label="Title" ng-model="search.title" class="long"></md-text-float>
+			<p style='font-size: 16px; color: LightGray; text-align:center;'>or</p>
+			<md-text-float label="Author" ng-model="search.author" class="long"></md-text-float>
+			<p style='font-size: 16px; color: LightGray; text-align:center;'>or</p>
+			<section layout="horizontal" layout-align="space-around" flex>
+				<md-text-float label="ISBN" ng-model="search.ISBN"></md-text-float>
+				<md-button class="md-button-fab"><i class="fa fa-barcode"></i></md-button>
+			</section>
+		</section>
+		<md-button ng-click="searchTitleAuthor()"><i class="fa fa-search"></i></md-button>
 	</section>
-	<md-divider ></md-divider>
-	<section layout="horizontal" layout-align="space-around" flex>
-		<md-button class="md-fab"><i class="fa fa-camera"></i></md-button>
-		<md-text-float label="ISBN" ng-model="search.ISBN"></md-text-float>
-		<md-button ng-click="searchISBN()"><i class="fa fa-chevron-right"></i></md-button>
-	</section>
+	
+
 </section>
