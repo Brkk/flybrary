@@ -1,26 +1,30 @@
-<section ng-controller="locCtrl" layout-fill flex layout='vertical'>
-	<map 
-		center="{{loc.lat}},{{loc.lon}}" 
-		zoom="{{loc.zoom}}"
-		street-view-control="false" 
-		layout-fill
-		flex
-		>
-		<shape id="circle" name="circle" stroke-color='#FF0000'
-	      stroke-opacity="0.8"stroke-weight="2" 
-	      center="[{{loc.lat}},{{loc.lon}}]" radius="{{loc.radius}}" editable="false" >
-	    </shape> 
-	</map>
-    
-    <h2 class="roboto-style" style="padding-left:65px; font-size:20px">Flight Controls</h2>
-   <md-divider></md-divider>
-   <p class="roboto-style" style="padding-left:10px;"> Fly Zone Calibration:</p>
-    <md-slider discrete ng-model="loc.sliderRadius"  step="5" min="5" max="30"></md-slider>
-    <div flex layout='vertical' layout-align='center center'>
-    	<md-button ng-click="getLoc()" style="background:#454FB3; color:#FFFFFF" flex> Update Location </md-button>
-  	</div>
-  	<md-divider></md-divider>
-  	<h5 class="roboto-style" style="padding-left:10px" >
-    	Tip: Don't forget to update location, if the map doesn't show where you are flying!
-   	</h5>
+<section ng-controller="locCtrl" layout-fill flex layout='vertical' class="subtle-gray-background">
+	
+	<md-card style="background-color:white">
+	  	<h5 class="helvetica-neue-style" style="padding-left:10px">
+	    	Make sure to update your location!
+	   	</h5>
+	   	<md-divider></md-divider>
+		<map 
+			center="{{loc.lat}},{{loc.lon}}" 
+			zoom="{{loc.zoom}}"
+			street-view-control="false" 
+			layout-fill
+			flex
+			>
+			<shape id="circle" name="circle" stroke-color="#3F51B5" fill-color="#7986CB"
+		      stroke-opacity="0.8" stroke-weight="2" 
+		      center="[{{loc.lat}},{{loc.lon}}]" radius="{{loc.radius}}" editable="false" >
+		    </shape> 
+		</map>
+
+	   	<p class="helvetica-neue-style" style="padding-left:10px; font-size:15px">Search Radius:</p>
+	    <md-slider discrete ng-model="loc.sliderRadius"  step="5" min="5" max="30"></md-slider>
+	    <div flex layout='vertical' layout-align='center center'>
+	    	<md-button ng-click="getLoc()" class="md-raised md-primary" flex> Update Location 
+	    		<i class="fa fa-location-arrow" style="color:white"></i>
+	    		
+	    	</md-button>
+	  	</div>
+   	</md-card>
 </section>

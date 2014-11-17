@@ -6,46 +6,43 @@
     <li><a href="#contact-container" scroll-on-click>Contact Us</a></li>
   </ul>
 </nav>
-
-
-  <div layout-fill layout="horizontal" id="login-container">
-    <div class="center-box">
-      <div layout="vertical" layout-md="horizontal" layout-lg="horizontal">
-        <i class="fa fa-book" id="book-logo"></i>
-        <h1 id="app-title">Flybrary</h1>
-      </div>
-      <h2 class="roboto-style" style="color:#000000">Share textbooks, on the fly.</h2>
-    <div>
-       <button class="btn btn-google-plus" ng-click="login()"><i class="fa fa-google-plus"></i> | Login with Google</button>
-       <!--<fb:login-button scope="public_profile,email" onlogin="checkLoginState();"></fb:login-button>-->
-     </div>
+<div id="login-container">
+  <div class="center-box">
+    <div flex layout="horizontal" class="title-container">
+      <i class="fa fa-book" id="book-logo"></i>
+      <h1 class="app-title">Flybrary</h1>
     </div>
-  </div>
-  <div layout-fill layout="horizontal" id="about-container">
-    <div class="center-box" style="padding-top: 30px">
-      <i class="fa fa-lightbulb-o" style="font-size:10em" id="logo-headers"></i>
-      <div class="about-content" style="width: 780px; margin-left: -20%">
-        <h1 class="dancing-style">What is the Flybrary?</h1>
-        <h2 class="roboto-style">A Sharing network for students.</h2>
-        <h3 class="roboto-style" style="font-size:1.3em">The flybrary connects students to share textbooks. Add a book and we do the searching for you to match you up.
-        </h3>
-        <h2 class="roboto-style">How does it work?</h2>
-        <h3 class="roboto-style" style="font-size:1.3em">Easily make a request for a textbook that you want. Done with a textbook? Offer a textbook so that you can share it with a friend you haven’t met yet. 
-          How do you trade? You decide, discuss it with your match through email. Don’t worry, all your information is private.
-        </h3>
+    <div flex layout="vertical">
+      <div class="sub-header-container">
+        <h2 class="helvetica-neue-style" style="color:white">Share textbooks, on the fly.</h2>
+      </div>
+      <div class="login-button-container">
+        <button class="btn btn-google-plus" ng-click="login()"><i class="fa fa-google-plus"></i> | Login with Google</button>
       </div>
     </div>
   </div>
-  <div layout-fill layout="horizontal" id="contact-container">
-    <div class="center-box">
-      <i class="fa fa-comments" id="logo-headers" style="color:white"></i>
-      <h1 class="dancing-style" style="color:white">Contact Us</h1>
-      <h2 class="roboto-style" style="color:white">The Flybrary Team</h2>
-      <h3 class="roboto-style" style="color:white">
-        <a href="mailto:team.flybrary@gmail.com" target="_top">team.flybrary@gmail.com</a>
+</div>
+<div id="about-container">
+  <div class="about-center-box">
+    <div class="about-content">
+      <i class="fa fa-lightbulb-o" id="lightbulb-header"></i>
+      <h1 class="dancing-style">What is the Flybrary?</h1>
+      <h2 class="helvetica-neue-style">A Sharing network for students.</h2>
+      <h3 class="helvetica-neue-style" style="font-size:1.3em">The flybrary connects students to share textbooks. Add a book and we do the searching for you to match you up.
       </h3>
-      <div>
-
-      </div>
+      <h2 class="helvetica-neue-style">How does it work?</h2>
+      <h3 class="helvetica-neue-style" style="font-size:1.3em">Easily make a request for a textbook that you want. Done with a textbook? Offer a textbook so that you can share it with a friend you haven’t met yet. 
+        How do you trade? You decide, discuss it with your match through email. Don’t worry, all your information is private.
+      </h3>
     </div>
   </div>
+</div>
+<div id="contact-container">
+  <div class="center-box">
+    <i class="fa fa-comments" id="comment-header" style="color:white"></i>
+    <h1 class="dancing-style" style="width:200px; color:white; margin:auto; margin-bottom:8px;">Contact Us</h1>
+    <h3 class="helvetica-neue-style" style="width:350px; color:white; margin:auto; font-size:2.2em;">
+      <a href="mailto:team.flybrary@gmail.com" target="_top">team.flybrary@gmail.com</a>
+    </h3>
+  </div>
+</div>

@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/james.css">
     <link rel="stylesheet" href="styles/font-awesome.min.css">
+    <link rel="stylesheet" href="/bower_components/angular-material/themes/indigo-theme.css">
+    <link rel="stylesheet" href="/bower_components/angular-material/themes/pink-theme.css">
 
     <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
     <script src="bower_components/angular/angular.js"></script>
@@ -28,7 +30,7 @@
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-	  <script src="bower_components/ngmap/build/scripts/ng-map.js"></script>
+	<script src="bower_components/ngmap/build/scripts/ng-map.js"></script>
 
 
     <script src="scripts/services/userSvc.js"></script>
@@ -150,33 +152,33 @@
     -->
 
 </head>
-<body layout="horizontal">
+<body layout="horizontal" md-theme="indigo">
 
-    <div layout-fill ng-controller="pageCtrl">
-        <div layout-fill>
-          <div ng-switch on="renderPath[ 0 ]" layout-fill>
-            <div ng-switch-when="login" layout-fill>
-              <div ng-include="'views/login.html'" layout-fill></div>
+    <div layout flex ng-controller="pageCtrl">
+        <div layout flex>
+          <div ng-switch on="renderPath[ 0 ]" layout flex>
+            <div ng-switch-when="login" flex>
+              <div ng-include="'views/login.html'" layout="vertical" flex></div>
               </div>
-            <div ng-switch-when="main" layout-fill>
-              <div ng-include="'views/main.html'" ng-controller="mainCtrl" layout-fill></div>
+            <div ng-switch-when="main" layout flex>
+              <div ng-include="'views/main.html'" ng-controller="mainCtrl" layout flex></div>
               </div>
-            <div ng-switch-when="loading" layout-fill>
-                <div ng-include="'views/loading.html'" layout-fill> </div>
+            <div ng-switch-when="loading" layout flex>
+                <div ng-include="'views/loading.html'" layout="vertical" flex> </div>
             </div>
-            <div ng-switch-when="faq" layout-fill>
-              <div ng-include="'views/faq.html'" layout-fill></div>
+            <div ng-switch-when="faq" layout flex>
+              <div ng-include="'views/faq.html'" layout flex></div>
             </div>
-            <div ng-switch-when="useragreement" layout-fill>
-              <div ng-include="'views/useragreement.html'" layout-fill></div>
+            <div ng-switch-when="useragreement" layout flex>
+              <div ng-include="'views/useragreement.html'" layout flex></div>
             </div>
-            <div ng-switch-when="feedback" layout-fill>    
-              <div ng-include="'views/feedback.html'" layout-fill></div>
+            <div ng-switch-when="feedback" layout flex>    
+              <div ng-include="'views/feedback.html'" layout flex></div>
             </div>
 
           </div>  
 
-            <!--<div ng-view layout-fill></div>-->
+            <!--<div ng-view layout flex></div>-->
         </div>
     </div>
 

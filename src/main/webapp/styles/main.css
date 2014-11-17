@@ -100,12 +100,12 @@
 }
 
 
-.animate-switch-container {
+/*.animate-switch-container {
   position:relative;
   width: 100%;
   height:100%;
   overflow:hidden;
-}
+}*/
 
 
 .first {
@@ -114,68 +114,126 @@
   background-size: 100% 100%;
 }
 
+.center-box {
+  margin-top: 7em;
+  margin-left: auto;
+  margin-right: auto;
+  width: 540px;
+  height: 300px;
+}
+
+.about-center-box {
+  margin-top: 7em;
+  margin-left: auto;
+  margin-right: auto;
+  width: 650px;
+  height: 300px;
+}
+
 #login-container {
   background-repeat: no-repeat;
-  height: 100%;
+  height: 500px;
+  width: 100%;
   background-size: 100%;
-  background-color: #216973;
+  background-color: #3f51b5;
 }
 
 #about-container {
   background-repeat: repeat;
   background-image: url('../images/swirl_pattern.png');
-  height: 100%;
+  height: 800px;
+  width: 100%;
   background-color: #FAFAFA;
-}
-.tab-bar-styling {
-  background-repeat: repeat;
-  background-image: url('../images/swirl_pattern.png');
-  height: 100%;
-  background-color: #FAFAFA;
-}
-
-
-#contact-container {
-  background-repeat: no-repeat;
-  height: 100%;
-  background-size: 100%;
-  background-color: #303030;
-}
-
-
-.center-box {
-  margin: 2em auto;
-  width: 540px;
-  height:300px;
-  text-align: center;
-  background-color: rgba(66, 74, 137, 0);
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -o-border-radius: 5px;
-  -ms-border-radius: 5px;
-  border-radius: 5px;
-  padding-top: 140px;
 }
 
 .about-content {
-  background: #fff;
+  background: #F9F9F9;
   box-shadow: inset 0px 0px 0px 1px rgba(0,0,0,0.15), 0px 2px 3px 0px rgba(0,0,0,0.1);
   text-align: center;
   padding:0.1em 2em 1em 2em;
 }
 
+#contact-container {
+  background-repeat: no-repeat;
+  height: 500px;
+  width: 100%;
+  background-size: 100%;
+  background-color: #303030;
+}
 
-#app-title{
-  color: #000000;
+
+.app-title{
+  color: white;
   font-family:'Dancing Script';
   font-size: 10em;
 }
 
 #book-logo {
-  color: #000;
+  color: white;
   font-size: 10em;
   margin-top: 0.25em;
   margin-right: 0.25em;
+}
+
+.login-button-container {
+  margin-left: 160px;
+  margin-top: 10px;
+}
+
+.sub-header-container {
+  margin: auto 0;
+  margin-left: 80px;
+}
+
+#lightbulb-header {
+  color:#000;
+  font-size: 8em;
+  margin-top: 20px;
+}
+
+#comment-header {
+  color:#000;
+  font-size: 8em;
+  margin-bottom: 0.2em;
+  margin-left:200px;
+}
+
+@media (max-width: 800px) {
+  .app-title{
+    color: white;
+    font-family:'Dancing Script';
+    font-size: 6em;
+    margin-left:5px;
+  }
+
+  #book-logo {
+    color: white;
+    font-size: 6em;
+    margin-top: 0.25em;
+    margin-right: -6px;
+  }
+  .title-container {
+    margin-left: 90px;
+  }
+  .sub-header-container {
+    margin: auto 0;
+    margin-left: 80px;
+  }
+
+.about-center-box {
+  margin-top: 7em;
+  margin-left: auto;
+  margin-right: auto;
+  width: 450px;
+  height: 300px;
+  }
+}
+
+.tab-bar-styling {
+  background-repeat: repeat;
+  background-image: url('../images/swirl_pattern.png');
+  min-height: 100%;
+  background-color: #FAFAFA;
 }
 
 #book-logo2 {
@@ -199,40 +257,30 @@
   cursor: default;
 }
 
-#logo-headers {
-  color:#000;
-  font-size: 8em;
-  margin-bottom: 0.2em;
-}
-
-
-.roboto-style{
-  color: #000000;
-  font-family:'Roboto';
-}
-
-.roboto-italic-light-style{
-  color: #000000;
-  font-family:'Roboto';
-  font-style:italic;
-  font-weight:lighter;
-}
-
 .dancing-style{
   color: #000000;
   font-family:'Dancing Script';
 }
-.indie-flower-style {
-  font-family:'Indie Flower';
+
+.helvetica-neue-style{
+	font-family:Helvetica Neue;
 }
 
-.roboto-style-sidebar-title{
+.helvetica-neue-style-sidebar-title{
   color: #fff;
-  font-family:'Roboto';
+  font-family:Helvetica Neue;
   font-size: 1.5em;
   margin-top: 0.5em;
   margin-left: 1.2em;
   width:5em;
+}
+
+.subtle-gray-background{
+	background-color:#F9F9F9;
+}
+
+.white-background-coloring{
+	background-color:white;
 }
 
 #dancing-style-menutab{
@@ -246,17 +294,6 @@
 h1.dancing-style{
   font-size: 3.5em;
 }
-
-h2.roboto-style{
-  font-size:2.2em;
-}
-
-.login-options{
-  color: #222;
-  font-size: 14px;
-  text-align: center;
-}
-
 
 #top-bar {
   margin-left: auto;
