@@ -85,7 +85,7 @@ app.controller('locCtrl', function($rootScope ,$scope, user)
         }
     }
     
-    $rootScope.geocoder = new google.maps.Geocoder();
+  /*  $rootScope.geocoder = new google.maps.Geocoder();
     $rootScope.address = 'Victoria';
 	$rootScope.codeAddress = function() {
 		  $rootScope.geocoder.geocode( { 'address': $rootScope.address}, function(results, status) {
@@ -99,5 +99,5 @@ app.controller('locCtrl', function($rootScope ,$scope, user)
 		      alert('Geocode was not successful for the following reason: ' + status);
 		    }
 		  });
-		}
+		}*/
 });

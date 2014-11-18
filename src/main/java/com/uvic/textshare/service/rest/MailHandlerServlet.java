@@ -66,11 +66,6 @@ public class MailHandlerServlet extends HttpServlet {
       String fromEmailAddress = ((InternetAddress)message.getFrom()[0]).getAddress().toString();
       String messageID = message.getMessageID();
 
-      System.out.println("emailMatchedDate: " + emailMatchedDate);
-      System.out.println("emailBody: " + emailBody);
-      System.out.println("fromEmailAddress: " + fromEmailAddress);
-      System.out.println("messageID: " + messageID);
-
       Filter matchFilter = new FilterPredicate("matchDate", FilterOperator.EQUAL, emailMatchedDate);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       Query q = new Query("Match").setFilter(matchFilter);
@@ -81,8 +76,6 @@ public class MailHandlerServlet extends HttpServlet {
       } else {
         String firstUsersEmail = match.getProperty("firstUsersEmail").toString();
         String secondUsersEmail = match.getProperty("secondUsersEmail").toString();
-        System.out.println("firstUsersEmail: " + firstUsersEmail);
-        System.out.println("secondUsersEmail: " + secondUsersEmail);
 
         if(fromEmailAddress.equals(secondUsersEmail)) {
           sendEmail("email@textchngr.appspotmail.com", "Team Flybrary", firstUsersEmail, "", emailBody);
@@ -101,7 +94,6 @@ public class MailHandlerServlet extends HttpServlet {
   public void sendEmail(String fromEmailAddress, String fromUserName, String toEmailAddress, String emailSubject, String emailBody) {
     Properties props = new Properties();
     Session session = Session.getDefaultInstance(props, null);
-    System.out.println("toEmailAddress: " + toEmailAddress);
     try {
       Message msg = new MimeMessage(session);
       try {

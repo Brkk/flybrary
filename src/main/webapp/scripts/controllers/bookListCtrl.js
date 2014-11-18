@@ -25,10 +25,10 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
           }
       }
 
-      if(num_matches == ($scope.num_matches+1)){
+    /*  if(num_matches == ($scope.num_matches+1)){
         $scope.dialogMatched();
       }
-
+*/
       $scope.num_matches = num_matches;
       $scope.num_offers = num_offers;
       $scope.num_requests = num_requests;
@@ -76,6 +76,7 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
 		user.activeBookProperties.isbn = book.isbn;
 		user.actionType = book.actionType;
 		user.activeBookProperties.title = book.title;
+		user.activeBookProperties.edition = book.edition;
 		user.unmatchTextbook();	
 	};
 
@@ -107,13 +108,14 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
     
     });
   };
-
+/*
   $scope.dialogMatched = function() {
     $mdDialog.show({
         templateUrl: '../views/dialogMatched.html',
         controller: DialogController
     });
   };
+  */
 
 	
   });
