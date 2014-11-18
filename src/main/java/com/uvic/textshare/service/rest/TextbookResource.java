@@ -103,7 +103,8 @@ public class TextbookResource {
 					text.getString("uid"),
 					text.getString("type"),
 					text.getString("title"),
-					text.getDouble("condition"));
+					text.getDouble("condition"),
+					text.getString("edition"));
 			 
 			
 			String[] parts = response.split("-");
@@ -236,6 +237,7 @@ public class TextbookResource {
 		String uid = obj.getString("uid");
 		String matchDate = obj.getString("matchDate");
 		double condition = obj.getDouble("condition");
+		String edition = obj.getString("edition");
 		String uidTwo;
 		String typeTwo;
 		
@@ -259,8 +261,8 @@ public class TextbookResource {
 		Delay.oneSecondDelay();
 		
 		//Check for a new match. Omit matching each other again.
-		String matchedOne = matchingFunction.checkForMatch(isbn, uid, type, title, condition);
-		String matchedTwo = matchingFunction.checkForMatch(isbn, uidTwo, typeTwo, title, condition);
+		String matchedOne = matchingFunction.checkForMatch(isbn, uid, type, title, condition, edition);
+		String matchedTwo = matchingFunction.checkForMatch(isbn, uidTwo, typeTwo, title, condition, edition);
 		
 		//Update database based on the result of new searches for matches.
 		if(matchedOne.equals("no")) { 

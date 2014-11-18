@@ -31,7 +31,7 @@ public class MatchingFunction {
 
 	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-	public String checkForMatch(String isbn, String uid, String type, String title, double condition) {
+	public String checkForMatch(String isbn, String uid, String type, String title, double condition, String edition) {
 		String searchType;
 		String firstUsersName;
 		String secondUsersName;
@@ -46,7 +46,7 @@ public class MatchingFunction {
 			searchType = "offer";
 		}
 
-		List<Entity> textbooks = getTextbooks(searchType, isbn, condition);
+		List<Entity> textbooks = getTextbooks(searchType, isbn, condition, edition);
 
 		if(!textbooks.isEmpty())
 		{
@@ -188,12 +188,13 @@ public class MatchingFunction {
 		return user;
 	}
 
-	private List<Entity> getTextbooks(String searchType, String isbn, double condition) {
+	private List<Entity> getTextbooks(String searchType, String isbn, double condition, String edition) {
 		Filter typeFilter = new FilterPredicate("type", FilterOperator.EQUAL, searchType);
 		Filter isbnFilter = new FilterPredicate("isbn", FilterOperator.EQUAL, isbn);
 		Filter matchedFilter = new FilterPredicate("matched", FilterOperator.EQUAL, "no");
 		Filter conditionFilter = new FilterPredicate("condition", FilterOperator.EQUAL, condition);
-		Filter searchFilter = CompositeFilterOperator.and(typeFilter, isbnFilter, matchedFilter, conditionFilter);
+		Filter editionFilter = new FilterPredicate("edition", FilterOperator.EQUAL, condition);
+		Filter searchFilter = CompositeFilterOperator.and(typeFilter, isbnFilter, matchedFilter, conditionFilter, editionFilter);
 		//any condition
 		if(condition == 4.0 ) {
 			searchFilter = CompositeFilterOperator.and(typeFilter, isbnFilter, matchedFilter);

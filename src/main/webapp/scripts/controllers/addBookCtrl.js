@@ -14,7 +14,8 @@ app.controller('addBookCtrl', function ($scope, $rootScope, $mdDialog, user, gBo
     key: "",
     image: "http://books.google.com/books/content?id=g_ybia0hGw8C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
     bigImage: "http://books.google.com/books/content?id=g_ybia0hGw8C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-    condition: "1"
+    condition: "1",
+    edition: ""
   };
 
   $rootScope.searchList = [];
@@ -32,7 +33,7 @@ app.controller('addBookCtrl', function ($scope, $rootScope, $mdDialog, user, gBo
     user.activeBookProperties.isbn = $rootScope.selected.ISBN;
     user.activeBookProperties.image = $rootScope.selected.image;
     user.activeBookProperties.condition = $rootScope.selected.condition;
-    user.activeBookProperties.edition = '1';
+    user.activeBookProperties.edition = $rootScope.selected.edition;
 
     $mdDialog.hide(true);
 

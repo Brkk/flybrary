@@ -40,7 +40,14 @@ app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $tim
 	$rootScope.login = function () {
 		googleService.login().then(
 		function(data) {
-			$location.path('/main/matches').replace();
+			if(user.loc.lat == 0 && user.loc.lon == 0)
+			{
+				$location.path('/setLocation').replace();
+			}
+			else
+			{
+				$location.path('/main/matches').replace();
+			}
 		},
 		function(err) {
     		$location.path('/login').replace();
@@ -53,7 +60,14 @@ app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $tim
 		if(newVal) {
 	    	googleService.handleClientLoad().then(
 			function(data) {
-				$location.path('/main/matches').replace();
+				if(user.loc.lat == 0 && user.loc.lon == 0)
+				{
+					$location.path('/setLocation').replace();
+				}
+				else
+				{
+					$location.path('/main/matches').replace();
+				}
 			},
 			function(err) {
 				googleService.logout();
@@ -65,6 +79,10 @@ app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $tim
     $rootScope.logout = function () {
     	googleService.logout();
     	$location.path('/login').replace();
+    };
+    
+    $rootScope.locSet = function () {
+    	$location.path('/main/matches').replace();
     };
 
     $rootScope.renderAction = '';

@@ -84,7 +84,20 @@ app.controller('locCtrl', function($rootScope ,$scope, user)
             $scope.error = "Geoloc is not supported by this browser.";
         }
     }
-
-
-   
+    
+    $rootScope.geocoder = new google.maps.Geocoder();
+    $rootScope.address = 'Victoria';
+	$rootScope.codeAddress = function() {
+		  $rootScope.geocoder.geocode( { 'address': $rootScope.address}, function(results, status) {
+		    if (status == google.maps.GeocoderStatus.OK) {
+		      $scope.loc.lat = (results[0].geometry.location.k);
+		      $scope.loc.lon = (results[0].geometry.location.B);
+		      $rootScope.setPosition({coords:{latitude:user.loc.lat , longitude: user.loc.lon}});
+              $scope.loc.set = true;
+              $scope.loc.inDB = true;
+		    } else {
+		      alert('Geocode was not successful for the following reason: ' + status);
+		    }
+		  });
+		}
 });

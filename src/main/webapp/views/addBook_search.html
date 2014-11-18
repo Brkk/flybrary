@@ -8,17 +8,20 @@
 
 	<section layout="horizontal" layout-align="space-around" flex>
 		<section layout="vertical" layout-align="space-around" flex>
-			<md-text-float label="Title" ng-model="search.title" class="long"></md-text-float>
-			<p style='font-size: 16px; color: LightGray; text-align:center;'>or</p>
-			<md-text-float label="Author" ng-model="search.author" class="long"></md-text-float>
-			<p style='font-size: 16px; color: LightGray; text-align:center;'>or</p>
-			<section layout="horizontal" layout-align="space-around" flex>
-				<md-text-float label="ISBN" ng-model="search.ISBN"></md-text-float>
-				<md-button class="md-button-fab"><i class="fa fa-barcode"></i></md-button>
-			</section>
+			<md-card>
+				<md-text-float label="Title" ng-model="search.title" class="long"></md-text-float>
+				<md-text-float label="Author" ng-model="search.author" class="long"></md-text-float>
+			</md-card>
+			<p style='font-size: 20px; color: Black; text-align:center;'>or</p>
+			<md-card>
+				<section layout="horizontal" layout-align="space-around" flex>
+					<md-text-float label="ISBN" ng-model="search.ISBN"></md-text-float>
+					<md-button class="md-button-fab"><i class="fa fa-barcode"></i></md-button>
+				</section>
+			</md-card>
 		</section>
-		<md-button ng-click="searchTitleAuthor()"><i class="fa fa-search"></i></md-button>
+		<div layout="vertical" layout-align="center center">
+			<md-button ng-click="searchTitleAuthor()"><i class="fa fa-search"></i></md-button>
+		</div>
 	</section>
-	
-
 </section>

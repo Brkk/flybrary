@@ -7,13 +7,9 @@ app.config( function($routeProvider) {
 
     $routeProvider
       .when('/login', {
-        //templateUrl: 'views/login.html',
-        //controller: '',
         action: 'login'
       })
       .when('/main/:currentTab', {
-        //templateUrl: 'views/main.html',
-        //controller: 'mainCtrl',
         action: 'main'
       })
       .when('/main/matches/:matchKey', {
@@ -29,24 +25,19 @@ app.config( function($routeProvider) {
         action: 'main.requests.add'
       })
       .when('/feedback', {
-        //templateUrl: 'views/feedback.html',
-        //controller: ''
         action: 'feedback'
       })
       .when('/useragreement', {
-        //templateUrl: 'views/useragreement.html',
-        //controller: ''
         action: 'useragreement'
       })
       .when('/faq', {
-        //templateUrl: 'views/faq.html',
-        //controller: ''
         action: 'faq'
       })
       .when('/loading', {
-        //templateUrl: 'views/loading.html',
-        //controller: ''
           action: 'loading'
+      })
+      .when('/setLocation', {
+    	  action: 'setLocation'
       })
       .otherwise({
         redirectTo: '/login'
