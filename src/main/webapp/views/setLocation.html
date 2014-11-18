@@ -1,0 +1,41 @@
+<div ng-controller="locCtrl" layout="vertical" layout-align="center center" flex style="  background-repeat: repeat; background-image: url('../images/swirl_pattern.png')">
+<md-content style="max-width:50%">	
+	<md-card>
+			<md-card>
+					<b>Looks like you haven't set your location. Please either click set location.
+					Once the map show where you are, hit done and start sharing.</b> 
+			</md-card>
+			<md-card>
+				<!--   <div id="panel">
+			      	<input id="codeAddress" type="textbox" >
+			      	<input type="button" value="Geocode" onclick="codeAddress()">
+			    </div>
+			    -->
+				<map 
+					center="{{loc.lat}},{{loc.lon}}" 
+					zoom="{{loc.zoom}}"
+					street-view-control="false" 
+					layout-fill
+					flex
+					>
+					<shape id="circle" name="circle" stroke-color="#3F51B5" fill-color="#7986CB"
+				      stroke-opacity="0.8" stroke-weight="2" 
+				      center="[{{loc.lat}},{{loc.lon}}]" radius="{{loc.radius}}" editable="false" >
+				    </shape> 
+				</map>
+			    <div flex layout='vertical' layout-align='center center' style="padding-top:10px">
+			    	<md-button ng-click="getLoc()" class="md-raised md-primary" style="max-width:25%" flex> Set Location 
+			    		<i class="fa fa-location-arrow" style="color:white"></i>
+			    		
+			    	</md-button>
+			  	</div>
+		   	</md-card>
+		   	<md-card>
+			   	<div flex layout='vertical' layout-align='center center'>
+			   		<md-button ng-click="locSet()" class="md-raised md-primary" style="max-width:25%" flex> Done
+				    </md-button>
+				 </div>
+		   	</md-card>
+	</md-card>
+	</md-content>
+</div>
