@@ -383,5 +383,9 @@ h1.dancing-style{
 
 }
 
+md-item-content {
+  cursor: pointer;
+}
+
 .textFieldLong md-input-group.long > input {
     width: 264px; }

@@ -1,7 +1,12 @@
-app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jsonFilter, user, $mdDialog, $location) {
+app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jsonFilter, user, $mdDialog, $mdToast, $location) {
 	
+  $rootScope.toasttype = {
+    typ: '',
+    msg: ''
+  };
 
-  console.log("booklist ctrl loaded");
+
+
   $rootScope.bookList = [];
   $rootScope.num_matches = 0;
   $rootScope.num_offers = 0;
@@ -25,14 +30,46 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
           }
       }
 
-    /*  if(num_matches == ($scope.num_matches+1)){
-        $scope.dialogMatched();
+      if(num_matches == ($scope.num_matches+1)){
+        $rootScope.toasttype.typ = "SEE IT";
+        $rootScope.toasttype.msg = 'We already found a match for you!';
+
+        $mdToast.show({
+          controller: ToastCtrl,
+          templateUrl: 'views/toast.html',
+          hideDelay: 3000,
+          position: $scope.getToastPosition()
+        });
+      }else if(((num_requests == ($scope.num_requests+1)) || (num_offers == ($scope.num_offers+1))) && ($rootScope.searchList != null)){
+        $rootScope.toasttype.typ = "DONE";
+        $rootScope.toasttype.msg = "For now we couldn't match your book(s). However, you'll be notified as soon as we find a match";
+
+        $mdToast.show({
+          controller: ToastCtrl,
+          templateUrl: 'views/toast.html',
+          hideDelay: 3000,
+          position: $scope.getToastPosition()
+        });
       }
-*/
       $scope.num_matches = num_matches;
       $scope.num_offers = num_offers;
       $scope.num_requests = num_requests;
   }, true);
+
+
+
+  $scope.toastPosition = {
+    bottom: false,
+    top: true,
+    left: true,
+    right: true
+  };
+
+  $scope.getToastPosition = function() {
+    return Object.keys($scope.toastPosition)
+      .filter(function(pos) { return $scope.toastPosition[pos]; })
+      .join(' ');
+  };
   
   user.getBooks().then(
     function(data){
@@ -51,33 +88,73 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
 	  });
 
   $scope.orderProp = 'title';
+
+
+
 		  
 	$rootScope.deleteBook = function(book){
     var index = $scope.bookList.indexOf(book);
+    // var hidenProp = { hiden: true };
+    // book['']
+    $rootScope.deletedBook = book;
+    $rootScope.deletedBook.hiden = true;
+    $rootScope.toasttype.typ = 'UNDO';
+    $rootScope.toasttype.msg = 'You deleted a book!';
+    
+    $mdToast.show({
+      controller: ToastCtrl,
+      templateUrl: 'views/toast.html',
+      hideDelay: 3000,
+      position: $scope.getToastPosition()
+    }).then(function(){
+        
+      if($rootScope.deletedBook.hiden==true){
 
-    if (index > -1) {
-        $scope.bookList.splice(index, 1);
-    }
+          if (index > -1) {
+          $scope.bookList.splice(index, 1);
+        }
 
-    user.activeBookProperties.key = book.key;
-		user.deleteBook();	
+        user.activeBookProperties.key = book.key;
+        user.deleteBook();  
+      }
+    });
+
 	};
 	
 	$rootScope.unmatchBook = function(book){
+    $rootScope.deletedBook = book;
+    $rootScope.deletedBook.hiden = true;
+    $rootScope.toasttype.typ = 'UNDO';
+    $rootScope.toasttype.msg = 'You deleted a match!';
 
-   var index = $scope.bookList.indexOf(book);
+    $mdToast.show({
+      controller: ToastCtrl,
+      templateUrl: 'views/toast.html',
+      hideDelay: 3000,
+      position: $scope.getToastPosition()
+    }).then(function(){
+        
+      if($rootScope.deletedBook.hiden==true){
+        var index = $scope.bookList.indexOf(book);
 
-    if (index > -1) {
-        $scope.bookList.splice(index, 1);
-    }
+        if (index > -1) {
+            $scope.bookList.splice(index, 1);
+        }
 
-		user.activeBookProperties.key = book.key;
-		user.activeBookProperties.matchDate = book.matchDate;
-		user.activeBookProperties.isbn = book.isbn;
-		user.actionType = book.actionType;
-		user.activeBookProperties.title = book.title;
-		user.activeBookProperties.edition = book.edition;
-		user.unmatchTextbook();	
+        user.activeBookProperties.key = book.key;
+        user.activeBookProperties.matchDate = book.matchDate;
+        user.activeBookProperties.isbn = book.isbn;
+        user.actionType = book.actionType;
+        user.activeBookProperties.title = book.title;
+        user.activeBookProperties.edition = book.edition;
+        user.unmatchTextbook(); 
+
+      }
+    });
+   
+
+
+   
 	};
 	
   $scope.dialog = function(ev, actionType) {
@@ -132,14 +209,6 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
           });
     }
   };
-/*
-  $scope.dialogMatched = function() {
-    $mdDialog.show({
-        templateUrl: '../views/dialogMatched.html',
-        controller: DialogController
-    });
-  };
-  */
 
 	
   });
@@ -193,20 +262,38 @@ app.filter('isMatch', function () {
       return filtered;
     };
   });
+
+
+
+function ToastCtrl($scope, $rootScope, $mdToast, $animate, $location) {
+
+  $scope.closeToast = function() {
+    if($rootScope.toasttype.typ == 'UNDO'){
+      $scope.undoDelete();
+    }else if($scope.toasttype.typ == 'DONE'){
+      $mdToast.hide();
+    }
+    else{
+      $scope.see();
+    }
+  };
+
+$scope.see = function() {
+    $rootScope.currentTab = 'matches';
+    $location.path('/main/' + $rootScope.currentTab).replace();
+    $mdToast.hide();
+  };
+
+$scope.undoDelete = function() {
+    $rootScope.deletedBook.hiden = false;
+    $mdToast.hide();
+  };
+  
+
+
+}
+
+
   
 /*    Filters End    */
 
-
-function DialogController($scope, $mdDialog, $rootScope, $location) {
-   $scope.cancel = function() {
-    $mdDialog.hide();
-  };
-
-
-  $scope.see = function() {
-
-    $rootScope.currentTab = 'matches';
-    $location.path('/main/' + $rootScope.currentTab).replace();
-    $mdDialog.hide();
-  };
-}
