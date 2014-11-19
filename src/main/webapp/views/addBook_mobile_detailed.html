@@ -1,0 +1,38 @@
+<section layout="vertical" layout-fill flex>
+	<md-toolbar class="app-toolbar">    
+		<div class="md-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between"> 
+	    	<md-button ng-click="backToSelect()" style="max-width:30px"><i class="fa fa-arrow-left fa-lg"></i></md-button>
+	        <h2> {{$root.addbooktype}}</h2>
+	    </div>
+	</md-toolbar>	
+	<md-card flex layout="vertical" style="padding-top:30px">
+    	<div flex layout-align="center center" layout="vertical" style="max-height:250px">
+			<img ng-src="{{selected.bigImage}}" width="150px" height="200px" style="border:1px solid #021a40">
+		</div>
+		<section flex layout="horizontal" layout-align="space-between">
+			<md-content flex layout="vertical" layout-align="center center">
+		       	<h1>{{selected.title}}</h1>
+		       	<h2>{{selected.author}}</h2>	
+			</md-content>
+	 	</section>
+	  	<md-divider></md-divider>
+	
+	  	<section flex layout="horizontal" layout-align="space-around">
+	      	<div style="padding-left:10px" flex>
+	    	<h3>Desired condition and edition:</h3>
+	    		<md-radio-group ng-model="selected.condition">
+	        	<md-radio-button ng-if="'requests' == $root.currentTab" value="4">Any</md-radio-button>
+	        	<md-radio-button value="1">Mint</md-radio-button>
+	        	<md-radio-button value="2">Some wear'n'tear</md-radio-button>
+	        	<md-radio-button value="3">Been "loved"</md-radio-button>
+	    	</md-radio-group>
+	    	<md-text-float label="Edition" ng-model="selected.edition"> </md-text-float>
+			</div>
+			<div flex style="text-align:center">
+				<md-button ng-click="addBookClicked()" md-theme="pink" class="md-fab md-primary">
+	     			<i class="fa fa-plus fa-lg" style="color:white"></i>
+	            </md-button>
+	        </div>
+	    </section>
+	</md-card>
+</section>

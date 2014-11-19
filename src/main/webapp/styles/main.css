@@ -189,6 +189,14 @@
   font-size: 8em;
 }
 
+.email-info {
+  font-size:2.2em;
+}
+
+#content-title {
+  font-size:3.5em;
+}
+
 @media (max-width: 800px) {
   .app-title{
     color: white;
@@ -215,8 +223,25 @@
     margin-right: -6px;
   }
 
-  .content-style{
+  #comment-header {
+  color:#000;
+  font-size: 6em;
+  }
+
+  #content-style{
     font-size:.9em;
+  }
+
+  #lightbulb-header {
+  color:#000;
+  font-size: 6em;
+  margin-top: 10px;
+  }
+  .email-info {
+    font-size:1.5em;
+  }
+  #content-title {
+    font-size:2.5em;
   }
 }
 

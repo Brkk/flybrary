@@ -1,0 +1,26 @@
+<section layout="vertical" layout-fill flex>	
+	<md-toolbar class="app-toolbar">
+		<div class="md-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between"> 
+	    	<md-button ng-click="backToSearch()" style="max-width:30px"><i class="fa fa-arrow-left fa-lg"></i></md-button>
+	        <h2> {{$root.addbooktype}}</h2>
+	    </div>
+	</md-toolbar>
+    <section layout="vertical" layout-align="space-around">
+        <md-card flex layout="vertical">
+            <md-list>
+                <md-item ng-repeat="book in searchList track by book.key">
+                    <md-item-content ng-click="selectKey(book) ; moveToSelected()" ng-mouseover="searchMouseOver(book)">
+                        <div class="md-tile-left">
+                            <img ng-src="{{book.image}}" class="img">
+                        </div>
+                        <div class="md-tile-content">
+                            <h3>{{book.title}}</h3>
+                            <h4><i>{{book.author}}</i></h4>
+                        </div>       
+                    </md-item-content>
+                    <md-divider ng-if="!$last"></md-divider>
+                </md-item>
+            </md-list>
+        </md-card>
+    </section>
+</section>

@@ -49,10 +49,12 @@ $rootScope.searchISBN = function() {
   gBooks.isbn = $scope.search.ISBN.replace(/\D/g,'');
   gBooks.doSearchISBN().then(
     function(data){
-      console.log(data);
-      $rootScope.searchList = data;
-      $rootScope.selectKey(data[0]);
-      $location.path('/main/' + $rootScope.currentTab + '/add/select').replace();
+    	//console.log(data);
+    	$rootScope.searchList = data;
+    	if( !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+    		$rootScope.selectKey(data[0]);
+    	}
+    	$location.path('/main/' + $rootScope.currentTab + '/add/select').replace();
     }, 
     function (err) {
       console.log('Failed: ' + err);
@@ -68,7 +70,9 @@ $rootScope.searchTitleAuthor = function() {
     function(data){
       console.log(data);
       $rootScope.searchList = data;
-      $rootScope.selectKey(data[0]);
+      if( !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+    	  $rootScope.selectKey(data[0]);
+      }
       $location.path('/main/' + $rootScope.currentTab + '/add/select').replace();
     }, 
     function (err) {
@@ -79,6 +83,19 @@ $rootScope.searchTitleAuthor = function() {
 
 $rootScope.backToSearch = function() {
   $location.path('/main/' + $rootScope.currentTab + '/add/search').replace();
+}
+
+$rootScope.backToSelect = function() {
+	  $location.path('/main/' + $rootScope.currentTab + '/add/select').replace();
+}
+
+$rootScope.backToMain = function() {
+	  $mdDialog.hide(false);
+	  $location.path('/main/' + $rootScope.currentTab).replace();
+}
+
+$rootScope.moveToSelected = function() {
+	$location.path('/main/' + $rootScope.currentTab + '/add/selected').replace();
 }
 
 

@@ -129,7 +129,7 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
 		user.activeBookProperties.edition = book.edition;
 		user.unmatchTextbook();	
 	};
-
+	
   $scope.dialog = function(ev, actionType) {
 
     if($rootScope.currentTab == 'matches') {
@@ -138,25 +138,49 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
 
     $location.path('/main/' + $rootScope.currentTab + '/add/search').replace();
 
-    $mdDialog.show({
-      templateUrl: 'views/addBook.html',
-      targetEvent: ev,
-      controller: 'addBookCtrl'
-    }).then(function(addBookConfirmed) {
-        if (addBookConfirmed){
-          user.addBook().then(
-            function(data)
-            {
-              $scope.bookList.push(data);
-              user.bookList.push(data);
-            },
-            function(err)
-            {
-              console.log('Failed: ' + err);
-            });
-        }
-    
-    });
+   if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        $mdDialog.show({
+            templateUrl: 'views/addBook_mobile.html',
+            targetEvent: ev,
+            controller: 'addBookCtrl'
+          }).then(function(addBookConfirmed) {
+              if (addBookConfirmed){
+                user.addBook().then(
+                  function(data)
+                  {
+                    $scope.bookList.push(data);
+                    user.bookList.push(data);
+                  },
+                  function(err)
+                  {
+                    console.log('Failed: ' + err);
+                  });
+              }
+          
+          }); 
+    }
+    else
+    {
+        $mdDialog.show({
+            templateUrl: 'views/addBook.html',
+            targetEvent: ev,
+            controller: 'addBookCtrl'
+          }).then(function(addBookConfirmed) {
+              if (addBookConfirmed){
+                user.addBook().then(
+                  function(data)
+                  {
+                    $scope.bookList.push(data);
+                    user.bookList.push(data);
+                  },
+                  function(err)
+                  {
+                    console.log('Failed: ' + err);
+                  });
+              }
+          
+          });
+    }
   };
 
 	
