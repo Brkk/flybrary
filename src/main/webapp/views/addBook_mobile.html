@@ -1,0 +1,17 @@
+<md-content aria-label="Add a new book" style="width:100%; height:100%" flex>
+  <md-content>
+    <div ng-controller="addBookCtrl">
+    	<div ng-switch on="$root.addStep" layout-fill>
+            <div ng-switch-when="search" layout-fill>
+    			<div ng-include="'views/addBook_mobile_search.html'"></div>
+    		</div>
+    		<div ng-switch-when="select" layout-fill>
+    			<div ng-include="'views/addBook_mobile_list.html'"></div>
+    		</div>
+    		<div ng-switch-when="selected" layout-fill>
+    			<div ng-include="'views/addBook_mobile_detailed.html'"></div>
+    		</div>
+    	</div>
+    </div>
+  </md-content>
+</md-content>

@@ -1,0 +1,27 @@
+<section layout="vertical" layout-fill>
+	<md-toolbar class="app-toolbar">
+		<div class="md-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between"> 
+	    	<md-button ng-click="backToMain()" style="max-width:30px"><i class="fa fa-arrow-left fa-lg"></i></md-button>
+	        <h2> {{$root.addbooktype}}</h2>
+	    </div>
+	</md-toolbar>
+
+	<section layout="horizontal" layout-align="space-around" flex>
+		<section layout="vertical" layout-align="space-around" flex>
+			<md-card>
+				<md-text-float label="Title" ng-model="search.title" class="long"></md-text-float>
+				<md-text-float label="Author" ng-model="search.author" class="long"></md-text-float>
+			</md-card>
+			<p style='font-size: 20px; color: Black; text-align:center;'>or</p>
+			<md-card>
+				<section layout="horizontal" layout-align="space-around" flex>
+					<md-text-float label="ISBN" ng-model="search.ISBN"></md-text-float>
+					<md-button class="md-button-fab"><i class="fa fa-barcode fa-3x"></i></md-button>
+				</section>
+			</md-card>
+		</section>
+		<div layout="vertical" layout-align="center center">
+			<md-button ng-click="searchTitleAuthor()"><i class="fa fa-search fa-3x"></i></md-button>
+		</div>
+	</section>
+</section>
