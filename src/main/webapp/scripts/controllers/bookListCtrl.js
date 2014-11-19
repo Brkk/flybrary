@@ -37,7 +37,7 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
         $mdToast.show({
           controller: ToastCtrl,
           templateUrl: 'views/toast.html',
-          hideDelay: 3000,
+          hideDelay: 5000,
           position: $scope.getToastPosition()
         });
       }else if(((num_requests == ($scope.num_requests+1)) || (num_offers == ($scope.num_offers+1))) && ($rootScope.searchList != null)){
@@ -47,7 +47,7 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
         $mdToast.show({
           controller: ToastCtrl,
           templateUrl: 'views/toast.html',
-          hideDelay: 3000,
+          hideDelay: 5000,
           position: $scope.getToastPosition()
         });
       }

@@ -193,7 +193,7 @@ public class MatchingFunction {
 		Filter isbnFilter = new FilterPredicate("isbn", FilterOperator.EQUAL, isbn);
 		Filter matchedFilter = new FilterPredicate("matched", FilterOperator.EQUAL, "no");
 		Filter conditionFilter = new FilterPredicate("condition", FilterOperator.EQUAL, condition);
-		Filter editionFilter = new FilterPredicate("edition", FilterOperator.EQUAL, condition);
+		Filter editionFilter = new FilterPredicate("edition", FilterOperator.EQUAL, edition);
 		Filter searchFilter = CompositeFilterOperator.and(typeFilter, isbnFilter, matchedFilter, conditionFilter, editionFilter);
 		//any condition
 		if(condition == 4.0 ) {

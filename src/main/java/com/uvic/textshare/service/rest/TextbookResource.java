@@ -120,6 +120,12 @@ public class TextbookResource {
 				matchDate = parts[1];
 				numberOf_matches++;
 			}
+			
+			double radius = text.getDouble("radius");
+			radius = radius / 1000.0;
+			if(radius > 30 || radius < 5) {
+				radius = 15.0;
+			}
 	 
 			Entity textbook = new Entity("Textbook");
 			    textbook.setProperty("uid", text.getString("uid"));
@@ -135,7 +141,7 @@ public class TextbookResource {
 			    textbook.setUnindexedProperty("image", text.getString("image"));
 			    textbook.setUnindexedProperty("lat", text.getDouble("lat"));
 			    textbook.setUnindexedProperty("lon", text.getDouble("lon"));
-			    textbook.setUnindexedProperty("radius", text.getDouble("radius"));
+			    textbook.setUnindexedProperty("radius", radius);
 			datastore.put(textbook);
 	
 			String bookOwner = text.getString("uid");

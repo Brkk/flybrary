@@ -1,4 +1,5 @@
-<section  layout-fill flex layout='vertical' class="subtle-gray-background">
+<section ng-controller="locCtrl" layout-fill flex layout='vertical' class="subtle-gray-background">
+	
 	<md-card style="background-color:white">
 	  	<h5 class="helvetica-neue-style" style="padding-left:10px">
 	    	Make sure to update your location!
@@ -19,9 +20,10 @@
 
 	   	<p class="helvetica-neue-style" style="padding-left:10px; font-size:15px">Search Radius:</p>
 	    <md-slider discrete ng-model="loc.sliderRadius"  step="5" min="5" max="30"></md-slider>
-	    <div layout='vertical' layout-align='center center'>
+	    <div flex layout='vertical' layout-align='center center'>
 	    	<md-button ng-click="getLoc()" class="md-raised md-primary" flex> Update Location 
-	    		<i class="fa fa-location-arrow" style="color:white"></i>	
+	    		<i class="fa fa-location-arrow" style="color:white"></i>
+	    		
 	    	</md-button>
 	  	</div>
    	</md-card>
