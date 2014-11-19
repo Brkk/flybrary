@@ -37,7 +37,7 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
         $mdToast.show({
           controller: ToastCtrl,
           templateUrl: 'views/toast.html',
-          hideDelay: 6000,
+          hideDelay: 3000,
           position: $scope.getToastPosition()
         });
       }else if(((num_requests == ($scope.num_requests+1)) || (num_offers == ($scope.num_offers+1))) && ($rootScope.searchList != null)){
@@ -47,7 +47,7 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
         $mdToast.show({
           controller: ToastCtrl,
           templateUrl: 'views/toast.html',
-          hideDelay: 6000,
+          hideDelay: 3000,
           position: $scope.getToastPosition()
         });
       }
@@ -91,43 +91,70 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
 
 
 
-
 		  
 	$rootScope.deleteBook = function(book){
     var index = $scope.bookList.indexOf(book);
+    // var hidenProp = { hiden: true };
+    // book['']
+    $rootScope.deletedBook = book;
+    $rootScope.deletedBook.hiden = true;
     $rootScope.toasttype.typ = 'UNDO';
     $rootScope.toasttype.msg = 'You deleted a book!';
     
     $mdToast.show({
       controller: ToastCtrl,
       templateUrl: 'views/toast.html',
-      hideDelay: 6000,
+      hideDelay: 3000,
       position: $scope.getToastPosition()
-    });
-    
-    if (index > -1) {
-        $scope.bookList.splice(index, 1);
-    }
+    }).then(function(){
+        
+      if($rootScope.deletedBook.hiden==true){
 
-    user.activeBookProperties.key = book.key;
-		user.deleteBook();	
+          if (index > -1) {
+          $scope.bookList.splice(index, 1);
+        }
+
+        user.activeBookProperties.key = book.key;
+        user.deleteBook();  
+      }
+    });
+
 	};
 	
 	$rootScope.unmatchBook = function(book){
+    $rootScope.deletedBook = book;
+    $rootScope.deletedBook.hiden = true;
+    $rootScope.toasttype.typ = 'UNDO';
+    $rootScope.toasttype.msg = 'You deleted a match!';
 
-   var index = $scope.bookList.indexOf(book);
+    $mdToast.show({
+      controller: ToastCtrl,
+      templateUrl: 'views/toast.html',
+      hideDelay: 3000,
+      position: $scope.getToastPosition()
+    }).then(function(){
+        
+      if($rootScope.deletedBook.hiden==true){
+        var index = $scope.bookList.indexOf(book);
 
-    if (index > -1) {
-        $scope.bookList.splice(index, 1);
-    }
+        if (index > -1) {
+            $scope.bookList.splice(index, 1);
+        }
 
-		user.activeBookProperties.key = book.key;
-		user.activeBookProperties.matchDate = book.matchDate;
-		user.activeBookProperties.isbn = book.isbn;
-		user.actionType = book.actionType;
-		user.activeBookProperties.title = book.title;
-		user.activeBookProperties.edition = book.edition;
-		user.unmatchTextbook();	
+        user.activeBookProperties.key = book.key;
+        user.activeBookProperties.matchDate = book.matchDate;
+        user.activeBookProperties.isbn = book.isbn;
+        user.actionType = book.actionType;
+        user.activeBookProperties.title = book.title;
+        user.activeBookProperties.edition = book.edition;
+        user.unmatchTextbook(); 
+
+      }
+    });
+   
+
+
+   
 	};
 	
   $scope.dialog = function(ev, actionType) {
@@ -258,7 +285,7 @@ $scope.see = function() {
   };
 
 $scope.undoDelete = function() {
-    alert('called');
+    $rootScope.deletedBook.hiden = false;
     $mdToast.hide();
   };
   

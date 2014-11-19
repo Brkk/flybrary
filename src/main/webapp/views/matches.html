@@ -1,6 +1,6 @@
 <md-list flex>
     <md-item ng-repeat="book in bookList | orderBy:orderProp | isMatch track by book.key">
-        <md-item-content>
+        <md-item-content ng-hide='book.hiden'>
             <div class="md-tile-left">
                 <img ng-src="{{book.image}}" class="img">
             </div>
