@@ -2,8 +2,6 @@ package com.uvic.textshare.service.model;
 
 import java.util.Date;
 
-import com.google.appengine.api.users.User;
-
 public class Textbook {
 	private String title;
     private String author;

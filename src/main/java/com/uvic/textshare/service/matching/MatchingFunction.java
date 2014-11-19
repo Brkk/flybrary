@@ -114,10 +114,10 @@ public class MatchingFunction {
 		    //Create the mail body and send it to both of the users from team.textshare@gmail.com
 		    String msgBody = "Hello fellow student,\n"
 		    		+ "Isn't this a lucky day for ya. Remember that time you used flybrary for " + title + ". Well, we found "
-		    		+ "you match. You can leave whatever you are doing and reach your lovely match "
+		    		+ "you match. You can leave whatever you are doing and reach your match "
 		    		+ matchedUserName + " by replying to this email . Have a fantastic day and remember to always fly with flybrary.\n\n"
-		    		+ "Regards,\n"
-		    		+ "Kisses from Team Flybrary\n\n<MATCH_DATE>"
+		    		+ "Cheers,\n"
+		    		+ "Team Flybrary\n\n<MATCH_DATE>"
 						+ matchDate
 						+"<MATCH_DATE>";
 
@@ -134,7 +134,7 @@ public class MatchingFunction {
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace(); //log these errors
 				}
-		        msg.setSubject(title + " got a match, don't forget to check it eh");
+		        msg.setSubject(title + " got a match, don't forget to check it eh!");
 		        msg.setText(msgBody);
 		        Transport.send(msg);
 

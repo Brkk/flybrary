@@ -2,6 +2,7 @@ package com.uvic.textshare.service.rest;
 
 import java.io.IOException;
 import java.util.Properties;
+
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
@@ -10,49 +11,31 @@ import javax.servlet.http.*;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import java.util.Date;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-
-import com.uvic.textshare.service.matching.MatchingFunction;
-import com.uvic.textshare.service.model.*;
-import com.google.appengine.api.users.*;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.FilterOperator;
-import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.users.User;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
-import com.google.gson.Gson;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+
 import java.io.UnsupportedEncodingException;
 
 
+@SuppressWarnings("serial")
 public class MailHandlerServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     String noMatchMsgBody = "Hello student,\n"
         + "Unfortunatley the match that you are replying to has been disconnected and you are no longer able to reach your match."
-        + "Fortunatley you are able to go back to the app to try and find another match for your textbook!"
+        + "Fortunatley we have already started to look for an another match for your textbook! We will get back to you, "
+        + "when we find one."
         + "Have a fantastic day and remember to always fly with flybrary.\n\n"
-        + "Regards,\n"
-        + "Kisses from Team Flybrary\n\n<MATCH_DATE>";
+        + "Cheers,\n"
+        + "Team Flybrary\n\n<MATCH_DATE>";
     try {
       Properties props = new Properties();
       Session session = Session.getDefaultInstance(props, null);
@@ -64,7 +47,6 @@ public class MailHandlerServlet extends HttpServlet {
       String[] matchDateTokens = emailBody.split("<MATCH_DATE>");
       String emailMatchedDate = matchDateTokens[1];
       String fromEmailAddress = ((InternetAddress)message.getFrom()[0]).getAddress().toString();
-      String messageID = message.getMessageID();
 
       Filter matchFilter = new FilterPredicate("matchDate", FilterOperator.EQUAL, emailMatchedDate);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

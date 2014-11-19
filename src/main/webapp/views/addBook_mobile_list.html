@@ -1,11 +1,11 @@
-<section layout="vertical" layout-fill flex>	
-	<md-toolbar class="app-toolbar">
+<section layout="vertical" layout-fill flex>
+	<md-toolbar class="app-toolbar" style="position:fixed">
 		<div class="md-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between"> 
 	    	<md-button ng-click="backToSearch()" style="max-width:30px"><i class="fa fa-arrow-left fa-lg"></i></md-button>
 	        <h2> {{$root.addbooktype}}</h2>
 	    </div>
 	</md-toolbar>
-    <section layout="vertical" layout-align="space-around">
+    <section layout="vertical" layout-align="space-around" style="padding-top:60px">
         <md-card flex layout="vertical">
             <md-list>
                 <md-item ng-repeat="book in searchList track by book.key">

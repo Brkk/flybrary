@@ -26,6 +26,7 @@ app.controller('addBookCtrl', function ($scope, $rootScope, $mdDialog, user, gBo
     $mdDialog.hide(false);
     $location.path('/main/' + $rootScope.currentTab).replace();
   };
+  
   $rootScope.addBookClicked = function() {
     
     user.activeBookProperties.title = $rootScope.selected.title;
@@ -33,10 +34,22 @@ app.controller('addBookCtrl', function ($scope, $rootScope, $mdDialog, user, gBo
     user.activeBookProperties.isbn = $rootScope.selected.ISBN;
     user.activeBookProperties.image = $rootScope.selected.image;
     user.activeBookProperties.condition = $rootScope.selected.condition;
-    user.activeBookProperties.edition = $rootScope.selected.edition;
-
+    if($rootScope.selected.edition) {
+    	if($rootScope.selected.edition[0] < '0' || $rootScope.selected.edition[0] > '9') {
+    		//Tell user that the edition must start with a digit
+    	} else {
+    		for (i = 0; i < $rootScope.selected.edition.length; i++) { 
+    			if($rootScope.selected.edition[i] >= '0' && $rootScope.selected.edition[i] <= '9')
+    				user.activeBookProperties.edition += $rootScope.selected.edition[i];
+    			else
+    				break;
+    		}
+    	}
+    } else {
+    	user.activeBookProperties.edition = "1"; 
+    }
+    
     $mdDialog.hide(true);
-
     $location.path('/main/' + $rootScope.currentTab).replace();
   };
 

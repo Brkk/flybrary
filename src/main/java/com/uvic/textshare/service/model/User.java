@@ -71,5 +71,8 @@ public class User {
 	public void setLocation(String location) {
 		this.location = location;
 	}
+	public double getRadius() {
+		return radius;
+	}
 
 }
