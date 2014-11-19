@@ -1,5 +1,9 @@
 <md-toolbar class="md-primary md-medium-tall preferences-toolbar md-whiteframe-z1">
-  <div class="md-toolbar-tools helvetica-neue-style-sidebar-title" ng-click="toggleLeft()">Preferences</div>
+	<div class="md-toolbar-tools">
+		<md-button class="md-raised helvetica-neue-style-sidebar-title" ng-click="toggleLeft()">
+	    	Preferences
+        </md-button>
+	</div>
 </md-toolbar>
 <md-content layout="vertical" flex layout-align="space-between" >
 	<section flex ng-include="'views/map.html'"></section>
