@@ -42,7 +42,7 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
         });
       }else if(((num_requests == ($scope.num_requests+1)) || (num_offers == ($scope.num_offers+1))) && ($rootScope.searchList != null)){
         $rootScope.toasttype.typ = "DONE";
-        $rootScope.toasttype.msg = "For now we couldn't match your book(s). However, you'll be notified as soon as we find a match";
+        $rootScope.toasttype.msg = "We haven't found a match yet, but you'll be notified as soon as we one!";
 
         $mdToast.show({
           controller: ToastCtrl,
