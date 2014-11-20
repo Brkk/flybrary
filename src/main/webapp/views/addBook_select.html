@@ -33,11 +33,32 @@
                    <h2>{{selected.author}}</h2>
                   <div style="padding-left:10px; overflow:scroll; max-height:200px">{{selected.desc}}</div>
 	        	</md-content>
-           	</section>
-            
+           	</section>            
             <md-divider></md-divider>
-
-            <section flex layout="horizontal" layout-align="space-around">
+              <div flex>
+              	<h3>Condition and Edition:</h3>			
+			    <div flex layout="row">
+			    	<div flex>
+                    <md-radio-group ng-model="selected.condition">
+	                        <md-radio-button ng-if="'requests' == $root.currentTab" value="4">Any</md-radio-button>
+	                        <md-radio-button value="1">Mint</md-radio-button>
+	                        <md-radio-button value="2">Some wear'n'tear</md-radio-button>
+	                        <md-radio-button value="3">Been "loved"</md-radio-button>
+	                    </md-radio-group>	    	
+			    	</div>
+			    	<div flex>
+			    		<md-text-float label="Edition" ng-model="selected.edition"> </md-text-float>
+			    	</div>		    
+			    </div>
+			    <div layout="column" flex layout-align="end end">
+			    	<md-button ng-click="addBookClicked()" md-theme="pink" class="md-raised md-primary" style="max-width:30%">
+                    	<i class="fa fa-check fa-lg" style="color:white"></i>
+                    </md-button>
+			    </div>	
+			  </div>
+   			
+   			<!--          
+   			<section flex layout="horizontal" layout-align="space-around">
                 <div style="padding-left:10px" flex>
                     <h3>Desired condition and edition:</h3>
                     <md-radio-group ng-model="selected.condition">
@@ -48,12 +69,13 @@
                     </md-radio-group>
                     <md-text-float label="Edition" ng-model="selected.edition"> </md-text-float>
                 </div>
-                <div flex style="text-align:center">
-                    <md-button ng-click="addBookClicked()" md-theme="pink" class="md-fab md-primary">
-                         <i class="fa fa-plus fa-lg" style="color:white"></i>
-                    </md-button>
-                </div>
+                <section flex layout="vertical" layout-align="space-around"> 	
+                       	<md-button ng-click="addBookClicked()" md-theme="pink" class="md-fab md-primary" layout-align="center center">
+                       		<i class="fa fa-plus fa-lg" style="color:white"></i>
+                    	</md-button>
+                </section>
             </section>
+            -->
         </md-card>
     </section>
 </md-card>

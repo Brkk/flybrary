@@ -1,13 +1,15 @@
 <section layout="vertical" layout-fill class="small-btns textFieldLong">
 	
 	<md-toolbar class="app-toolbar" style="z-index:3">    
-        <div class="md-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between"> 
-        	<h1>{{$root.addbooktype}}</h1>
-        </div>
+		<div class="md-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between"> 
+			<h1> {{$root.addbooktype}}</h1>
+	    	<md-button ng-click="backToMain()"><i class="fa fa-close"></i></md-button>
+	    </div>
     </md-toolbar>
 
 	<section layout="horizontal" layout-align="space-around" flex>
 		<section layout="vertical" layout-align="space-around" flex>
+			<b>Search by title and/or author , or by isbn.</b>
 			<md-card>
 				<md-text-float label="Title" ng-model="search.title" class="long"></md-text-float>
 				<md-text-float label="Author" ng-model="search.author" class="long"></md-text-float>
@@ -16,12 +18,17 @@
 			<md-card>
 				<section layout="horizontal" layout-align="space-around" flex>
 					<md-text-float label="ISBN" ng-model="search.ISBN"></md-text-float>
-					<md-button class="md-button-fab"><i class="fa fa-barcode"></i></md-button>
+					<md-button class="md-button-fab"><i class="fa fa-barcode fa-lg"></i></md-button>
 				</section>
 			</md-card>
 		</section>
-		<div layout="vertical" layout-align="center center">
-			<md-button ng-click="searchTitleAuthor()"><i class="fa fa-search"></i></md-button>
-		</div>
+		<section layout="vertical" layout-align="space-around" style="width:30%">	
+				<div  >
+					<md-button ng-click="searchTitleAuthor()"><i class="fa fa-search"></i></md-button>
+				</div>
+				<div >
+					<md-button ng-click="searchISBN()"><i class="fa fa-search"></i></md-button>
+				</div>
+		</section>
 	</section>
 </section>

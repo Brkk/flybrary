@@ -1,4 +1,4 @@
-app.controller('addBookCtrl', function ($scope, $rootScope, $mdDialog, user, gBooks, $location) {
+app.controller('addBookCtrl', function ($scope, $rootScope, $mdDialog,$mdToast, user, gBooks, $location) {
   
   $rootScope.search = {
     title: "",
@@ -6,7 +6,10 @@ app.controller('addBookCtrl', function ($scope, $rootScope, $mdDialog, user, gBo
     ISBN: ""
   };
 
-
+  $rootScope.toasttype = {
+		    typ: '',
+		    msg: ''
+		  };
 
   $rootScope.selected = {
     title: "sjdkfjw",
@@ -29,16 +32,39 @@ app.controller('addBookCtrl', function ($scope, $rootScope, $mdDialog, user, gBo
     $location.path('/main/' + $rootScope.currentTab).replace();
   };
   
+
+  $scope.toastPosition = {
+    bottom: true,
+    top: false,
+    left: false,
+    right: true
+  };
+
+  $scope.getToastPosition = function() {
+    return Object.keys($scope.toastPosition)
+      .filter(function(pos) { return $scope.toastPosition[pos]; })
+      .join(' ');
+  };
+  
   $rootScope.addBookClicked = function() {
     
+ 	$scope.alert = '';
     user.activeBookProperties.title = $rootScope.selected.title;
     user.activeBookProperties.author = $rootScope.selected.author;
     user.activeBookProperties.isbn = $rootScope.selected.ISBN;
     user.activeBookProperties.image = $rootScope.selected.image;
     user.activeBookProperties.condition = $rootScope.selected.condition;
+ 	
     if($rootScope.selected.edition) {
     	if($rootScope.selected.edition[0] < '0' || $rootScope.selected.edition[0] > '9') {
-    		//Tell user that the edition must start with a digit
+            $rootScope.toasttype.msg = "Edition must be a number!";
+
+            $mdToast.show({
+              //controller: ToastCtrl,
+              templateUrl: 'views/toast.html',
+              hideDelay: 10000,
+              position: $scope.getToastPosition()
+            });
     	} else {
     		for (i = 0; i < $rootScope.selected.edition.length; i++) { 
     			if($rootScope.selected.edition[i] >= '0' && $rootScope.selected.edition[i] <= '9')
@@ -46,15 +72,21 @@ app.controller('addBookCtrl', function ($scope, $rootScope, $mdDialog, user, gBo
     			else
     				break;
     		}
+    		$mdDialog.hide(true);
+    	    $location.path('/main/' + $rootScope.currentTab).replace();
     	}
-    } else {
-    	user.activeBookProperties.edition = "1"; 
-    }
-    
-    $mdDialog.hide(true);
-    $location.path('/main/' + $rootScope.currentTab).replace();
-  };
+    } else { 
+            $rootScope.toasttype.msg = "Please enter an edition";
 
+            $mdToast.show({
+              //controller: ToastCtrl,
+              templateUrl: 'views/toast.html',
+              hideDelay: 10000,
+              position: $scope.getToastPosition()
+            });
+    	
+    }
+  };
 
 // fills the list/changes page/selects the first book
 $rootScope.searchISBN = function() {
@@ -149,4 +181,7 @@ $rootScope.searchMouseOver = function(theBook) {
 
 
 });
+function ToastCtrlTwo($scope, $rootScope, $mdToast) {
+
+};
 

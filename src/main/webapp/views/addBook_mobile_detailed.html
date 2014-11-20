@@ -17,8 +17,28 @@
 				</md-content>
 		 	</section>
 		  	<md-divider></md-divider>
-		
-		  	<section flex layout="horizontal" layout-align="space-around">
+           	<div flex>
+              	<h3>Condition and Edition:</h3>			
+			    <div flex layout="row">
+			    	<div flex>
+                    <md-radio-group ng-model="selected.condition">
+	                        <md-radio-button ng-if="'requests' == $root.currentTab" value="4">Any</md-radio-button>
+	                        <md-radio-button value="1">Mint</md-radio-button>
+	                        <md-radio-button value="2">Some wear'n'tear</md-radio-button>
+	                        <md-radio-button value="3">Been "loved"</md-radio-button>
+	                    </md-radio-group>	    	
+			    	</div>
+			    	<div flex>
+			    		<md-text-float label="Edition" ng-model="selected.edition"> </md-text-float>
+			    	</div>		    
+			    </div>
+			    <div layout="column" flex layout-align="end end">
+			    	<md-button ng-click="addBookClicked()" md-theme="pink" class="md-raised md-primary" style="max-width:30%">
+                    	<i class="fa fa-check fa-lg" style="color:white"></i>
+                    </md-button>
+			    </div>	
+			  </div>
+		<!--    	<section flex layout="horizontal" layout-align="space-around">
 		      	<div style="padding-left:10px" flex>
 		    	<h3>Desired condition and edition:</h3>
 		    		<md-radio-group ng-model="selected.condition">
@@ -35,6 +55,7 @@
 		            </md-button>
 		        </div>
 		    </section>
+		    -->
 		</md-card>
 	</section>
 </section>

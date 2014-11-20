@@ -8,7 +8,7 @@
             <div ng-include="'views/match_list.html'" layout="vertical" flex></div>
         </div>
     </md-sidenav>
-    <div layout="vertical" layout-fill="" tabindex="-1" role="main" class ="tab-bar-styling">
+    <div layout="vertical" layout-fill tabindex="-1" role="main" class ="tab-bar-styling">
         <md-toolbar class="md-primary app-toolbar" style="z-index:3">
             <div class="md-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between">
               <i class="fa fa-navicon" class="nav-icon" style="color:white; cursor:pointer" ng-click="toggleLeft()"></i>
@@ -28,7 +28,7 @@
         </md-toolbar>
 
         <md-content ng-controller="BookListCtrl" class="tab-bar-styling">
-            <md-whiteframe class="md-whiteframe-z1" layout layout-fill style="background: #f9f9f9; z-index:2;">    
+            <md-whiteframe class="md-whiteframe-z1" layout style="background: #f9f9f9; z-index:2;">    
                 <div layout flex class="animate-switch-container" ng-switch on="$root.currentTab" >
                     <div layout flex class="animate-switch"
                         ng-switch-when="offers"

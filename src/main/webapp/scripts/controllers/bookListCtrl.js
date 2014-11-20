@@ -296,4 +296,3 @@ $scope.undoDelete = function() {
 
   
 /*    Filters End    */
-
