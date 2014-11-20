@@ -9,7 +9,7 @@
 		    <section layout="horizontal" layout-align="space-around">
 		        <md-card flex layout="vertical">
 		            <md-list>
-		                <md-item ng-repeat="book in searchList track by book.key">
+		                <md-item ng-repeat="book in searchList track by book.title">
 		                    <md-item-content ng-click="selectKey(book)" ng-mouseover="searchMouseOver(book)">
 		                        <div class="md-tile-left">
 		                            <img ng-src="{{book.image}}" class="img">
@@ -29,9 +29,9 @@
 		            </div>
 		            <section flex layout="horizontal" layout-align="space-between">
 		            	<md-content flex layout="vertical" layout-align="center center">
-		                   <h1>{{selected.title}}</h1>
-		                   <h2>{{selected.author}}</h2>
-		                  <div style="padding-left:10px; overflow:hidden; max-height:200px">{{selected.desc}}</div>
+		                   <h2>{{selected.title}}</h2>
+		                   <h3>{{selected.author}}</h3>
+		                  <div style="padding-left:10px; overflow:hidden; max-height:65px">{{selected.desc}}</div>
 			        	</md-content>
 		           	</section>            
 		            <md-divider></md-divider>

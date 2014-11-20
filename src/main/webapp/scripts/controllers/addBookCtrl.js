@@ -113,7 +113,6 @@ $rootScope.searchTitleAuthor = function() {
 
   gBooks.doSearchTitleAuthor().then(
     function(data){
-      console.log(data);
       $rootScope.searchList = data;
       if( !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
     	  $rootScope.selectKey(data[0]);
@@ -145,15 +144,10 @@ $rootScope.moveToSelected = function() {
 
 
 $rootScope.selectKey = function(theBook) {
-  // lower the old selected element if it exists
-
-  // raise on of the list elements, and fill the other side's elements
-
   var i = $rootScope.searchList.indexOf(theBook);
 
   if(i < 0)
     return;
-
   
   $rootScope.selected.title = $rootScope.searchList[i].title;
   $rootScope.selected.author = $rootScope.searchList[i].author;
@@ -167,21 +161,12 @@ $rootScope.selectKey = function(theBook) {
 };
 
 $rootScope.searchMouseOver = function(theBook) {
-  // if the old one exists, lower it
-
-
-
-  // raise it a little bit
-
-
 
   $rootScope.hoveredKey = theBook;
 };
 
-
-
 });
-function ToastCtrlTwo($scope, $rootScope, $mdToast) {
 
+function ToastCtrlTwo($scope, $rootScope, $mdToast) {
 };
 
