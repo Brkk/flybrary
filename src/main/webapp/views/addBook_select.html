@@ -9,7 +9,7 @@
 		    <section layout="horizontal" layout-align="space-around">
 		        <md-card flex layout="vertical">
 		            <md-list>
-		                <md-item ng-repeat="book in searchList track by book.title">
+		                <md-item ng-repeat="book in searchList track by $index">
 		                    <md-item-content ng-click="selectKey(book)" ng-mouseover="searchMouseOver(book)">
 		                        <div class="md-tile-left">
 		                            <img ng-src="{{book.image}}" class="img">
