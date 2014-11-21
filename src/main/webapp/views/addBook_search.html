@@ -9,18 +9,18 @@
 
 	<section layout="horizontal" layout-align="space-around" flex>
 		<section layout="vertical" layout-align="space-around" flex>
-			<b>Search by title and/or author , or by isbn.</b>
-			<md-card>
+
+			<!-- <md-card> --><div>
 				<md-text-float label="Title" ng-model="search.title" class="long"></md-text-float>
 				<md-text-float label="Author" ng-model="search.author" class="long"></md-text-float>
-			</md-card>
-			<p style='font-size: 20px; color: Black; text-align:center;'>or</p>
-			<md-card>
+			<!-- </md-card> --></div>
+			<p style='font-size: 16px; text-align:center;'>or</p>
+			<!-- <md-card> --><div>
 				<section layout="horizontal" layout-align="space-around" flex>
 					<md-text-float label="ISBN" ng-model="search.ISBN"></md-text-float>
 					<md-button class="md-button-fab"><i class="fa fa-barcode fa-lg"></i></md-button>
 				</section>
-			</md-card>
+			<!-- </md-card> --></div>
 		</section>
 		<section layout="vertical" layout-align="space-around" style="width:30%">	
 				<div  >
