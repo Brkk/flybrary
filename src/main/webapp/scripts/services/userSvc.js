@@ -117,6 +117,7 @@ var userSvc = angular.module( 'userSvc', [])
         $http.post("resources/retrieve", this.generateRetrieve(), null)
         .success(function (data, status, headers, config)
         {
+
             deferred_getBooks.resolve(data.map(parseBook));
         })
         .error(function (data, status, headers, config)
@@ -127,10 +128,33 @@ var userSvc = angular.module( 'userSvc', [])
         return deferred_getBooks.promise;
     };
 
+    this.confirmMatch = function (book){
+        // var aux {
+            // ididOfInitiator: book.ididOfInitiator;
+
+        // }
+        console.log(book);
+
+    //     $http.post("resources/completeMatch", parseBook(book), null)
+    //     .success(function (data, status, headers, config)
+    //     {
+    //         deferred_getBooks.resolve(data.map(parseBook));
+    //         alert('confirmedMatch');
+    //     })
+    //     .error(function (data, status, headers, config)
+    //     {
+    //         deferred_getBooks.reject('error');
+    //         alert('Didnt confirm');
+    //     });
+    //     deferred_getBooks = $q.defer();
+    //     return deferred_getBooks.promise;
+    }
+
     this.addBook = function (){
         $http.post("resources/add", this.generateAdd(), null)
         .success(function (data, status, headers, config)
         {
+
             deferred_addBook.resolve(parseBook(data));
         })
         .error(function (data, status, headers, config)

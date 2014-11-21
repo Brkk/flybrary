@@ -113,9 +113,9 @@ public class MatchingFunction {
 
 		    //Create the mail body and send it to both of the users from team.textshare@gmail.com
 		    String msgBody = "Hello fellow student,\n"
-		    		+ "Isn't this a lucky day for ya. Remember that time you used flybrary for " + title + ". Well, we found "
+		    		+ "Isn't this a lucky day for ya? Remember that time you used flybrary for " + title + ". Well, we found "
 		    		+ "you match. You can leave whatever you are doing and reach your match "
-		    		+ matchedUserName + " by replying to this email . Have a fantastic day and remember to always fly with flybrary.\n\n"
+		    		+ matchedUserName + " by replying to this email. Have a fantastic day and remember to always fly with flybrary.\n\n"
 		    		+ "Cheers,\n"
 		    		+ "Team Flybrary\n\n<MATCH_DATE>"
 						+ matchDate

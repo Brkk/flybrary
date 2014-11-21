@@ -1,18 +1,35 @@
 <md-list flex>
     <md-item ng-repeat="book in bookList | orderBy:orderProp | isMatch track by book.key">
-        <md-item-content ng-hide='book.hiden'>
+        <md-item-content ng-click="expand(book)" ng-hide='book.hiden'>
             <div class="md-tile-left">
                 <img ng-src="{{book.image}}" class="img">
             </div>
-            <div class="md-tile-content">
-                <h3>{{book.title}}</h3>
-                <h4><i>{{book.author}}</i></h4>
-                 <md-button class="glyphicon glyphicon-trash btn-lg" style="position: absolute; right: 10px;" ng-click="unmatchBook(book)">
-                 	<md-tooltip>
-	         		    Unmatch
-	        		</md-tooltip>
-                 </md-button>
+            <div  class="md-tile-content">
+	            <div layout='horizontal'>
+	            	<div layout='vertical' flex>
+		                <h3>{{book.title}}</h3>
+                    	<h4><i> {{book.author}}</i></h4>
+	                    <div layout='vertical' style='padding-top:20px;' ng-show='book.clicked'>
+	                    	<h3>Did your transaction happen? </h3>
+		                    <div class='divButtonExpand' layout='horizontal' flex>
+			                  <md-button class='fa fa-check md-raised' ng-click='confirmMatch(book)' style='background-color: #4CAF50;'><md-tooltip>
+	         					You traded a book
+	        				  </md-tooltip></md-button>
+			                  <md-button class='fa fa-close md-raised' style='background-color: #F44336;'><md-tooltip>
+	         					It didn't work out
+	        				  </md-tooltip></md-button>
+
+		                    
+		                </div>
+		            </div>    
+		            <md-button class="glyphicon glyphicon-trash btn-lg" style="position: absolute; right: 10px;" ng-click="unmatchBook(book)">
+		                 	<md-tooltip>
+			         		    Unmatch
+			        		</md-tooltip>
+		                 </md-button>
+		         </div>
             </div>
+
         </md-item-content>
         <md-divider ng-if="!$last"></md-divider>
     </md-item>

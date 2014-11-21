@@ -30,9 +30,9 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
           }
       }
 
-      if(num_matches == ($scope.num_matches+1)){
-        $rootScope.toasttype.typ = "SEE IT";
-        $rootScope.toasttype.msg = 'We already found a match for you!';
+      if((num_matches == ($scope.num_matches+1)) && ($rootScope.searchList != null)){
+        $rootScope.toasttype.typ = "SEE MY MATCHES";
+      $rootScope.toasttype.msg = 'We found you a match! Check your mailbox.';
 
         $mdToast.show({
           controller: ToastCtrl,
@@ -94,9 +94,10 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
 		  
 	$rootScope.deleteBook = function(book){
     var index = $scope.bookList.indexOf(book);
-    // var hidenProp = { hiden: true };
-    // book['']
+
+
     $rootScope.deletedBook = book;
+    $rootScope.deletedBook.clicked = false;
     $rootScope.deletedBook.hiden = true;
     $rootScope.toasttype.typ = 'UNDO';
     $rootScope.toasttype.msg = 'You deleted a book!';
@@ -120,7 +121,18 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
     });
 
 	};
+
+  $rootScope.expand = function(book){
+    book.clicked =  !book.clicked;
+
+  }
 	
+  $rootScope.confirmMatch = function(book){
+    book.hiden = true;
+    user.confirmMatch(book);
+
+  }
+
 	$rootScope.unmatchBook = function(book){
     $rootScope.deletedBook = book;
     $rootScope.deletedBook.hiden = true;

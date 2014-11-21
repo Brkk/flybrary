@@ -389,3 +389,11 @@ md-item-content {
 
 .textFieldLong md-input-group.long > input {
     width: 264px; }
+
+.divButtonExpand md-button {
+  max-width: 80px;
+  font-size:16px;
+  color: White;
+
+
+}
