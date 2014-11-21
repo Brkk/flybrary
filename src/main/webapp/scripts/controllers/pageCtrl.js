@@ -42,7 +42,13 @@ app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $tim
 		function(data) {
 			if(user.loc.lat == 0 && user.loc.lon == 0)
 			{
-				$location.path('/setLocation').replace();
+				if(!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+					$location.path('/setLocation').replace();
+				}
+				else
+				{
+					$location.path('/setLocationMobile').replace();
+				}
 			}
 			else
 			{
@@ -62,7 +68,13 @@ app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $tim
 			function(data) {
 				if(user.loc.lat == 0 && user.loc.lon == 0)
 				{
-					$location.path('/setLocation').replace();
+					if( !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+						$location.path('/setLocation').replace();
+					}
+					else
+					{
+						$location.path('/setLocationMobile').replace();
+					}
 				}
 				else
 				{
