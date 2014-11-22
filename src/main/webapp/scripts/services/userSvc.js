@@ -96,9 +96,17 @@ var userSvc = angular.module( 'userSvc', [])
             edition: this.activeBookProperties.edition
         };
     };
+    
+    this.generateConfirm = function(){
+        return {
+            id: this.activeBookProperties.key,
+            uid: this.uid,
+            type: this.actionType,
+            matchDate: this.activeBookProperties.matchDate
+        };   	   	
+    };
 
     function parseBook(book){
-        console.log(book);
         return {   
             key: book.key.id,
             title: book.propertyMap.title.value,
@@ -109,7 +117,7 @@ var userSvc = angular.module( 'userSvc', [])
             image: book.propertyMap.image.value,
             isbn: book.propertyMap.isbn,
             matched: book.propertyMap.matched,
-            matchDate: book.propertyMap.matchDate.value
+            matchDate: book.propertyMap.matchDate
         };
     }
 
@@ -129,32 +137,13 @@ var userSvc = angular.module( 'userSvc', [])
     };
 
     this.confirmMatch = function (book){
-        // var aux {
-            // ididOfInitiator: book.ididOfInitiator;
-
-        // }
-        console.log(book);
-
-    //     $http.post("resources/completeMatch", parseBook(book), null)
-    //     .success(function (data, status, headers, config)
-    //     {
-    //         deferred_getBooks.resolve(data.map(parseBook));
-    //         alert('confirmedMatch');
-    //     })
-    //     .error(function (data, status, headers, config)
-    //     {
-    //         deferred_getBooks.reject('error');
-    //         alert('Didnt confirm');
-    //     });
-    //     deferred_getBooks = $q.defer();
-    //     return deferred_getBooks.promise;
+        $http.post("resources/completeMatch", this.generateConfirm(), null)
     }
 
     this.addBook = function (){
         $http.post("resources/add", this.generateAdd(), null)
         .success(function (data, status, headers, config)
         {
-
             deferred_addBook.resolve(parseBook(data));
         })
         .error(function (data, status, headers, config)

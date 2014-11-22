@@ -1,22 +1,18 @@
 <md-list flex>
     <md-item ng-repeat="book in bookList | orderBy:orderProp | isOffer track by book.key ">
-        <md-item-content ng-click="expand(book)" ng-hide='book.hiden'>
+        <md-item-content ng-hide='book.hiden'>
             <div class="md-tile-left">
                 <img ng-src="{{book.image}}" class="img">
             </div>
-            <div class="md-tile-content" layout='vertical'>
-                <div layout='horizontal'>
-                    <h3>{{book.title}}</h3>
-                    <h4><i ng-show='{{book.extraInfo}}'> {{book.author}}</i></h4>
-                    <md-button class="glyphicon glyphicon-trash btn-lg" style="position: absolute; right: 10px;" ng-click="deleteBook(book)">
-    	                <md-tooltip>
-    	         		 	Delete
-    	        		</md-tooltip>
-                    </md-button>
-                </div>
-                
+            <div class="md-tile-content">
+                <h3>{{book.title}}</h3>
+                <h4><i>{{book.author}}</i></h4>
+                <md-button class="glyphicon glyphicon-trash btn-lg" style="position: absolute; right: 1%;" ng-click="deleteBook(book)">
+            	    <md-tooltip>
+	         			Delete
+	        		</md-tooltip>
+	        	</md-button>
             </div>
-            
         </md-item-content>
         <md-divider ng-if="!$last"></md-divider>
     </md-item>

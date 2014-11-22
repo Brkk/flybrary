@@ -103,7 +103,7 @@ public class TextbookResource {
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 			JSONObject text = new JSONObject(input);
 			Date addDate = new Date();
-			String matchDate = null; 
+			String matchDate = "emtpy"; 
 			String response = matchingFunction.checkForMatch(
 					text.getString("isbn"), 
 					text.getString("uid"),
@@ -136,7 +136,7 @@ public class TextbookResource {
 			    textbook.setProperty("edition", text.getString("edition"));
 			    textbook.setProperty("condition", text.getDouble("condition"));
 			    textbook.setProperty("date", addDate);	 
-			    textbook.setUnindexedProperty("matchDate", matchDate);
+			    textbook.setProperty("matchDate", matchDate);
 			    textbook.setProperty("matched", matched);
 			    textbook.setUnindexedProperty("image", text.getString("image"));
 			    textbook.setUnindexedProperty("lat", text.getDouble("lat"));
@@ -322,27 +322,37 @@ public class TextbookResource {
 		try {
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 			JSONObject obj = new JSONObject(input);
-			Long idOfInitiator = (long) obj.getDouble("ididOfInitiator");
-			Long idOfmatch = (long) obj.getDouble("ididOfmatch");
-			String uidOfInitiator = obj.getString("uidOfInitiator");
-			String uidOfmatch = obj.getString("uidOfmatch");
+			Long idOfInitiator = (long) obj.getDouble("id");
+			String uidOfInitiator = obj.getString("uid");
 			String matchDate = obj.getString("matchDate");
 			String type = obj.getString("type");
-	
-		
+			String uidofMatch;
+			
 			//Delete the match entry
 			Filter matchFilter = new FilterPredicate("matchDate", FilterOperator.EQUAL, matchDate);
 			Query q = new Query("Match").setFilter(matchFilter);
 			Entity match = datastore.prepare(q).asSingleEntity();
+			
+			if(!uidOfInitiator.equals((String) match.getProperty("userOneId")))
+				uidofMatch = (String) match.getProperty("userOneId");
+			else
+				uidofMatch = (String) match.getProperty("userTwoId");
+			
 			Key matchKey = match.getKey();
 			datastore.delete(matchKey);
-			Delay.oneSecondDelay();
 			
 			//Delete Books
 			Key textbookKey = KeyFactory.createKey("Textbook", idOfInitiator);
 			datastore.delete(textbookKey);
-			textbookKey = KeyFactory.createKey("Textbook", idOfmatch);
-			datastore.delete(textbookKey);
+			
+			Filter uidFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uidofMatch);
+			Filter searchFilter = CompositeFilterOperator.and(uidFilter, matchFilter);
+			
+			q = new Query("Textbook").setFilter(searchFilter);
+			Entity textbook = datastore.prepare(q).asSingleEntity();
+			
+			matchKey = textbook.getKey();
+			datastore.delete(matchKey);	
 			
 			if(type.equals("offer")) {
 				//give user karma
@@ -353,6 +363,7 @@ public class TextbookResource {
 				//reduce user karma
 				//increase other guy
 			}
+			
 		} catch(NullPointerException e) {
 			e.printStackTrace();
 		}
@@ -420,7 +431,6 @@ public class TextbookResource {
 	 		user.setUnindexedProperty("name", obj.getString("name"));
 	 		user.setProperty("uid", obj.getString("uid"));
 	 		user.setUnindexedProperty("email", obj.getString("email"));
-			//user.setUnindexedProperty("address", obj.getString("location"));
 			user.setUnindexedProperty("lat", obj.getDouble("lat"));
 			user.setUnindexedProperty("lon", obj.getDouble("lon"));
 			user.setUnindexedProperty("request_karma", 0);

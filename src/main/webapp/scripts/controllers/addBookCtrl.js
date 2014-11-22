@@ -66,12 +66,14 @@ app.controller('addBookCtrl', function ($scope, $rootScope, $mdDialog,$mdToast, 
               position: $scope.getToastPosition()
             });
     	} else {
+    		user.activeBookProperties.edition = '';
     		for (i = 0; i < $rootScope.selected.edition.length; i++) { 
     			if($rootScope.selected.edition[i] >= '0' && $rootScope.selected.edition[i] <= '9')
     				user.activeBookProperties.edition += $rootScope.selected.edition[i];
     			else
     				break;
     		}
+    		
     		$mdDialog.hide(true);
     	    $location.path('/main/' + $rootScope.currentTab).replace();
     	}
