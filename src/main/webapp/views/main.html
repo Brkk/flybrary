@@ -1,6 +1,6 @@
 <section layout="horizontal" layout-fill ng-controller="mainCtrl" flex>
-    <md-sidenav  class="md-sidenav-left md-whiteframe-z1" is-locked-open="$media('md')" component-id="left"
-     layout="vertical" class="md-sidenav-left">
+    <md-sidenav  class="md-sidenav-left md-whiteframe-z1" component-id="left"
+     layout="vertical" style="width:304px !important;">
         <div ng-if="$root.currentTab != 'matches'" layout flex>
             <div ng-include="'views/preferences.html'" layout="vertical" flex></div>
         </div>
