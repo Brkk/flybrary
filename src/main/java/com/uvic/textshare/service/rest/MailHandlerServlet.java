@@ -36,6 +36,9 @@ import com.google.gson.Gson;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.BodyPart;
+import javax.mail.Multipart;
+import javax.activation.DataHandler;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
@@ -51,6 +54,8 @@ public class MailHandlerServlet extends HttpServlet {
   public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     String emailBody = "";
     String fromEmailAddress = "";
+    String emailSubject ="";
+    String messageID;
     try {
       String noMatchMsgBody = "Hello student,\n"
           + "Unfortunatley the match that you are replying to has been disconnected and you are no longer able to reach your match."
@@ -63,53 +68,92 @@ public class MailHandlerServlet extends HttpServlet {
       Session session = Session.getDefaultInstance(props, null);
       MimeMessage message = new MimeMessage(session, req.getInputStream());
 
-      MimeMultipart content=(MimeMultipart)message.getContent();
+      Object msgContent = message.getContent();  
 
-      emailBody = content.getBodyPart(0).getContent().toString();
       fromEmailAddress = ((InternetAddress)message.getFrom()[0]).getAddress().toString();
-      String emailSubject = message.getSubject();
-      String messageID = message.getMessageID();
+      emailSubject = message.getSubject();
+      messageID = message.getMessageID();
 
-
-      Pattern pattern = Pattern.compile("\\d+/\\d+/\\d+ +\\d+:\\d+:\\d+");
-      Matcher matcher = pattern.matcher(emailBody);
-      String emailMatchedDate = "";
-      while (matcher.find()) {
-        int i = 0;
-        emailMatchedDate = matcher.group(i);
-        i++;
-      }
-
-      System.out.println("emailMatchedDate: " + emailMatchedDate);
-      System.out.println("emailBody: " + emailBody);
       System.out.println("fromEmailAddress: " + fromEmailAddress);
       System.out.println("messageID: " + messageID);
       System.out.println("emailSubject: " + emailSubject);
 
-      Filter matchFilter = new FilterPredicate("matchDate", FilterOperator.EQUAL, emailMatchedDate);
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      Query q = new Query("Match").setFilter(matchFilter);
-      Entity match = datastore.prepare(q).asSingleEntity();
+      Boolean emailHasAttachment = false;
+      Object content = new Object();
+      /* Check if content is pure text/html or in parts */                     
+      if (msgContent instanceof Multipart) {
+        Multipart multipart = (Multipart) msgContent;
+        System.out.println("MultiPartCount: " + multipart.getCount());
 
-      if(match == null) {
-        sendEmail("email@textchngr.appspotmail.com", "Team Flybrary", fromEmailAddress, "Match Does not Exist", noMatchMsgBody+"\n\n Match Date:"+emailMatchedDate);
+        for (int i = 0; i < multipart.getCount(); i++) {
+          BodyPart bodyPart = multipart.getBodyPart(i);
+          String disposition = bodyPart.getDisposition();
+          System.out.println("Disposition: " + disposition);
+
+          if (disposition != null && (disposition.equalsIgnoreCase("ATTACHMENT"))) { 
+            System.out.println("This email has an attachment");
+            emailHasAttachment = true;
+            break;
+            //DataHandler handler = bodyPart.getDataHandler();
+            //System.out.println("file name : " + bodyPart.getFileName());
+            //System.out.println("handler.getContent() : " + handler.getContent());
+            //System.out.println("file name : " + bodyPart.getFileName());                            
+          }
+          else { 
+            content = bodyPart.getContent();
+            try{
+              System.out.println("content in loop:" + (String) content); 
+            } catch(Exception e) {
+              System.out.println("Error when parsing emailBody to string Error StackTrace: " + e.toString());
+            }
+          }
+        }
+      }
+      else {              
+        content= message.toString();
+      }
+
+      if(emailHasAttachment) {
+        sendEmail("email@textchngr.appspotmail.com", "Team Flybrary", fromEmailAddress, "Error Attachment Found","Hi there,\n\nUnfortunatley Flybrary does not support sending attachments on emails through our servers. If you want to send an attachment ask for your matches email address and send it as a normal email.\n\nTeam Flybrary");
       } else {
-        String firstUsersEmail = match.getProperty("firstUsersEmail").toString();
-        String secondUsersEmail = match.getProperty("secondUsersEmail").toString();
+        emailBody =(String) content;
+        Pattern pattern = Pattern.compile("\\d+/\\d+/\\d+ +\\d+:\\d+:\\d+");
+        Matcher matcher = pattern.matcher(emailBody);
+        String emailMatchedDate = "";
+        while (matcher.find()) {
+          int i = 0;
+          emailMatchedDate = matcher.group(i);
+          i++;
+        }
 
-        System.out.println("firstUsersEmail: " + firstUsersEmail);
-        System.out.println("secondUsersEmail: " + secondUsersEmail);
+        System.out.println("emailBody: " + emailBody);
+        System.out.println("emailMatchedDate: " + emailMatchedDate);
 
-        if(fromEmailAddress.equals(secondUsersEmail)) {
-          sendEmail("email@textchngr.appspotmail.com", "Team Flybrary", firstUsersEmail, emailSubject, emailBody);
-        } else if (fromEmailAddress.equals(firstUsersEmail)) {
-          sendEmail("email@textchngr.appspotmail.com", "Team Flybrary", secondUsersEmail, emailSubject, emailBody);
-        } else {
+        Filter matchFilter = new FilterPredicate("matchDate", FilterOperator.EQUAL, emailMatchedDate);
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query q = new Query("Match").setFilter(matchFilter);
+        Entity match = datastore.prepare(q).asSingleEntity();
+
+        if(match == null) {
           sendEmail("email@textchngr.appspotmail.com", "Team Flybrary", fromEmailAddress, "Match Does not Exist", noMatchMsgBody+"\n\n Match Date:"+emailMatchedDate);
+        } else {
+          String firstUsersEmail = match.getProperty("firstUsersEmail").toString();
+          String secondUsersEmail = match.getProperty("secondUsersEmail").toString();
+
+          System.out.println("firstUsersEmail: " + firstUsersEmail);
+          System.out.println("secondUsersEmail: " + secondUsersEmail);
+
+          if(fromEmailAddress.equals(secondUsersEmail)) {
+            sendEmail("email@textchngr.appspotmail.com", "Team Flybrary", firstUsersEmail, emailSubject, emailBody);
+          } else if (fromEmailAddress.equals(firstUsersEmail)) {
+            sendEmail("email@textchngr.appspotmail.com", "Team Flybrary", secondUsersEmail, emailSubject, emailBody);
+          } else {
+            sendEmail("email@textchngr.appspotmail.com", "Team Flybrary", fromEmailAddress, "Match Does not Exist", noMatchMsgBody+"\n\n Match Date:"+emailMatchedDate);
+          }
         }
       }
     } catch (Exception e) {
-        sendEmail("email@textchngr.appspotmail.com", "Team Flybrary", "team.flybrary@gmail.com", "Error Email from User", emailBody + "\n\nThis email was sent as a result from an error from user" + fromEmailAddress);
+        sendEmail("email@textchngr.appspotmail.com", "Team Flybrary", "team.flybrary@gmail.com", "Error Email from User", emailBody + "\n\nThis email was sent as a result from an error from user \"" + fromEmailAddress +"\" with message subject \"" + emailSubject +"\".\n\nError StackTrace: " + e.toString() );
         System.out.println(e.toString());
         e.printStackTrace();
     }
