@@ -10,26 +10,32 @@
 		                <h3>{{book.title}}</h3>
                     	<h4><i> {{book.author}}</i></h4>
 	                    <div layout='vertical' style='padding-top:20px;' ng-show='book.clicked'>
-	                    	<h3>Did your transaction happen? </h3>
+	                    	<h3>How did your trade go?</h3>
 		                    <div class='divButtonExpand' layout='horizontal' flex>
-			                  <md-button class='fa fa-check md-raised' ng-click='confirmMatch(book)' style='background-color: #4CAF50;'><md-tooltip>
-	         					You traded a book
-	        				  </md-tooltip></md-button>
-			                  <md-button class='fa fa-close md-raised' style='background-color: #F44336;'><md-tooltip>
-	         					It didn't work out
-	        				  </md-tooltip></md-button>
-
-		                    
-		                </div>
-		            </div>    
-		            <md-button class="glyphicon glyphicon-trash btn-lg" style="position: absolute; right: 10px;" ng-click="unmatchBook(book)">
+			                  <md-button class='md-raised' ng-click='confirmMatch(book)' style='background-color: #4CAF50;'>
+			                  	<i class="fa fa-check" style="color:white"></i>
+			                  	<md-tooltip>
+	         						Success!
+	        				  	</md-tooltip>
+	        				  </md-button>
+			                  <md-button class='md-raised' ng-click="unmatchBook(book)" style='background-color: #F44336;'>
+				                  <i class="fa fa-close" style="color:white"></i>
+				                  <md-tooltip>
+		         					It didn't work out.
+		        				  </md-tooltip>
+	        				 </md-button>          
+			                </div>
+			            </div>
+			            <i class="fa fa-angle-down fa-lg" ng-show='!book.clicked' style="color:black; position:absolute; right: 50%; top:90%"></i>
+			            <i class="fa fa-angle-up fa-lg" ng-show='book.clicked' style="color:black; position:absolute; right: 50%; top:90%"></i>
+		            	<md-button class="glyphicon glyphicon-trash btn-lg" style="position: absolute; right: 1%;" ng-click="unmatchBook(book)">
 		                 	<md-tooltip>
 			         		    Unmatch
 			        		</md-tooltip>
-		                 </md-button>
-		         </div>
+		                </md-button>
+		         	</div>
+            	</div>
             </div>
-
         </md-item-content>
         <md-divider ng-if="!$last"></md-divider>
     </md-item>

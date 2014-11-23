@@ -47,7 +47,6 @@ public class MatchingFunction {
 		}
 
 		List<Entity> textbooks = getTextbooks(searchType, isbn, condition, edition);
-
 		if(!textbooks.isEmpty())
 		{
 
@@ -67,7 +66,6 @@ public class MatchingFunction {
 				
 				String uid2 = (String) matchedBook.getProperty("uid");
 				withinRadius = distance(first, second, type);
-
 				if(withinRadius && !uid.equals(uid2)) {
 					matchDate = new Date();
 
@@ -92,7 +90,7 @@ public class MatchingFunction {
 
 					Delay.oneSecondDelay();
 					matchedBook.setProperty("matched", "yes");
-					matchedBook.setUnindexedProperty("matchDate", simpleDate);
+					matchedBook.setProperty("matchDate", simpleDate);
 					datastore.put(matchedBook);
 
 					return "yes-" + simpleDate;
