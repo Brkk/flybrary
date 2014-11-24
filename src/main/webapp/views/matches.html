@@ -9,6 +9,10 @@
 	            	<div layout='vertical' flex>
 		                <h3>{{book.title}}</h3>
                     	<h4><i> {{book.author}}</i></h4>
+             	        <h4 ng-if="book.edition > 3">{{book.edition}}th. Edition</h4>
+                		<h4 ng-if="book.edition == 1">{{book.edition}}st. Edition</h4>
+                		<h4 ng-if="book.edition == 2">{{book.edition}}nd. Edition</h4>
+                		<h4 ng-if="book.edition == 3">{{book.edition}}rd. Edition</h4>
 	                    <div layout='vertical' style='padding-top:20px;' ng-show='book.clicked'>
 	                    	<h3>How did your trade go?</h3>
 		                    <div class='divButtonExpand' layout='horizontal' flex>
@@ -26,8 +30,8 @@
 	        				 </md-button>          
 			                </div>
 			            </div>
-			            <i class="fa fa-angle-down fa-lg" ng-show='!book.clicked' style="color:black; position:absolute; right: 50%; top:90%"></i>
-			            <i class="fa fa-angle-up fa-lg" ng-show='book.clicked' style="color:black; position:absolute; right: 50%; top:90%"></i>
+			            <i class="fa fa-angle-down fa-lg" ng-show='!book.clicked' style="color:black; position:absolute; right: 50%; top:86%"></i>
+			            <i class="fa fa-angle-up fa-lg" ng-show='book.clicked' style="color:black; position:absolute; right: 50%; top:86%"></i>
 		            	<md-button class="glyphicon glyphicon-trash btn-lg" style="position: absolute; right: 1%;" ng-click="unmatchBook(book)">
 		                 	<md-tooltip>
 			         		    Unmatch

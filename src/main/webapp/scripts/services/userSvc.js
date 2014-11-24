@@ -117,7 +117,8 @@ var userSvc = angular.module( 'userSvc', [])
             image: book.propertyMap.image.value,
             isbn: book.propertyMap.isbn,
             matched: book.propertyMap.matched,
-            matchDate: book.propertyMap.matchDate
+            matchDate: book.propertyMap.matchDate,
+            addDate: book.propertyMap.date
         };
     }
 
