@@ -11,7 +11,7 @@
                 <h4 ng-if="book.edition == 1">{{book.edition}}st. Edition</h4>
                 <h4 ng-if="book.edition == 2">{{book.edition}}nd. Edition</h4>
                 <h4 ng-if="book.edition == 3">{{book.edition}}rd. Edition</h4>
-                <div class="md-tile-content" style='padding-top:10px;' ng-show='book.clicked'>
+                <div layout='vertical' style='padding-top:10px;' ng-show='book.clicked'>
 	                <h3><b>Additional Details</b></h3>
 	                <h4 ng-if="book.condition == 1"><b>Condition:</b> Mint</h4>
 	                <h4 ng-if="book.condition == 2"><b>Condition:</b> Some wear'n'tear</h4>
