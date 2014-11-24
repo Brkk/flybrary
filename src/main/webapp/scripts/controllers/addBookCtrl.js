@@ -96,7 +96,6 @@ $rootScope.searchISBN = function() {
   gBooks.isbn = $scope.search.ISBN.replace(/\D/g,'');
   gBooks.doSearchISBN().then(
     function(data){
-    	//console.log(data);
     	$rootScope.searchList = data;
     	if( !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
     		$rootScope.selectKey(data[0]);

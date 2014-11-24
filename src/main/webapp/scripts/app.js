@@ -42,6 +42,9 @@ app.config( function($routeProvider) {
       .when('/setLocationMobile', {
     	  action: 'setLocationMobile'
       })
+      .when('/preferencesMobile', {
+    	  action: 'preferencesMobile'
+      })
       .otherwise({
         redirectTo: '/login'
       });

@@ -1,7 +1,6 @@
 <section layout="horizontal" layout-fill ng-controller="mainCtrl" flex>
-    <md-sidenav  class="md-sidenav-left md-whiteframe-z1" component-id="left"
-     layout="vertical" style="max-width:251.016px !important;" is-locked-open="$media('md')">
-
+    <md-sidenav ng-if="!mobileCheck()" class="md-sidenav-left md-whiteframe-z1" component-id="left"
+     layout="vertical" style="max-width:251.016px !important;" is-locked-open="true">
         <div ng-if="$root.currentTab != 'matches'" layout flex>
             <div ng-include="'views/preferences.html'" layout="vertical" flex></div>
         </div>
@@ -9,10 +8,11 @@
             <div ng-include="'views/match_list.html'" layout="vertical" flex></div>
         </div>
     </md-sidenav>
+    
     <div layout="vertical" layout-fill tabindex="-1" role="main" class ="tab-bar-styling">
         <md-toolbar class="md-primary app-toolbar" style="z-index:3">
-            <div class="md-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between">
-              <i class="fa fa-navicon" class="nav-icon" style="color:white; cursor:pointer" ng-click="toggleLeft()"></i>
+         	<div class="md-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between">
+              <i ng-if="mobileCheck()" class="fa fa-navicon" class="nav-icon" style="color:white; cursor:pointer" ng-click="toggleRight()"></i>
               <div id="dancing-style-menutab" flex style=" color:white">
                 <i class="fa fa-book" id="book-logo2" ></i>Flybrary
               </div>

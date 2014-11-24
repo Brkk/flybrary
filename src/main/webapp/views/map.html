@@ -1,6 +1,6 @@
 <section ng-controller="locCtrl" layout-fill flex layout='vertical' class="subtle-gray-background">
 	
-	<md-card style="background-color:white">
+	<md-card style="background-color:white" flex>
 	  	<p style="padding-left:10px">
 	    	Make sure to update your location!
 	   	</p>
@@ -9,9 +9,9 @@
 			center="{{loc.lat}},{{loc.lon}}" 
 			zoom="{{loc.zoom}}"
 			street-view-control="false" 
+			style="height:250px"
 			layout-fill
 			flex
-			style="height:250px;"
 			>
 			<shape id="circle" name="circle" stroke-color="#3F51B5" fill-color="#7986CB"
 		      stroke-opacity="0.8" stroke-weight="2" 

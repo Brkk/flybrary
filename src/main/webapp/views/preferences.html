@@ -1,6 +1,10 @@
 <md-toolbar class="md-primary md-medium-tall preferences-toolbar md-whiteframe-z1">
-	<div class="md-toolbar-tools">
-		<md-button class="helvetica-neue-style-sidebar-title" ng-click="toggleLeft()" layout-align="center center">
+	<div class="md-toolbar-tools" ng-controller="mainCtrl">
+		<i ng-if="mobileCheck()" class="fa fa-arrow-left" style="color:white; padding-top:10px" ng-click="toggleLeft()"></i>
+		<md-button ng-if="mobileCheck()" class="helvetica-neue-style-sidebar-title" ng-click="toggleLeft()" style="padding-right:40px">
+	    	Settings
+        </md-button>
+        <md-button ng-if="!mobileCheck()" class="helvetica-neue-style-sidebar-title" style="padding-right:25px">
 	    	Settings
         </md-button>
 	</div>
