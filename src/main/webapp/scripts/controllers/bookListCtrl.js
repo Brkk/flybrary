@@ -29,8 +29,8 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
       }
 
       if((num_matches == ($scope.num_matches+1)) && ($rootScope.searchList != null)){
-        $rootScope.toasttype.typ = "SEE MATCHES";
-      $rootScope.toasttype.msg = 'We found you a match! Check your mailbox.';
+        $rootScope.toasttype.typ = "SEE IT";
+        $rootScope.toasttype.msg = "We found you a match! Check your mailbox.";
 
         $mdToast.show({
           controller: ToastCtrl,
