@@ -172,10 +172,7 @@
 }
 
 #book-logo {
-  color: white;
-  font-size: 10em;
   margin-top: 0.25em;
-  margin-right: 0.25em;
 }
 
 #lightbulb-header {
@@ -217,10 +214,7 @@
   }
 
   #book-logo {
-    color: white;
-    font-size: 6em;
-    margin-top: 0.25em;
-    margin-right: -6px;
+    content:url("/images/logo_image_mobile.png");
   }
 
   #comment-header {
