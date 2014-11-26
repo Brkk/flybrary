@@ -3,7 +3,7 @@
 	  	<p style="text-align:center;font-size: 1.3em;padding-top: 0.5em;">
 	    	Make sure to update your location!
 	   	</p>
-	   	<md-divider></md-divider>
+	   	<div style="padding-left:10px;padding-right:10px;">
 		<map 
 			center="{{loc.lat}},{{loc.lon}}" 
 			zoom="{{loc.zoom}}"
@@ -17,6 +17,7 @@
 		      center="[{{loc.lat}},{{loc.lon}}]" radius="{{loc.radius}}" editable="false" >
 		    </shape> 
 		</map>
+	</div>
 
 	   	<p style="padding: 10px 0px 0px 20px; font-size:15px">Search Radius:</p>
 	    <md-slider discrete ng-model="loc.sliderRadius"  step="5" min="5" max="30"></md-slider>
