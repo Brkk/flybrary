@@ -1,8 +1,8 @@
 app.controller('mainCtrl', function($scope, $rootScope, user, $location, $mdSidenav)
   {
       $rootScope.actionType = user.actionType;
-
-      
+      $scope.name = user.name;
+            
       $rootScope.tabs = {
         maxIndex: 2,
         locked: true,

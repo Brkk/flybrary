@@ -1,4 +1,4 @@
-<md-toolbar class="md-primary md-medium-tall preferences-toolbar md-whiteframe-z1">
+<md-toolbar class="md-primary  preferences-toolbar md-whiteframe-z1">
 	<div class="md-toolbar-tools" ng-controller="mainCtrl">
 		<i ng-if="mobileCheck()" class="fa fa-arrow-left" style="color:white; padding-top:10px" ng-click="toggleLeft()"></i>
 		<md-button ng-if="mobileCheck()" class="helvetica-neue-style-sidebar-title" ng-click="toggleLeft()" style="padding-right:40px">
@@ -8,16 +8,11 @@
 	    	Settings
         </md-button>
 	</div>
+	<div style="font-size:0.6em;text-align:center;">Logged in as: {{name}}</div>
+	<md-button style="font-size:0.6em" ng-click="logout()" > Logout
+	            	<i class="fa fa-power-off"></i>
+	            </md-button>
 </md-toolbar>
 <md-content layout="vertical" layout-align="space-between" >
-	<section flex ng-include="'views/map.html'"></section>
-	<footer class="subtle-gray-background">
-		<md-card class="white-background-coloring">
-			<div flex layout='vertical' layout-align='center center'>
-				<md-button class="md-raised" ng-click="logout()">Logout
-					<i class="fa fa-power-off"></i>
-				</md-button>
-			</div>
-		</md-card>
-	</footer>
+	<section flex ng-include="'views/map.html'"></section>	
 </md-content>
