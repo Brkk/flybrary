@@ -145,7 +145,7 @@ md-switch.md-indigo-theme .md-switch-thumb:focus .md-label {
 md-tabs.md-indigo-theme .md-header {
   background-color: #3f51b5; }
 md-tabs.md-indigo-theme md-tabs-ink-bar {
-  background: #ffff85; }
+  background: #FFFFFF; }
 md-tabs.md-indigo-theme md-tab {
   color: #c5cae9; }
   md-tabs.md-indigo-theme md-tab.active {
@@ -155,7 +155,7 @@ md-tabs.md-indigo-theme md-tab {
   md-tabs.md-indigo-theme md-tab:focus {
     border-color: rgba(0, 0, 0, 0.73); }
   md-tabs.md-indigo-theme md-tab .md-ripple-container {
-    color: #ffff85; }
+    color: #FFFFFF; }
 
 md-input-group.md-indigo-theme input, md-input-group.md-indigo-theme textarea {
   text-shadow: none; }

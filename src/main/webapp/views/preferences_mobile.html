@@ -1,20 +1,16 @@
 <section layout="vertical" layout-fill>
 	<md-toolbar ng-controller="mainCtrl" class="app-toolbar" layout="horizontal" layout-align="space-between">
-		<div class="md-toolbar-tools" >
-			<i ng-if="mobileCheck()" class="fa fa-arrow-left" style="color:white; padding-top:10px" ng-click="toggleLeft()"></i>
-			<md-button ng-if="mobileCheck()" class="helvetica-neue-style-sidebar-title" ng-click="toggleLeft()" style="padding-right:40px">
-		    	Settings
-	        </md-button>
-	        <md-button ng-if="!mobileCheck()" class="helvetica-neue-style-sidebar-title" style="padding-right:25px">
-		    	Settings
-		    </md-button>
+		<div layout="row" layout-align="space-between center">
+			<i ng-if="mobileCheck()" class="fa fa-arrow-left" style="color:white;padding-left:10px;padding-top:10px" 
+			ng-click="toggleLeft()"></i>
+			<i ng-class="showInfo ? 'instructions-icon-on fa-map-marker' : 'instructions-icon-off fa-info-circle'"
+			 class="fa fa-lg" ng-click="showInfo = !showInfo"></i>
 		</div>
-		<div style="font-size:0.6em;text-align:center;">Logged in as: {{name}}</div>
-		<md-button style="font-size:0.6em" ng-click="logout()">Logout
-						<i class="fa fa-power-off"></i>
-					</md-button>
+		<div style="font-size:0.6em;font-size:1.2em;text-align:center;">{{name}}</div>
 	</md-toolbar>
+<md-content flex ng-show="showInfo" ng-include="'views/info.html'"></md-content>
+
 	<md-content layout="vertical" layout-align="space-around">
-		<section flex ng-include="'views/map.html'"></section>		
-	</md-content>
+		<section ng-show="!showInfo" flex ng-include="'views/map_mobile.html'"></section>		
+	</md-content>	
 </section>

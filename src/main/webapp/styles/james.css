@@ -30,7 +30,6 @@ md-button.glyphicon {
 
 section md-button {
   display: inline-block;
-  margin: 1em;
   line-height: 25px;
 }
 md-tab:focus {
