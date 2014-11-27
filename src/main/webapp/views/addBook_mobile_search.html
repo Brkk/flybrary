@@ -6,19 +6,20 @@
 	    </div>
 	</md-toolbar>
 
-	<section layout="horizontal" layout-align="space-around" flex>
+	<md-card layout="horizontal" layout-align="space-around" flex>
 		<section layout="vertical" layout-align="space-around" flex>
-			<div>
+			<p class="helvetica-neue-style">You can search by Title and/or Author, or by ISBN.</p>
+			<md-card>
 				<md-text-float label="Title" ng-model="search.title" class="long"></md-text-float>
 				<md-text-float label="Author" ng-model="search.author" class="long"></md-text-float>
-			</div>
+			</md-card>
 			<p style='font-size: 20px; color: Black; text-align:center;'>or</p>
-			<div>
+			<md-card>
 				<section layout="horizontal" layout-align="space-around" flex>
 					<md-text-float label="ISBN" ng-model="search.ISBN"></md-text-float>
-					<md-button class="md-button-fab"><i class="fa fa-barcode fa-3x"></i></md-button>
+					<div><i class="fa fa-barcode fa-3x"></i></div>
 				</section>
-			</div>
+			</md-card>
 		</section>
 		<section layout="vertical" layout-align="space-around" style="width:30%">	
 			<div  >
@@ -28,5 +29,5 @@
 				<md-button ng-click="searchISBN()"><i class="fa fa-search"></i></md-button>
 			</div>
 		</section>
-	</section>
+	</md-card>
 </section>

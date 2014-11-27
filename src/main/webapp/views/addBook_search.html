@@ -1,26 +1,22 @@
 <section layout="vertical" layout-fill class="small-btns textFieldLong">
-	
 	<md-toolbar class="app-toolbar" style="z-index:3">    
 		<div class="md-toolbar-tools" tabindex="0" layout="horizontal" layout-align="space-between"> 
 			<h1> {{$root.addbooktype}}</h1>
 	    	<md-button ng-click="backToMain()"><i class="fa fa-close"></i></md-button>
 	    </div>
     </md-toolbar>
-
-	<section layout="horizontal" layout-align="space-around" flex>
+    <p class="helvetica-neue-style" style="color:Gray">You can search by Title and/or Author, or by ISBN.</p>
+	<md-card layout="horizontal" layout-align="space-around" flex>
 		<section layout="vertical" layout-align="space-around" flex>
-
-			<!-- <md-card> --><div>
+			<div>
 				<md-text-float label="Title" ng-model="search.title" class="long"></md-text-float>
 				<md-text-float label="Author" ng-model="search.author" class="long"></md-text-float>
-			<!-- </md-card> --></div>
-			<p style='font-size: 16px; text-align:center;'>or</p>
-			<!-- <md-card> --><div>
-				<section layout="horizontal" layout-align="space-around" flex>
-					<md-text-float label="ISBN" ng-model="search.ISBN"></md-text-float>
-					<md-button class="md-button-fab"><i class="fa fa-barcode fa-lg"></i></md-button>
-				</section>
-			<!-- </md-card> --></div>
+			</div>
+			<p style="font-size: 20px; text-align:center; color:Gray">or</p>
+			<div>
+				<md-text-float label="ISBN" ng-model="search.ISBN" class="long"></md-text-float>
+				<!--  <div><i class="fa fa-barcode fa-3x"></i></div>-->			
+			</div>
 		</section>
 		<section layout="vertical" layout-align="space-around" style="width:30%">	
 				<div  >
@@ -30,5 +26,5 @@
 					<md-button ng-click="searchISBN()"><i class="fa fa-search"></i></md-button>
 				</div>
 		</section>
-	</section>
+	</md-card>
 </section>
