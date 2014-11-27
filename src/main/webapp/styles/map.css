@@ -1,0 +1,25 @@
+.settings-label {
+  text-align:center;
+  font-size: 1.3em;
+  padding-top: 0.5em;
+}
+
+.map-container {
+	padding-left:10px;
+	padding-right:10px;
+}
+
+.search-radius {
+	padding: 10px 0px 0px 20px;
+	font-size:15px
+}
+
+.location-arrow {
+	color:white;
+}
+
+.logout-bar-mobile {
+	max-height: 3.5em;
+	padding-top:1em;
+}
+

@@ -3,6 +3,18 @@
     border:1px solid #021a40;
     width: 36px;
     height:36px;
+    margin-right: 0.5em;
+}
+
+.name-bar {
+  padding-top:0.5em;
+  padding-bottom:0.5em;
+   padding-left:0.5em;
+   font-size:1.2em;
+}
+
+.logout-bar {
+  padding-top:15px;
 }
 
 .instructions-icon {
@@ -26,10 +38,8 @@
 }
 
 .active-user {
-  padding-top:0.5em;
-  padding-bottom:0.5em;
-  font-size:1.2em;
-  text-align:center;
+  font-size:0.9em;
+  font-size:20px;
 }
 
 .active-user-mobile {

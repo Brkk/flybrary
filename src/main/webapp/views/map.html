@@ -1,8 +1,8 @@
 <section ng-controller="locCtrl" layout-fill flex layout='vertical'>
-	  	<p style="text-align:center;font-size: 1.3em;padding-top: 0.5em;">
+	  	<p class="settings-label">
 	    	Settings
 	   	</p>
-	   	<div style="padding-left:10px;padding-right:10px;">
+	   	<div class="map-container">
 		<map 
 			center="{{loc.lat}},{{loc.lon}}" 
 			zoom="{{loc.zoom}}"
@@ -17,11 +17,11 @@
 		    </shape> 
 		</map>
 	</div>
-	   	<p style="padding: 10px 0px 0px 20px; font-size:15px">Search Radius:</p>
+	   	<p class="search-radius">Search Radius:</p>
 	    <md-slider discrete ng-model="loc.sliderRadius"  step="5" min="5" max="30"></md-slider>
 	    <div flex layout='vertical' layout-align='center center'>
 	    	<md-button ng-click="getLoc()"  class="md-raised md-primary" flex> Update Location 
-	    		<i class="fa fa-location-arrow" style="color:white"></i>
+	    		<i class="fa fa-location-arrow location-arrow"></i>
 	    	</md-button>
 	  	</div> 
 </section>
