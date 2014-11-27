@@ -5,6 +5,7 @@ var userSvc = angular.module( 'userSvc', [])
     this.uid = '';
     this.email ='';
     this.name = '';
+    this.pic = '';
     this.loc = {
             lat: 0,
             lon: 0,

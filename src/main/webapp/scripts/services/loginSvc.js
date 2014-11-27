@@ -56,7 +56,8 @@ var login = angular.module('loginSvc', ['userSvc'])
                 request.execute(function (resp) {
                     user.email = resp.email;
                     user.uid = resp.id;
-                    user.name = resp.name; 
+                    user.name = resp.name;
+                    user.pic  = resp.picture;
                     this.loggedIn = true;              
                     //deferred.resolve(data); 
                     user.getUser().then(function(data){

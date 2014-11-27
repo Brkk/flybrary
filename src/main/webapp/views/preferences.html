@@ -1,13 +1,11 @@
 <md-toolbar class="md-primary preferences-toolbar md-whiteframe-z1">
 		<div layout="row" layout-align="end">
-			<!--<i ng-if="mobileCheck()" class="fa fa-arrow-left" style="color:white;padding-top:10px;" 
-				ng-click="toggleLeft()"></i> -->
-			<i ng-class="showInfo ? 'instructions-icon fa fa-close' : 'instructions-icon fa fa-info-circle'"
+			<i style="padding-top:5px" ng-class="showInfo ? 'instructions-icon fa fa-close' : 'instructions-icon fa fa-info-circle'"
 			 class="fa fa-lg" ng-click="showInfo = !showInfo"></i>
 		</div>	
 
-	<div class="md-tile-left"style="padding-top:0.5em;padding-bottom:0.5em;font-size:1.2em;text-align:center;">
-        <img ng-src="images/logo_image_mobile.png" class="img2">
+<div layout="row" flex style="padding-top:0.5em;padding-bottom:0.5em; padding-left:0.5em;font-size:1.2em" layout-aling="center center">
+        <img ng-src="{{picture}}" class="img2">
         {{name}}
     </div>
 	
