@@ -12,6 +12,10 @@
   font-size: 1em;
 }
 
+.instructions-icon-selected {
+  text-shadow: 2px 2px 5px #000000;
+}
+
 .instructions-icon:hover {
   color:#3A96C2;
   cursor: pointer;
