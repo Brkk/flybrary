@@ -2,6 +2,7 @@ app.controller('mainCtrl', function($scope, $rootScope, user, $location, $mdSide
   {
       $rootScope.actionType = user.actionType;
       $scope.name = user.name;
+      $scope.picture = user.pic;
             
       $rootScope.tabs = {
         maxIndex: 2,
