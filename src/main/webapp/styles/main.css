@@ -396,26 +396,16 @@ md-item-content {
     height:36px;
 }
 
-.instructions-icon-off {
+.instructions-icon {
   color:white;
   padding-top:10px;
   padding-right:10px;
   font-size: 1em;
 }
 
-.instructions-icon-off:hover {
+.instructions-icon:hover {
   color:#3A96C2;
-}
-
-.instructions-icon-on {
-  color:white;
-  padding-top:10px;
-  padding-right:10px;
-  font-size: 1em;
-}
-
-.instructions-icon-on:hover {
-  color:#3A96C2;
+  cursor: pointer;
 }
 
 .instructions {
