@@ -396,23 +396,6 @@ md-item-content {
   color: White;
 }
 
-.img2 {
-    width: 36px;
-    height:36px;
-}
-
-.instructions-icon {
-  color:white;
-  padding-top:10px;
-  padding-right:10px;
-  font-size: 1em;
-}
-
-.instructions-icon:hover {
-  color:#3A96C2;
-  cursor: pointer;
-}
-
 .instructions {
   padding-left: 0.2em;
 }
@@ -420,11 +403,4 @@ md-item-content {
 #video-styling {
    width:360px;
    height:240px;
-}
-
-@media (min-width: 768px) {
-  #video-styling {
-   width:360px;
-   height:240px;
-  }
 }
