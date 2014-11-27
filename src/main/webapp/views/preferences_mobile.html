@@ -6,7 +6,7 @@
 			<i ng-class="showInfo ? 'instructions-icon-on fa-map-marker' : 'instructions-icon-off fa-info-circle'"
 			 class="fa fa-lg" ng-click="showInfo = !showInfo"></i>
 		</div>
-		<div style="font-size:0.6em;font-size:1.2em;text-align:center;">{{name}}</div>
+		<div class="active-user-mobile">{{name}}</div>
 	</md-toolbar>
 <md-content flex ng-show="showInfo" ng-include="'views/info.html'"></md-content>
 

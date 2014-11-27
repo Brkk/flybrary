@@ -1,10 +1,10 @@
 <md-toolbar class="md-primary preferences-toolbar md-whiteframe-z1">
 		<div layout="row" layout-align="end">
-			<i ng-class="showInfo ? 'instructions-icon-on fa-map-marker' : 'instructions-icon-off fa-info-circle'"
+			<i ng-class="showInfo ? 'instructions-icon fa fa-close' : 'instructions-icon fa fa-info-circle'"
 			 class="fa fa-lg" ng-click="showInfo = !showInfo"></i>
 		</div>	
 
-	<div layout="row" flex style="padding-top:0.5em;padding-bottom:0.5em; padding-left:0.5em;font-size:1.2em" layout-aling="center center">
+<div layout="row" flex style="padding-top:0.5em;padding-bottom:0.5em; padding-left:0.5em;font-size:1.2em" layout-aling="center center">
         <img ng-src="{{picture}}" class="img2">
         {{name}}
     </div>
