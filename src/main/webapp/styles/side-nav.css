@@ -5,12 +5,20 @@
     height:36px;
     margin-right: 0.5em;
 }
-
+.img2-mobile {
+  margin-top: 0.25em;
+  margin-left: 0.5em;
+}
 .name-bar {
   padding-top:0.5em;
   padding-bottom:0.5em;
    padding-left:0.5em;
    font-size:1.2em;
+}
+
+.name-bar-mobile {
+  padding-top:0em;
+  padding-bottom:0em;
 }
 
 .logout-bar {

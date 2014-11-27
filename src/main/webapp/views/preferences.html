@@ -1,17 +1,18 @@
 <md-toolbar class="md-primary preferences-toolbar md-whiteframe-z1">
-		<div layout="row" layout-align="end">
-			<i ng-class="showInfo ? 'instructions-icon-selected fa fa-info-circle' : 'fa fa-info-circle'"
+	<div layout="row" layout-align="end">
+		<i ng-class="showInfo ? 'instructions-icon-selected fa fa-info-circle' : 'fa fa-info-circle'"
 			 class="instructions-icon fa fa-lg" ng-click="showInfo = !showInfo"></i>
-		</div>	
+	</div>	
 
 <div layout="row" flex class="name-bar" layout-aling="center center">
-        <img ng-src="{{picture}}" class="img2">
-        <p class="active-user helvetica-neue-style">{{name}}</p>
-    </div>
+    <img ng-src="{{picture}}" class="img2">
+    <p class="active-user helvetica-neue-style">{{name}}</p>
+</div>
 	
 </md-toolbar>
 <md-content flex ng-show="showInfo" ng-include="'views/info.html'"></md-content >
 <md-content flex ng-show="!showInfo" ng-include="'views/map.html'"></md-content >	
+
 <div ng-show="!showInfo" class="logout-bar" flex layout='vertical' layout-align='center center'>
 	<md-button class="md-raised" ng-click="logout()"> Logout
 	    <i class="fa fa-power-off"></i>

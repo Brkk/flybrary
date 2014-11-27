@@ -3,10 +3,14 @@
 		<div layout="row" layout-align="space-between center">
 			<i ng-if="mobileCheck()" class="fa fa-arrow-left" style="color:white;padding-left:10px;padding-top:10px" 
 			ng-click="toggleLeft()"></i>
-			<i ng-class="showInfo ? 'instructions-icon-on fa-map-marker' : 'instructions-icon-off fa-info-circle'"
-			 class="fa fa-lg" ng-click="showInfo = !showInfo"></i>
+			<i ng-class="showInfo ? 'instructions-icon-selected fa fa-info-circle' : 'fa fa-info-circle'"
+			 class="instructions-icon fa fa-lg" ng-click="showInfo = !showInfo"></i>
 		</div>
-		<div class="active-user-mobile">{{name}}</div>
+
+		<div layout="row" flex class="name-bar-mobile" layout-aling="center center">
+    		<img ng-src="{{picture}}" class="img2 img2-mobile">
+    		<p class="active-user-mobile helvetica-neue-style">{{name}}</p>
+		</div>
 	</md-toolbar>
 <md-content flex ng-show="showInfo" ng-include="'views/info.html'"></md-content>
 
