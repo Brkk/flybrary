@@ -119,6 +119,11 @@
   height: 50vh;
 }
 
+.login-center-box {
+  width: 80%;
+  height: 80vh;
+}
+
 .about-center-box {
   width: 75%;
   height: 75vh;
@@ -412,5 +417,16 @@ md-item-content {
   padding-left: 0.2em;
 }
 
+#video-styling {
+   width:360px;
+   height:240px;
+}
+
+@media (min-width: 768px) {
+  #video-styling {
+   width:360px;
+   height:240px;
+  }
+}
 
 

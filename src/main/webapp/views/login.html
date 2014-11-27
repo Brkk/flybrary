@@ -7,15 +7,18 @@
   </ul>
 </nav>
 <div id="login-container" flex layout="vertical" layout-align="center center">
-  <div class="center-box" layout="vertical" layout-align="center center">
-    <div flex layout="horizontal" layout-align="center center">
+  <div class="login-center-box" layout="vertical" layout-align="center center">
+    <div layout="horizontal" layout-align="center center">
       <img id="book-logo" src="/images/logo_image2.png">
       <h1 class="app-title">Flybrary</h1>
     </div>
-    <div flex layout="vertical" layout-align="center center">
+    <div layout="vertical" layout-align="center center">
       <div >
         <h2 class="helvetica-neue-style sub-title">Share textbooks, on the fly.</h2>
       </div>
+      <video id="video-styling" preload controls>
+        <source src="/videos/Flybrary.mp4"/>
+      </video>
       <div>
         <button class="btn btn-google-plus" ng-click="login()"><i class="fa fa-google-plus"></i> | Login with Google</button>
       </div>
