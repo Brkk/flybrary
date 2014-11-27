@@ -1,9 +1,6 @@
 
 app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $timeout, googleService, user, $route, $routeParams) {
 
-	console.log("page ctrl loaded");
-
-
 	$window.addEventListener('resize', function() {
 
 		$rootScope.size = 'xs';
@@ -24,8 +21,6 @@ app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $tim
 
 	$rootScope.$watch('size', function(newVal,oldVal){
 		if(newVal != oldVal) {
-			console.log("size changed");
-			console.log($rootScope.size);
 			render();
 		}
 	});
@@ -151,11 +146,9 @@ app.controller('pageCtrl', function($window, $scope, $rootScope, $location, $tim
     $scope.$on(
 	"$routeChangeSuccess",function( $currentRoute, $previousRoute ) {
 		render();
-		console.log("rendered");
 	});  
   });
 
 window.googleOnLoadCallback = function() {
 
-	console.log(gapi);
 }

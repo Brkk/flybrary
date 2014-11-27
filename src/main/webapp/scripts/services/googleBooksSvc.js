@@ -12,7 +12,6 @@ var googleBooksSvc = angular.module( 'googleBooksSvc', [])
 
 
     function parseBook(book){
-        console.log(book);
         var ret = {};
         
         ret.title = book.volumeInfo.title || "No title available";

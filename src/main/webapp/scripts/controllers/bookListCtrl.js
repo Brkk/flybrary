@@ -72,7 +72,6 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
   user.getBooks().then(
     function(data){
       $rootScope.bookList = data;
-      console.log($rootScope.bookList);
     }, 
     function (err) {
       console.log('Failed: ' + err);

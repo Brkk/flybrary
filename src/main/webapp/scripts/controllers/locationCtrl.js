@@ -1,8 +1,6 @@
 app.controller('locCtrl', function($rootScope ,$scope, user)
 {
 	
-    console.log("loc ctrl loaded");
-
     $rootScope.loc = user.loc;
     $rootScope.loc.sliderRadius = user.loc.radius;
 

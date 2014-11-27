@@ -58,8 +58,7 @@ var login = angular.module('loginSvc', ['userSvc'])
                     user.uid = resp.id;
                     user.name = resp.name;
                     user.pic  = resp.picture;
-                    this.loggedIn = true;              
-                    //deferred.resolve(data); 
+                    this.loggedIn = true;               
                     user.getUser().then(function(data){
                         //add user loc to loc
                     	user.loc.lat = data.lat;
