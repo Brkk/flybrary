@@ -102,7 +102,7 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
     $mdToast.show({
       controller: ToastCtrl,
       templateUrl: 'views/toast.html',
-      hideDelay: 3000,
+      hideDelay: 5000,
       position: $scope.getToastPosition()
     }).then(function(){
         
@@ -125,12 +125,32 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
   }
 	
   $rootScope.confirmMatch = function(book){
-    book.hiden = true;
-    user.activeBookProperties.key = book.key;
-    user.activeBookProperties.matchDate = book.matchDate;
-    user.actionType = book.actionType;
-    user.confirmMatch(book);
-  }
+	$rootScope.deletedBook = book;
+	$rootScope.deletedBook.hiden = true;
+    $rootScope.toasttype.typ = 'UNDO';
+    $rootScope.toasttype.msg = 'You confirmed a match!';
+
+    $mdToast.show({
+      controller: ToastCtrl,
+      templateUrl: 'views/toast.html',
+      hideDelay: 5000,
+      position: $scope.getToastPosition()
+    }).then(function(){
+        
+      if($rootScope.deletedBook.hiden==true){
+        var index = $scope.bookList.indexOf(book);
+
+        if (index > -1) {
+            $scope.bookList.splice(index, 1);
+        }
+        user.activeBookProperties.key = book.key;
+        user.activeBookProperties.matchDate = book.matchDate;
+        user.actionType = book.actionType;
+        user.confirmMatch();
+      }
+    });
+
+  };
 
 	$rootScope.unmatchBook = function(book){
 	    $rootScope.deletedBook = book;
@@ -141,7 +161,7 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
 	    $mdToast.show({
 	      controller: ToastCtrl,
 	      templateUrl: 'views/toast.html',
-	      hideDelay: 3000,
+	      hideDelay: 5000,
 	      position: $scope.getToastPosition()
 	    }).then(function(){
 	        

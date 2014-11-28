@@ -138,7 +138,7 @@ var userSvc = angular.module( 'userSvc', [])
         return deferred_getBooks.promise;
     };
 
-    this.confirmMatch = function (book){
+    this.confirmMatch = function (){
         $http.post("resources/completeMatch", this.generateConfirm(), null)
     }
 

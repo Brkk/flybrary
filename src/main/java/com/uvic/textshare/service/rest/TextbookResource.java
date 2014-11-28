@@ -311,7 +311,7 @@ public class TextbookResource {
 				datastore.put(textbookTwo);
 			}
 		} catch(NullPointerException e) {
-		e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	

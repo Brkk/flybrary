@@ -5,40 +5,42 @@
                 <img ng-src="{{book.image}}" class="img">
             </div>
             <div  class="md-tile-content">
-	            <div layout='horizontal'>
-	            	<div layout='vertical' flex>
+	         <!--     <div layout='horizontal'>
+	            	<div layout='vertical' flex> -->
 		                <h3>{{book.title}}</h3>
                     	<h4><i> {{book.author}}</i></h4>
              	        <h4 ng-if="book.edition > 3">{{book.edition}}th. Edition</h4>
                 		<h4 ng-if="book.edition == 1">{{book.edition}}st. Edition</h4>
                 		<h4 ng-if="book.edition == 2">{{book.edition}}nd. Edition</h4>
                 		<h4 ng-if="book.edition == 3">{{book.edition}}rd. Edition</h4>
-	                    <div layout='vertical' style='padding-top:20px;' ng-show='book.clicked'>
-	                    	<h3>How did your trade go?</h3>
-		                    <div class='divButtonExpand' layout='horizontal' flex>
-			                  <md-button class='md-raised' ng-click='confirmMatch(book)' style='background-color: #4CAF50;'>
-			                  	<i class="fa fa-check" style="color:white"></i>
-			                  	<md-tooltip>
-	         						Success!
-	        				  	</md-tooltip>
-	        				  </md-button>
-			                  <md-button class='md-raised' ng-click="unmatchBook(book)" style="background-color: #F44336; padding-left:5px">
-				                  <i class="fa fa-close" style="color:white"></i>
-				                  <md-tooltip>
-		         					It didn't work out.
-		        				  </md-tooltip>
-	        				 </md-button>          
-			                </div>
+	                    <div layout='vertical' style='padding-top:10px;' ng-show='book.clicked'>
+			                <h3><b>Additional Details</b></h3>
+			                <h4 ng-if="book.condition == 1"><b>Condition:</b> Mint</h4>
+			                <h4 ng-if="book.condition == 2"><b>Condition:</b> Some wear'n'tear</h4>
+			                <h4 ng-if="book.condition == 3"><b>Condition:</b> Been "loved"</h4>
+			                <h4><b>Matched on:</b> {{book.matchDate}}</h4>
+			                <h4><b>Status:</b> Matched!</h4>
 			            </div>
 			            <i class="fa fa-angle-down fa-lg" ng-show='!book.clicked' style="color:black; position:absolute; right: 50%; top:86%"></i>
 			            <i class="fa fa-angle-up fa-lg" ng-show='book.clicked' style="color:black; position:absolute; right: 50%; top:86%"></i>
-		            	<md-button class="glyphicon glyphicon-trash btn-lg" style="position: absolute; right: 1%;" ng-click="unmatchBook(book)">
-		                 	<md-tooltip>
-			         		    Unmatch
-			        		</md-tooltip>
-		                </md-button>
-		         	</div>
-            	</div>
+			          	<div style="position: absolute; right: 10%; top:10%">
+				          	<h3>How did your trade go?</h3>
+			               <div layout="row" flex>
+			                <md-button class='md-raised' ng-click='confirmMatch(book)' style='background-color: #4CAF50;'>
+			                  	<i class="fa fa-check" style="color:white"></i>
+			                  	<md-tooltip>
+		        						Success!
+		       				  	</md-tooltip>
+	       				  	</md-button>
+	       				  	<div style="padding-left: 15px;"></div>
+		                  	<md-button class='md-raised' ng-click="unmatchBook(book)" style="background-color: #F44336; padding-left:5px">
+		                  		<i class="fa fa-close" style="color:white"></i>
+			                  	<md-tooltip>
+	         						Find me a new match!
+	        				  	</md-tooltip>
+	       				 	</md-button>    
+	       				 	</div>
+       				 	</div>      
             </div>
         </md-item-content>
         <md-divider ng-if="!$last"></md-divider>
