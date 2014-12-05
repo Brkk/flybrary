@@ -400,3 +400,7 @@ md-item-content {
    width:360px;
    height:240px;
 }
+
+#infoSection{
+  font-size: 0.9em;
+}
