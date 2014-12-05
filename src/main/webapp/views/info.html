@@ -1,16 +1,95 @@
-<md-content class="md-padding">
+<md-content ng-controller="infoController as infoCtrl" class="md-padding">
 <div >
  <div layout="vertical" layout-align="center center">
  <i class="fa fa-lightbulb-o fa-3x" style="color:black;"></i>
  <h4 class="helvetica-neue-style">How to use the Flybrary</h4>
 </div>
 <md-divider></md-divider>
-In the main window, there are three tabs. You are able to view your Matches, Books, and Book Requests. 
-As you add textbook requests and offers, lists will populate displaying your requests and offers. 
-When a match for one of your requests/offers is made, the book will move from the requests/offers list into the matches list.
-You will also be notified by email when a match is made. Replying to the email will get you in touch with your new found friend!
+
+
+<select ng-model="infoSxns" class="form-control" title="infoSections">
+<option value="1">Offering a Book</option>
+<option value="2">Requesting a Book</option>
+<option value="3">Viewing your Matches</option>
+<option value="4">Re-matching</option>
+<option value="5">Cofirming your Matches</option>
+<option value="6">Updating your Location and Search Radius</option>
+<option value="7">Contact Us</option>
+</select> 
+
+
+<div id="infoSection" ng-show="infoSxns == 1">
+<h5>Offering a Book</h5>
+<ol>
+	<li>Go to the 'Offer a Book' tab</li>
+	<li>Click the pink plus button</li>
+	<li>Enter the title, author, or ISBN of the textbook you are offering</li>
+	<li>Click the magnifying glass icon</li>
+	<li>Select your book from the list</li>
+	<li>Enter the edition and select the condition of your book</li>
+	<li>Click the pink checkmark button</li>
+</ol>
+Your book will now be available to other Flybrarians! Keep an eye on your email. If someone requests your book, you will be notified!
+</div>
+
+<div id="infoSection" ng-show="infoSxns == 2">
+<h5>Requesting a Book</h5>
+<ol>
+	<li>Go to the 'Request a Book' tab</li>
+	<li>Click the pink plus button</li>
+	<li>Enter the title, author, or ISBN of the textbook you are looking for</li>
+	<li>Click the magnifying glass icon</li>
+	<li>Select your desired book from the list</li>
+	<li>Enter the edition and select the condition that you want</li>
+	<li>Click the pink checkmark button</li>
+</ol>
+Sit tight! Flybrary will match you up if your book is being offered. Keep an eye on your email. If someone offers your book, you will be notified!
+</div>
+
+<div id="infoSection" ng-show="infoSxns == 3">
+<h5>Viewing your Matches</h5>
+<ol>
+	<li>Go to the 'My Matches' tab</li>
+	<li>If you have no matches, try offering a book or requesting one to get more matches</li>
+	<li>If you have matches, they will be listed in the main window</li>
+	<li>Be sure to check your email to get in touch with your matches</li>
+	<li>Clicking on the down arrow on each match will list additional details about your match</li>
+</ol>
+</div>
+
+<div id="infoSection" ng-show="infoSxns == 4">
+<h5>Re-matching</h5>
+If you are unable to contact your match, or a match did not work out for a specific book, you can always try and find a new match for your requested or offered book. The following steps explain how to find a new match for a specific book:
+<ol>
+	<li>Go to the 'My Matches' tab</li>
+	<li>Clicking on the down arrow on each match will list additional details about your match</li>
+	<li>To look for a different match, click the 'X' button</li>
+	<li>Your matched book will be removed from the matched list and will be returned to either the offered or requested books list</li>
+	<li>If another user has that book, you will be automatically rematched, otherwise sit tight and wait for a new match!</li>
+</ol>
+</div>
+<div id="infoSection" ng-show="infoSxns == 5">
+<h5>Cofirming your Matches</h5>
+<ol>
+	<li>Go to the 'My Matches' tab</li>
+	<li>Be sure to check your email to get in touch with your matches</li>
+	<li>Clicking on the down arrow on a match will list additional details about that match</li>
+	<li>After you have either borrowed or lent out a book to someone, make sure to click the green checkmark button in the additional details to let Flybrary know that you have met with your match!</li>
+	<li>A confirmed match will be removed from the list, but you are still able to contact your match via email</li>
+</ol>
+</div>
+<div id="infoSection" ng-show="infoSxns == 6">
+<h5>Updating your Location and Search Radius</h5>
+Make sure to keep your search radius updated so that you can connect with people near you! Check under settings in the side navigation bar to set your search radius and update your location.
+<ol>
+	<li>Drag the Search Radius slider to your desired search distance. You can set your radius anywhere between 5 and 30 km</li>
+	<li>Click the 'Update Location' button below the map</li>
+	<li>You must allow Flybrary.ca to use your computers location if you want to get matched up</li>
+	<li>Your search radius will be updated and displayed on the map</li>
+</ol>
+</div>
 <md-divider></md-divider>
-  <div layout="vertical" layout-align="center center">
+  <div ng-show="infoSxns == 7" layout="vertical" layout-align="center center">
     <i class="fa fa-comments fa-3x" style="color:black;padding-top:5px"></i>
     <h2 class="dancing-style" style="color:black;">Contact Us</h2>
     <p class="helvetica-neue-style">
