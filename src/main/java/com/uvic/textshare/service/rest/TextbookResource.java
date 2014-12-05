@@ -54,6 +54,7 @@ public class TextbookResource {
 	private static int numberOf_requested_books;
 	private static int numberOf_matches;
 	MatchingFunction matchingFunction = new MatchingFunction();
+	String matchDate;
 	
 /*
  * 
@@ -103,7 +104,7 @@ public class TextbookResource {
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 			JSONObject text = new JSONObject(input);
 			Date addDate = new Date();
-			String matchDate = "emtpy"; 
+			matchDate = "emtpy"; 
 			String response = matchingFunction.checkForMatch(
 					text.getString("isbn"), 
 					text.getString("uid"),
@@ -274,7 +275,6 @@ public class TextbookResource {
 			Filter matchFilter = new FilterPredicate("matchDate", FilterOperator.EQUAL, matchDate);
 			Query q = new Query("Match").setFilter(matchFilter);
 			Entity match = datastore.prepare(q).asSingleEntity();
-			
 			if(!uid.equals((String) match.getProperty("userOneId")))
 				uidTwo = (String) match.getProperty("userOneId");
 			else
@@ -283,9 +283,10 @@ public class TextbookResource {
 			Key matchKey = match.getKey();
 			datastore.delete(matchKey);
 			Delay.oneSecondDelay();
-			
+
 			//Check for a new match. Omit matching each other again.
 			String matchedOne = matchingFunction.checkForMatch(isbn, uid, type, title, condition, edition);
+			Delay.oneSecondDelay();
 			String matchedTwo = matchingFunction.checkForMatch(isbn, uidTwo, typeTwo, title, condition, edition);
 			
 			//Update database based on the result of new searches for matches.
@@ -294,20 +295,42 @@ public class TextbookResource {
 				Query q2 = new Query(textbookKey);
 				Entity textbook = datastore.prepare(q2).asSingleEntity();
 					textbook.setProperty("matched", "no");
-					textbook.setUnindexedProperty("matchDate", null);
+					textbook.setProperty("matchDate", null);
+				datastore.put(textbook);
+			} 
+			else
+			{
+				String[] parts = matchedOne.split("-");
+				String matchDateOne = parts[1];
+				Key textbookKey = KeyFactory.createKey("Textbook", id);
+				Query q2 = new Query(textbookKey);
+				Entity textbook = datastore.prepare(q2).asSingleEntity();
+					textbook.setProperty("matched", "yes");
+					textbook.setProperty("matchDate", matchDateOne);
 				datastore.put(textbook);
 			}
 			
+			
+			Filter isbnFilter = new FilterPredicate("isbn", FilterOperator.EQUAL,isbn);
+			Filter uidFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uidTwo);
+			Filter searchFilter = CompositeFilterOperator.and(isbnFilter, uidFilter);
 			Delay.oneSecondDelay();
+			
 			if(matchedTwo.equals("no")) {
-				Filter isbnFilter = new FilterPredicate("isbn", FilterOperator.EQUAL,isbn);
-				Filter uidFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uidTwo);
-				Filter searchFilter = CompositeFilterOperator.and(isbnFilter, uidFilter);
-				
 				q = new Query("Textbook").setFilter(searchFilter);
 				Entity textbookTwo = datastore.prepare(q).asSingleEntity();
 					textbookTwo.setProperty("matched", "no");
-					textbookTwo.setUnindexedProperty("matchDate", null);
+					textbookTwo.setProperty("matchDate", null);
+				datastore.put(textbookTwo);
+			}
+			else
+			{
+				String[] parts = matchedTwo.split("-");
+				String matchDateTwo = parts[1];
+				q = new Query("Textbook").setFilter(searchFilter);
+				Entity textbookTwo = datastore.prepare(q).asSingleEntity();
+					textbookTwo.setProperty("matched", "yes");
+					textbookTwo.setProperty("matchDate", matchDateTwo);
 				datastore.put(textbookTwo);
 			}
 		} catch(NullPointerException e) {
@@ -353,16 +376,6 @@ public class TextbookResource {
 			
 			matchKey = textbook.getKey();
 			datastore.delete(matchKey);	
-			
-			if(type.equals("offer")) {
-				//give user karma
-				//reduce other guy
-			}
-			else
-			{
-				//reduce user karma
-				//increase other guy
-			}
 			
 		} catch(NullPointerException e) {
 			e.printStackTrace();
@@ -421,7 +434,7 @@ public class TextbookResource {
 
 /*
  * 
- * Start of Support Methods
+ * Start of Service Methods
  * 	
  */
 	

@@ -157,14 +157,13 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
 	    $rootScope.deletedBook.hiden = true;
 	    $rootScope.toasttype.typ = 'UNDO';
 	    $rootScope.toasttype.msg = 'You deleted a match!';
-	
+		var num_matches = $scope.num_matches;
 	    $mdToast.show({
 	      controller: ToastCtrl,
 	      templateUrl: 'views/toast.html',
 	      hideDelay: 5000,
 	      position: $scope.getToastPosition()
 	    }).then(function(){
-	        
 	      if($rootScope.deletedBook.hiden==true){
 	        var index = $scope.bookList.indexOf(book);
 	
@@ -181,7 +180,7 @@ app.controller('BookListCtrl', function($scope, $rootScope, $http, $timeout, jso
 	        user.unmatchTextbook(); 
 	        
 	      }
-	    });
+	    })
 	};
 	
   $scope.dialog = function(ev, actionType) {

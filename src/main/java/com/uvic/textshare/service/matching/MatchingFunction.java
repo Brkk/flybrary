@@ -246,7 +246,7 @@ public class MatchingFunction {
 			searchFilter = CompositeFilterOperator.and(typeFilter, isbnFilter, matchedFilter);
 		}
 		
-		Query q = new Query("Textbook").setFilter(searchFilter).addSort("date", Query.SortDirection.ASCENDING);
+		Query q = new Query("Textbook").setFilter(searchFilter);
 		List<Entity> textbooks = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
 		return textbooks;
 	}
