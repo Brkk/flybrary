@@ -120,22 +120,6 @@ public class MatchingFunction {
 +"<p>Isn't this a lucky day for ya. Remember that time you used flybrary for \"" + title + "\". Well, we found "
 + "you a match. You can leave whatever you are doing and reach "+matchedUserName+" to work out the details. </p>"
 +  "</header><article class='main' style='flex: 1 100%; text-align: left; margin-left: 30px; padding: 10px;'><!-- <aside class='aside aside-1'> -->"
-/*
-//Commented out the Progress bar
-+"<p>Your match has</p>"
-+  "<p>"
-+		"</p>"
-+"<div class='progress' style='font-weight: bold; height: 35px; margin-bottom: 20px; overflow: hidden; background-color: #f5f5f5; border-radius: 4px; -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);'>"
-+		  "<div class='progress-bar progress-bar-success' style='width: 50%; float: left; height: 100%; font-size: 18px; line-height: 20px; color: white; text-align: center; -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15); box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15);"
-+      "-webkit-transition: width .6s ease; transition: width .6s ease; font-family: Roboto; background-color: #5cb85c;' align='center'>"
-+"        <span>5 Books Offered</span>"
-+"      </div>"
-+		  "<div class='progress-bar progress-bar-danger' style='width: 50%; float: left; height: 100%; font-size: 18px; line-height: 20px; color: white; text-align: center; -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15); box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15); "
-+      "-webkit-transition: width .6s ease; transition: width .6s ease; font-family: Roboto; background-color: #d9534f;' align='center'>"
-+"        <span>5 Books Requested</span>"
-+"      </div>"
-+"    </div>"
-*/
 +  		"<p>To contact your match simply reply to this email. Flybrary will keep your contact information confidential.</p>"
 +  		"<p>Go back to Flybary and let us know how your match went.</p>"
 +		"<table cellspacing='0' cellpadding='0' align='center'> <tr>"
@@ -143,15 +127,6 @@ public class MatchingFunction {
 +		"<a href='http://www.flybrary.ca/' style='font-size:16px; font-weight: bold; font-family: Helvetica, Arial, sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block'><span style='color: #FFFFFF'>Take me to Flybrary</span></a>"
 +		"</td> "
 +		"</tr> </table> "
-/*
-+  		"<div class='button' style='font-size: 12pt; display: inline-block; position: relative; overflow: hidden; color: black; height: 3em; line-height: 3em; vertical-align: middle; text-transform: uppercase; font-weight: bold; cursor: pointer; -webkit-font-smoothing: antialiased; "
-+      "-moz-osx-font-smoothing: grayscale; padding: 0 2em; border: 2px solid black;'>Rematch Me!</div>"
-+  	"<p>Please let us now if the trade went well,</p>"
-+  		"<div class='button' "
-+      "style='font-size: 12pt; display: inline-block; position: relative; overflow: hidden; color: black; height: 3em; line-height: 3em; vertical-align: middle; text-transform: uppercase; font-weight: bold; cursor: pointer; -webkit-font-smoothing: antialiased; "
-+      "-moz-osx-font-smoothing: grayscale; padding: 0 2em; border: 2px solid black;'>"
-+      "It Flew!</div>"
-*/
 +  	"</article><footer class='footer' style='flex: 1 100%; padding: 10px;'><p style='text-align: center; font-size: 12pt; margin-top: 40px;' align='center'><p>Have a fantastic day and remember to always let your textbooks fly with Flybrary.</p><p></p><p></p>"
 + "<p>Cheers,</p>"
 + "<p>Team Flybrary</p>"
@@ -185,9 +160,7 @@ public class MatchingFunction {
 		        Transport.send(msg);
 
 		    } catch (AddressException e) {
-		        // ...
 		    } catch (MessagingException e) {
-		        // ...
 		    }
 	}
 
@@ -226,14 +199,16 @@ public class MatchingFunction {
 	private double rad2deg(double rad) {
 	  return (rad * 180 / Math.PI);
 	}
-
+    
+    //Returns the user from the database with the given UID
 	private Entity getUser(String uid) {
 		Filter uidFilter = new FilterPredicate("uid", FilterOperator.EQUAL, uid);
 		Query query = new Query("User").setFilter(uidFilter);
 		Entity user = datastore.prepare(query).asSingleEntity();
 		return user;
 	}
-
+    
+    //Returns a list of matched textbooks, empty if no macth found.
 	private List<Entity> getTextbooks(String searchType, String isbn, double condition, String edition) {
 		Filter typeFilter = new FilterPredicate("type", FilterOperator.EQUAL, searchType);
 		Filter isbnFilter = new FilterPredicate("isbn", FilterOperator.EQUAL, isbn);
@@ -241,7 +216,7 @@ public class MatchingFunction {
 		Filter conditionFilter = new FilterPredicate("condition", FilterOperator.EQUAL, condition);
 		Filter editionFilter = new FilterPredicate("edition", FilterOperator.EQUAL, edition);
 		Filter searchFilter = CompositeFilterOperator.and(typeFilter, isbnFilter, matchedFilter, conditionFilter, editionFilter);
-		//any condition
+		//no restiriction on textbook condition
 		if(condition == 4.0 ) {
 			searchFilter = CompositeFilterOperator.and(typeFilter, isbnFilter, matchedFilter);
 		}

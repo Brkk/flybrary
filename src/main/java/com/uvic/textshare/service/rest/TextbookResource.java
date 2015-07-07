@@ -434,7 +434,7 @@ public class TextbookResource {
 
 /*
  * 
- * Start of Service Methods
+ * Start of Support Methods
  * 	
  */
 	
