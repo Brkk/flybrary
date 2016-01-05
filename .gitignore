@@ -13,3 +13,5 @@ release.properties
 node_modules
 .tmp
 .sass-cache
+
+src/main/webapp/bower_components/
